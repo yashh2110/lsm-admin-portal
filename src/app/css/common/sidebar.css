@@ -1,0 +1,131 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  background-color: rgba(253, 231, 231, 0.802);
+  height: 100vh;
+}
+.user {
+  padding: 10px;
+  margin: 5px;
+  /* background-color: grey; */
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+/* place */
+.place {
+  margin: 10px;
+}
+.place > .placeLabel {
+  margin-left: 10px;
+  font-weight: 400;
+}
+.place > .placeDiv {
+  position: relative;
+  margin-right: 5px;
+  padding: 12px;
+  width: 94%;
+  left: 3%;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(233, 224, 224, 0.496);
+  border-radius: 5px;
+  box-shadow: 0 0px 3px lightgrey;
+}
+.placeDiv > .placeName {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+/* user details */
+.user > .userDet {
+  display: flex;
+  align-items: center;
+}
+.user > .userDet > .userImg {
+  width: 40px;
+  height: 40px;
+  background-color: lightgrey;
+  border-radius: 50%;
+  margin-right: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.user > .userDet > .userName {
+  margin-left: 5px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.user > .userMore {
+  transition: all 0.3s;
+}
+.user:hover > .userMore {
+  margin-top: -7px;
+}
+/* menue */
+.menu {
+  padding: 10px;
+}
+.menu > .inventoryLabel {
+  margin-left: 10px;
+  font-weight: 400;
+}
+.menu > .menu-item {
+  padding: 12px;
+  margin: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: rgb(57, 57, 57);
+  cursor: pointer;
+}
+.menu > .menu-item:hover {
+  background-color: rgb(223, 223, 223);
+}
+.menu > .active {
+  background-color: rgb(223, 223, 223);
+}
+.menu-item > p {
+  margin: 0;
+  padding: 0;
+  margin-left: 7px;
+}
+/* foot */
+.foot {
+  position: absolute;
+  bottom: 0px;
+  /* background-color:grey; */
+  width: 100%;
+  padding: 15px;
+}
+
+.foot > .signout {
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  padding: 10px 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+.signout:hover {
+  background-color: rgb(223, 223, 223);
+}
+.signout > p {
+  margin: 0;
+  padding: 0;
+  font-family: 600;
+  font-size: 0.96rem;
+  margin-left: 5px;
+}

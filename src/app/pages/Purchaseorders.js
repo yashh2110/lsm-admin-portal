@@ -1,32 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getPurchaseOrders} from '../../redux/actions/PurchaseOrders';
-import PurchaseOrderCreateForm from '../components/purchaseorders/PurchaseOrderCreateForm';
 import PurchaseOrderTable from '../components/purchaseorders/PurchaseOrderTable';
-import PurchaseOrderUpdateForm from '../components/purchaseorders/PurchaseOrderUpdateForm';
+
 import '../css/pages/vendor.css';
 
 function PurchaseOrders({setActiveTab}) {
   const orders = useSelector(state => state.purchaseorders);
   const dispatch = useDispatch();
-  const [updateopen, setUpdateopen] = useState(false);
-  const [createopen, setCreateopen] = useState(false);
-  const [rowData, setRowData] = useState(false);
-  const handleUpdateClose = () => {
-    setUpdateopen(false);
-    setRowData(null);
-  };
-  const handleCreateClose = () => {
-    setCreateopen(false);
-    setRowData(null);
-  };
+
   useEffect(() => {
     dispatch(getPurchaseOrders());
     setActiveTab(3);
   }, []);
   console.log(orders);
   const columns = [
-    {title: 'Id', field: 'id'},
+    {title: 'Id', field: 'id', width: '10%'},
     {title: 'Vendor Id', field: 'vendorId'},
     {title: 'Warehouse Id', field: 'warehouseId'},
     {title: 'Order Amount', field: 'orderAmount'},
@@ -39,27 +28,7 @@ function PurchaseOrders({setActiveTab}) {
   ];
   return (
     <div className="vendor">
-      <PurchaseOrderTable
-        columns={columns}
-        data={orders}
-        setUpdateopen={setUpdateopen}
-        updateopen={updateopen}
-        setCreateopen={setCreateopen}
-        createopen={createopen}
-        setRowData={setRowData}
-      />
-      {rowData ? (
-        <PurchaseOrderUpdateForm
-          open={updateopen}
-          handleClose={handleUpdateClose}
-          data={rowData}
-        />
-      ) : null}
-      {/* <Dtable /> */}
-      <PurchaseOrderCreateForm
-        open={createopen}
-        handleClose={handleCreateClose}
-      />
+      <PurchaseOrderTable columns={columns} data={orders} />
     </div>
   );
 }

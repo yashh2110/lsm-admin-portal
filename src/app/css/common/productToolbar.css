@@ -1,0 +1,40 @@
+.product-toolbar {
+  padding: 1rem;
+  padding-right: 8px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.product-toolbar > .title {
+  font-size: 1.25rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+}
+.product-toolbar > .filter {
+  position: relative;
+  width: 55%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.filter > .form-control {
+  margin: 3px;
+}
+.filter > .name {
+  width: 30%;
+}
+.filter > .active {
+  width: 15%;
+}
+.filter > .category {
+  width: 25%;
+}
+@media (min-width: 600px) {
+  .product-toolbar {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}

@@ -42,6 +42,8 @@ function WarehouseTable({
           paging: false,
           padding: 'dense',
           actionsColumnIndex: -1,
+          minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
+          maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
         }}
         components={{
           Toolbar: props => (

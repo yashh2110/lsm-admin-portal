@@ -1,14 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getProducts} from '../../redux/actions/Products';
-import {getPurchaseOrders} from '../../redux/actions/PurchaseOrders';
-import PurchaseOrderCreateForm from '../components/purchaseorders/PurchaseOrderCreateForm';
-import PurchaseOrderTable from '../components/purchaseorders/PurchaseOrderTable';
-import PurchaseOrderUpdateForm from '../components/purchaseorders/PurchaseOrderUpdateForm';
+import {
+  addProducts,
+  getProductCategory,
+  getProducts,
+} from '../../redux/actions/Products';
+import ProductsTable from '../components/products/ProductsTable';
+import {Waypoint} from 'react-waypoint';
 import '../css/pages/vendor.css';
 
 function Products({setActiveTab}) {
-  const orders = useSelector(state => state.products);
+  const products = useSelector(state => state.products.products);
+  const filters = useSelector(state => state.products.filters);
+  const [page, setPage] = useState(0);
   const dispatch = useDispatch();
   //   const [updateopen, setUpdateopen] = useState(false);
   //   const [createopen, setCreateopen] = useState(false);
@@ -22,27 +26,67 @@ function Products({setActiveTab}) {
   //     setRowData(null);
   //   };
   useEffect(() => {
-    dispatch(getProducts());
-    setActiveTab(3);
+    dispatch(
+      getProducts({
+        name: filters.name,
+        category: filters.category,
+        active: filters.active,
+        page,
+      }),
+    );
+    dispatch(getProductCategory());
+    setActiveTab(0);
   }, []);
-  console.log(orders);
+  console.log(products, 'addpro');
+
   const columns = [
-    {title: 'Id', field: 'id'},
-    {title: 'Vendor Id', field: 'vendorId'},
-    {title: 'Warehouse Id', field: 'warehouseId'},
-    {title: 'Order Amount', field: 'orderAmount'},
-    {title: 'Purchase State', field: 'purchaseState'},
-    {title: 'Payment State', field: 'paymentState'},
     {
-      title: 'Comments',
-      field: 'comments',
+      title: 'Id',
+      field: 'id',
+      render: rowdata => {
+        return (
+          <Fragment>
+            <Waypoint
+              onEnter={() => {
+                if (rowdata.tableData.id === products.length - 2) {
+                  dispatch(
+                    addProducts({
+                      name: filters.name,
+                      category: filters.category,
+                      active: filters.active,
+                      page: page + 1,
+                    }),
+                  );
+                  setPage(i => i + 1);
+                }
+              }}></Waypoint>
+            {rowdata.id}
+          </Fragment>
+        );
+      },
     },
+    {
+      title: 'Name',
+      field: 'name',
+    },
+    {
+      title: 'Sub Name',
+      field: 'subName',
+    },
+    {title: 'category', field: 'categoryName'},
+    {title: 'Actual Price', field: 'actualPrice'},
+    {title: 'Discount Price', field: 'discountedPrice'},
+    {title: 'Reorder Qauntity', field: 'thresholdQuantity'},
+    {title: 'Available Quantity', field: 'availableQuantity'},
+    {title: 'Item Cap', field: 'maxAllowedQuantity'},
+    {title: 'Priority', field: 'priority'},
+    {title: 'On Demand', field: 'onDemand'},
+    {title: 'Status', field: 'isActive'},
   ];
   return (
     <div className="vendor">
-      <PurchaseOrderTable
+      <ProductsTable
         columns={columns}
-        data={orders}
         // setUpdateopen={setUpdateopen}
         // updateopen={updateopen}
         // setCreateopen={setCreateopen}

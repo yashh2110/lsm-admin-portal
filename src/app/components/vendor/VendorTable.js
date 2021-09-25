@@ -1,6 +1,6 @@
 // import MUIDataTable from 'mui-datatables';
 import MaterialTable, {MTableToolbar} from 'material-table';
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import {getVendors} from '../../../redux/actions/Vendors';
@@ -15,7 +15,6 @@ function VendorTable({
   setRowData,
 }) {
   const dispatch = useDispatch();
-  const tableRef = useRef();
   const [search, setSearch] = useState('yash');
   console.log(search);
   const deactivate = async id => {
@@ -44,13 +43,14 @@ function VendorTable({
         onSearchChange={e => {
           setSearch(e);
         }}
-        ref={tableRef}
         options={{
           paging: false,
           padding: 'dense',
           actionsColumnIndex: -1,
           debounceInterval: 1000,
           searchText: search,
+          minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
+          maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
         }}
         localization={{
           toolbar: {},

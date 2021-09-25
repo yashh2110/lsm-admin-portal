@@ -1,0 +1,192 @@
+.pocreateHead {
+  position: fixed;
+  padding: 1rem;
+  padding-right: 8px;
+  min-height: 64px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+}
+.pocTitle {
+  margin: 0;
+  padding: 0;
+  font-size: 1.25rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+  margin-left: 10px;
+}
+.pocBack {
+  width: 40px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+}
+.pocBack:hover {
+  transform: scale(1.1);
+  background-color: rgba(253, 231, 231, 0.802);
+}
+.pocFormDiv {
+  position: relative;
+  margin-top: 76px;
+  padding: 10px;
+  width: 100%;
+  height: calc(100% - 76px) !important;
+  display: flex;
+  justify-content: center;
+}
+.pocForm {
+  position: relative;
+  width: 60%;
+  height: 100%;
+  overflow: auto;
+  /* border-right: 1px solid rgba(0, 0, 0, 0.2); */
+}
+.pocInput {
+  position: relative;
+  margin: 15px !important;
+  min-width: 35% !important;
+}
+.filterItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  border: 1px solid rgb(253, 224, 224);
+  padding: 5px;
+}
+.filterDet {
+  display: flex;
+  align-items: center;
+  width: 60%;
+}
+.filterItemName,
+.filterItemPrice {
+  margin: 0;
+  padding: 0;
+}
+.filterItemName {
+  font-size: 0.9rem !important;
+  font-weight: 500;
+  padding: 3px;
+}
+.filterItemPrice {
+  font-size: 0.9rem;
+  padding: 3px;
+  font-weight: 500;
+}
+.filterItemImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin: 5px;
+}
+.filterItemQuantityAdd {
+  display: flex;
+  width: 40%;
+  justify-content: flex-end;
+  padding-right: 10px;
+  align-items: center;
+}
+.pocPrev {
+  position: relative;
+  width: 40%;
+  display: flex;
+  padding-left: 15px;
+  flex-direction: column;
+}
+.productPrev {
+  position: relative;
+  width: 100%;
+  height: 60%;
+  border: 1px solid rgb(253, 224, 224);
+  border-radius: 5px;
+  padding: 5px;
+  overflow: auto;
+}
+.item {
+  position: relative;
+  padding: 5px;
+  margin-bottom: 5px;
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid rgb(253, 224, 224);
+  border-radius: 5px;
+}
+.itemDet {
+  position: relative;
+  width: 60%;
+  display: flex;
+  align-items: center;
+}
+
+.itemName {
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  margin-bottom: 7px;
+  font-weight: 500;
+}
+.price {
+  width: 60%;
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 10px;
+  text-align: right;
+}
+.itemImg {
+  width: 55px;
+  height: 55px;
+  border-radius: 5px;
+}
+/* .itemNamePrice {
+  display: flex;
+  justify-content: center;
+} */
+.quantityDiv {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.btn,
+.form-control:focus {
+  box-shadow: none !important;
+}
+.counterBtn {
+  background-color: rgba(253, 231, 231, 0.802) !important;
+  border-radius: 0 !important;
+  border: none !important;
+  padding: 0 8px;
+}
+.counter {
+  border-radius: 0 !important ;
+  height: 30px !important;
+}
+.totalPriceDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  margin-top: 10px;
+}
+.totalPriceLabel {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.totalPrice {
+  font-size: 1.3rem;
+  font-weight: 600;
+}

@@ -5,6 +5,7 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import {Link} from 'react-router-dom';
 function Sidebar({activeTab}) {
   console.log(activeTab);
@@ -34,10 +35,12 @@ function Sidebar({activeTab}) {
       </div>
       <ul className="menu">
         <p className="inventoryLabel">Inventory</p>
-        <li className="menu-item ">
-          <GroupOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
+        <Link
+          to="/"
+          className={activeTab === 0 ? 'menu-item active' : 'menu-item'}>
+          <ListAltOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
           <p>Products</p>
-        </li>
+        </Link>
         <Link
           to="/vendors"
           className={activeTab === 1 ? 'menu-item active' : 'menu-item'}>

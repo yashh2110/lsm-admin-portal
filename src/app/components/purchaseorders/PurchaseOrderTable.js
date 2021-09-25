@@ -6,6 +6,7 @@ import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOut
 import {useDispatch} from 'react-redux';
 import {toast} from 'react-toastify';
 import axios from 'axios';
+import {useHistory} from 'react-router-dom';
 import {getPurchaseOrders} from '../../../redux/actions/PurchaseOrders';
 function PurchaseOrderTable({
   columns,
@@ -14,10 +15,11 @@ function PurchaseOrderTable({
   setUpdateopen,
   setRowData,
 }) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const deactivate = async id => {
     await axios
-      .delete(`https://test-api.zasket.in/customer/purchases/${id}`)
+      .delete(`https://test-api.zasket.in/customer/purchases/item/${id}`)
       .then(res => {
         console.log(res);
         toast.success('Purchase deactivated', {
@@ -80,13 +82,13 @@ function PurchaseOrderTable({
             tooltip: 'Deactivate',
             isFreeAction: true,
             onClick: event => {
-              setCreateopen(true);
+              history.push('/purchaseorders/new');
             },
           },
         ]}
         columns={columns}
         data={data}
-        title="Vendors"
+        title="Purchase Orders"
       />
     </div>
   );

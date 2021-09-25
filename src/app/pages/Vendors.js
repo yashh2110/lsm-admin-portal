@@ -22,6 +22,7 @@ function Vendors({setActiveTab}) {
   };
   useEffect(() => {
     dispatch(getVendors());
+
     setActiveTab(1);
   }, []);
   console.log(vendors);

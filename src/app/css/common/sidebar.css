@@ -2,10 +2,18 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px;
-  background-color: rgba(253, 231, 231, 0.802);
+  z-index: 100;
   height: 100vh;
+  transition: all 0.2s ease-in-out;
 }
+.sidebarDiv {
+  z-index: 100;
+  overflow: auto;
+  width: 250px;
+  height: 100vh;
+  background-color: rgba(253, 231, 231, 0.802);
+}
+
 .user {
   padding: 10px;
   margin: 5px;
@@ -103,8 +111,6 @@
 }
 /* foot */
 .foot {
-  position: absolute;
-  bottom: 0px;
   /* background-color:grey; */
   width: 100%;
   padding: 15px;
@@ -128,4 +134,27 @@
   font-family: 600;
   font-size: 0.96rem;
   margin-left: 5px;
+}
+.backDrop {
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .sidebar {
+    left: -100%;
+  }
+  .sidebarDiv {
+    margin-top: 66px;
+    height: calc(100vh - 66px);
+    background-color: rgb(255, 246, 246) !important;
+  }
+  .backDrop {
+    position: absolute;
+    top: 0;
+    display: block;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 }

@@ -8,19 +8,21 @@ import {
 import ProductsTable from '../components/products/ProductsTable';
 import {Waypoint} from 'react-waypoint';
 import '../css/pages/vendor.css';
+import ProductsUpdateForm from '../components/products/ProductsUpdateForm';
 
 function Products({setActiveTab}) {
   const products = useSelector(state => state.products.products);
   const filters = useSelector(state => state.products.filters);
   const [page, setPage] = useState(0);
+
   const dispatch = useDispatch();
-  //   const [updateopen, setUpdateopen] = useState(false);
+  const [updateopen, setUpdateopen] = useState(false);
   //   const [createopen, setCreateopen] = useState(false);
-  //   const [rowData, setRowData] = useState(false);
-  //   const handleUpdateClose = () => {
-  //     setUpdateopen(false);
-  //     setRowData(null);
-  //   };
+  const [rowData, setRowData] = useState(false);
+  const handleUpdateClose = () => {
+    setUpdateopen(false);
+    setRowData(null);
+  };
   //   const handleCreateClose = () => {
   //     setCreateopen(false);
   //     setRowData(null);
@@ -87,11 +89,12 @@ function Products({setActiveTab}) {
     <div className="vendor">
       <ProductsTable
         columns={columns}
-        // setUpdateopen={setUpdateopen}
-        // updateopen={updateopen}
+        setPage={setPage}
+        setUpdateopen={setUpdateopen}
+        updateopen={updateopen}
         // setCreateopen={setCreateopen}
         // createopen={createopen}
-        // setRowData={setRowData}
+        setRowData={setRowData}
       />
       {/* {rowData ? (
         <PurchaseOrderUpdateForm
@@ -105,6 +108,13 @@ function Products({setActiveTab}) {
         open={createopen}
         handleClose={handleCreateClose}
       />  */}
+      {rowData ? (
+        <ProductsUpdateForm
+          open={updateopen}
+          handleClose={handleUpdateClose}
+          data={rowData}
+        />
+      ) : null}
     </div>
   );
 }

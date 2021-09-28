@@ -7,7 +7,7 @@ import {
   productNameFilter,
 } from '../../../redux/actions/Products';
 import '../../css/common/productToolbar.css';
-function ProductToolbar() {
+function ProductToolbar({setPage}) {
   const cat = useSelector(state => state.products.catogories);
   console.log(cat);
   const [name, setName] = useState('');
@@ -16,6 +16,7 @@ function ProductToolbar() {
   const dispatch = useDispatch();
   const filters = useSelector(state => state.products.filters);
   const filter = ({type, payload}) => {
+    setPage(0);
     switch (type) {
       case 'name':
         setName(payload);

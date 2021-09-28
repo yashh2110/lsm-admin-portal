@@ -57,8 +57,11 @@ function PurchaseOrderTable({
             icon: () => <EditOutlinedIcon />,
             tooltip: 'Edit',
             onClick: (event, rowData) => {
-              setUpdateopen(true);
-              setRowData(rowData);
+              console.log(rowData);
+              history.push({
+                pathname: '/purchaseorders/update',
+                state: {item: rowData},
+              });
             },
           },
           {

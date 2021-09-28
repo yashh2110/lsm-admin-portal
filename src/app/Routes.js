@@ -6,6 +6,7 @@ import Products from './pages/Products';
 import PurchaseOrders from './pages/Purchaseorders';
 import Vendors from './pages/Vendors';
 import Warehouses from './pages/Warehouses';
+import PurchaseOrderUpdateForm from './pages/PurchaseOrderUpdateForm';
 
 function Routes() {
   const [activeTab, setActiveTab] = useState();
@@ -55,6 +56,18 @@ function Routes() {
           render={props => (
             <Index activeTab={activeTab}>
               <PurchaseOrderCreateForm setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/purchaseorders/update"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <PurchaseOrderUpdateForm
+                setActiveTab={setActiveTab}
+                item={props.location.state['item']}
+              />
             </Index>
           )}
         />

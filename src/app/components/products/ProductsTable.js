@@ -7,7 +7,13 @@ import {useSelector} from 'react-redux';
 // import {useDispatch} from 'react-redux';
 // import {toast} from 'react-toastify';
 
-function ProductsTable({columns, setCreateopen, setUpdateopen, setRowData}) {
+function ProductsTable({
+  columns,
+  setCreateopen,
+  setUpdateopen,
+  setRowData,
+  setPage,
+}) {
   // const dispatch = useDispatch();
   const products = useSelector(state => state.products.products);
   console.log(products);
@@ -15,7 +21,7 @@ function ProductsTable({columns, setCreateopen, setUpdateopen, setRowData}) {
     <div style={{maxWidth: '100%'}}>
       <div className="p-2">
         {/* <MTableToolbar {...props} /> */}
-        <ProductToolbar />
+        <ProductToolbar setPage={setPage} />
       </div>
       <MaterialTable
         style={{padding: '0 8px', boxShadow: 'none'}}

@@ -24,7 +24,6 @@ function Warehouses({setActiveTab}) {
     dispatch(getWarehouses());
     setActiveTab(2);
   }, []);
-  console.log(vendors);
   const columns = [
     {title: 'Id', field: 'id'},
     {title: 'Warehouse Name', field: 'name'},

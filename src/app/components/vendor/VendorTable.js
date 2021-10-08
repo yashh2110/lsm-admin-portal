@@ -1,12 +1,12 @@
 // import MUIDataTable from 'mui-datatables';
 import MaterialTable, {MTableToolbar} from 'material-table';
-import React, {useState} from 'react';
+import React from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import {getVendors} from '../../../redux/actions/Vendors';
 import {useDispatch} from 'react-redux';
 import {toast} from 'react-toastify';
-import axios from 'axios';
+import {deactivateVendorService} from './VendorService';
 function VendorTable({
   columns,
   data,
@@ -15,13 +15,10 @@ function VendorTable({
   setRowData,
 }) {
   const dispatch = useDispatch();
-  const [search, setSearch] = useState('yash');
-  console.log(search);
+
   const deactivate = async id => {
-    await axios
-      .delete(`https://test-api.zasket.in/customer/vendors/${id}`)
+    deactivateVendorService(id)
       .then(res => {
-        console.log(res);
         toast.success('Vendor deactivated', {
           position: 'top-right',
           autoClose: 2000,
@@ -40,15 +37,11 @@ function VendorTable({
     <div style={{maxWidth: '100%'}}>
       <MaterialTable
         style={{padding: '0 8px', boxShadow: 'none'}}
-        onSearchChange={e => {
-          setSearch(e);
-        }}
         options={{
           paging: false,
           padding: 'dense',
           actionsColumnIndex: -1,
           debounceInterval: 1000,
-          searchText: search,
           minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
           maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
         }}

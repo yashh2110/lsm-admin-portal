@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {HashRouter as Router, Switch, Route} from 'react-router-dom';
 import PurchaseOrderCreateForm from './pages/PurchaseOrderCreateForm';
 import Index from './pages/Index';
 import Products from './pages/Products';
@@ -8,9 +8,11 @@ import Vendors from './pages/Vendors';
 import Warehouses from './pages/Warehouses';
 import PurchaseOrderUpdateForm from './pages/PurchaseOrderUpdateForm';
 
+import ViewPurchaseOrder from './pages/ViewPurchaseOrder';
+import Assignments from './pages/Assignments';
+
 function Routes() {
   const [activeTab, setActiveTab] = useState();
-
   return (
     <Router>
       <Switch>
@@ -50,6 +52,7 @@ function Routes() {
             </Index>
           )}
         />
+
         <Route
           exact
           path="/purchaseorders/new"
@@ -67,6 +70,27 @@ function Routes() {
               <PurchaseOrderUpdateForm
                 setActiveTab={setActiveTab}
                 item={props.location.state['item']}
+              />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/assignments"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <Assignments setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/purchaseorders/:orderId"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <ViewPurchaseOrder
+                setActiveTab={setActiveTab}
+                orderId={props.match.params.orderId}
               />
             </Index>
           )}

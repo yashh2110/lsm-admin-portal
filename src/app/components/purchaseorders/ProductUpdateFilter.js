@@ -4,15 +4,15 @@ import img from '../../../assets/images/img.jpg';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {BiRupee} from 'react-icons/bi';
-function ProductFilterItem({i, dispatch, addedProducts}) {
+function ProductUpdateFilter({i, dispatch, addedProducts}) {
   const [quantity, setQuantity] = useState(1);
   const [unitPrice, setUnitPrice] = useState(i.discountedPrice);
   const item = {
-    item: i,
+    itemName: i.name,
     itemId: i.id,
     quantity: quantity,
-    unitPrice: unitPrice,
-    totalQuantityPrice: unitPrice * quantity,
+    unitPrice: i.discountedPrice,
+    totalPrice: i.discountedPrice * quantity,
   };
   const isProductAdded = () => {
     if (addedProducts.length === 0) return false;
@@ -32,24 +32,15 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
   return (
     <div className="filterItem">
       <div className="filterDet">
-        <img
-          src={
-            i.productImageInfoList[0]
-              ? i.productImageInfoList[0].mediumImagePath
-              : img
-          }
-          alt="img"
-          className="filterItemImg"
-        />
+        <img src={img} alt="img" className="filterItemImg" />
         <div className="filterItemNamePrice">
-          <p className="filterItemName">
-            {i.name} ({i.subName})
-          </p>
+          <p className="filterItemName">{i.name}</p>
           <div className="filterItemPrice d-flex align-items-center">
             <p className="p-0 m-0">Unit Price : </p>
             <input
               type="number"
               value={unitPrice}
+              className="unitPrice"
               onChange={e => {
                 const newUnitPrice = parseInt(e.target.value) || 0;
                 setUnitPrice(newUnitPrice);
@@ -58,11 +49,10 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                   payload: {
                     ...item,
                     unitPrice: newUnitPrice,
-                    totalQuantityPrice: newUnitPrice * quantity,
+                    totalPrice: newUnitPrice * quantity,
                   },
                 });
               }}
-              className="unitPrice"
             />
             <BiRupee className="mb-1" />
             {/* {unitPrice * quantity} */}
@@ -90,7 +80,7 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                     payload: {
                       ...item,
                       quantity: quantity - 1,
-                      totalQuantityPrice: unitPrice * (quantity - 1),
+                      totalPrice: i.discountedPrice * (quantity - 1),
                     },
                   });
                 } else {
@@ -110,7 +100,7 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                   payload: {
                     ...item,
                     quantity: parseInt(e.target.value) || null,
-                    totalQuantityPrice: unitPrice * (e.target.value - 1),
+                    totalPrice: i.discountedPrice * (e.target.value - 1),
                   },
                 });
               }}
@@ -125,7 +115,7 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                   payload: {
                     ...item,
                     quantity: quantity + 1,
-                    totalQuantityPrice: unitPrice * (quantity + 1),
+                    totalPrice: i.discountedPrice * (quantity + 1),
                   },
                 });
               }}>
@@ -138,4 +128,4 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
   );
 }
 
-export default ProductFilterItem;
+export default ProductUpdateFilter;

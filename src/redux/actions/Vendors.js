@@ -1,6 +1,6 @@
 import {ActionTypes} from '../actionTypes/ActionTypes';
 import axios from 'axios';
-const BASE_URL = 'https://test-api.zasket.in/customer/vendors';
+const BASE_URL = 'https://test-api.zasket.in/inventory/api/1/vendors';
 export const allVendors = payload => {
   return {
     type: ActionTypes.GET_ALL_VENDOR,
@@ -14,7 +14,6 @@ export const getVendors = () => {
       .get(BASE_URL)
       .then(res => {
         dispatch(allVendors(res.data));
-        console.log(res);
       })
       .catch(err => {
         console.log(err);

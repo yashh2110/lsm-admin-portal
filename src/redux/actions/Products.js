@@ -38,7 +38,7 @@ export const productActiveFilter = payload => {
   };
 };
 export const getProducts = ({name, category, active}) => {
-  let URL = 'https://test-api.zasket.in/api/v1/inventory/products/list';
+  let URL = 'https://test-api.zasket.in/inventory/api/1/products';
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'size=' + 15 + '&';
   URL = URL + 'page=' + 0 + '&';
@@ -54,7 +54,6 @@ export const getProducts = ({name, category, active}) => {
       })
       .then(res => {
         dispatch(allProducts(res.data.products));
-        console.log(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -62,7 +61,7 @@ export const getProducts = ({name, category, active}) => {
   };
 };
 export const addProducts = ({name, category, active, page}) => {
-  let URL = 'https://test-api.zasket.in/api/v1/inventory/products/list';
+  let URL = 'https://test-api.zasket.in/inventory/api/1/products';
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'size=' + 15 + '&';
   URL = URL + 'page=' + page + '&';
@@ -78,7 +77,6 @@ export const addProducts = ({name, category, active, page}) => {
       })
       .then(res => {
         dispatch(newProducts(res.data.products));
-        console.log(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -89,7 +87,7 @@ export const getProductCategory = () => {
   return async dispatch => {
     await axios
       .get(
-        'https://test-api.zasket.in/api/v1/inventory/categories/list?isActive=true',
+        'https://test-api.zasket.in/inventory/api/1/categories/list?isActive=true',
         {
           headers: {
             'inventory-user-id': 1,
@@ -99,7 +97,6 @@ export const getProductCategory = () => {
       )
       .then(res => {
         dispatch(allCategories(res.data.categories));
-        console.log(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -107,7 +104,7 @@ export const getProductCategory = () => {
   };
 };
 export const getProductsWithFilter = ({name, category, active}) => {
-  let URL = 'https://test-api.zasket.in/api/v1/inventory/products/list';
+  let URL = 'https://test-api.zasket.in/inventory/api/1/products';
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'categoryId=' + category + '&';
   if (active) URL = URL + 'isActive=' + active;
@@ -121,7 +118,6 @@ export const getProductsWithFilter = ({name, category, active}) => {
       })
       .then(res => {
         dispatch(allProducts(res.data.products));
-        console.log(res.data);
       })
       .catch(err => {
         console.log(err);

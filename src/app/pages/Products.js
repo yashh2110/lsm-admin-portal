@@ -9,6 +9,8 @@ import ProductsTable from '../components/products/ProductsTable';
 import {Waypoint} from 'react-waypoint';
 import '../css/pages/vendor.css';
 import ProductsUpdateForm from '../components/products/ProductsUpdateForm';
+import ProductCreateForm from '../components/products/ProductsCreateForm';
+import ViewProduct from '../components/products/ViewProduct';
 
 function Products({setActiveTab}) {
   const products = useSelector(state => state.products.products);
@@ -17,16 +19,21 @@ function Products({setActiveTab}) {
 
   const dispatch = useDispatch();
   const [updateopen, setUpdateopen] = useState(false);
-  //   const [createopen, setCreateopen] = useState(false);
-  const [rowData, setRowData] = useState(false);
+  const [createopen, setCreateopen] = useState(false);
+  const [viewProduct, setViewProduct] = useState(false);
+  const [rowData, setRowData] = useState(null);
   const handleUpdateClose = () => {
     setUpdateopen(false);
     setRowData(null);
   };
-  //   const handleCreateClose = () => {
-  //     setCreateopen(false);
-  //     setRowData(null);
-  //   };
+  const handleCreateClose = () => {
+    setCreateopen(false);
+    setRowData(null);
+  };
+  const handleViewClose = () => {
+    setViewProduct(false);
+    setRowData(null);
+  };
   useEffect(() => {
     dispatch(
       getProducts({
@@ -39,7 +46,6 @@ function Products({setActiveTab}) {
     dispatch(getProductCategory());
     setActiveTab(0);
   }, []);
-  console.log(products, 'addpro');
 
   const columns = [
     {
@@ -92,8 +98,10 @@ function Products({setActiveTab}) {
         setPage={setPage}
         setUpdateopen={setUpdateopen}
         updateopen={updateopen}
-        // setCreateopen={setCreateopen}
-        // createopen={createopen}
+        setCreateopen={setCreateopen}
+        createopen={createopen}
+        setViewProduct={setViewProduct}
+        viewProduct={viewProduct}
         setRowData={setRowData}
       />
       {/* {rowData ? (
@@ -104,10 +112,14 @@ function Products({setActiveTab}) {
         />
       ) : null}
       {/* <Dtable /> */}
-      {/* <PurchaseOrderCreateForm
-        open={createopen}
-        handleClose={handleCreateClose}
-      />  */}
+      <ProductCreateForm open={createopen} handleClose={handleCreateClose} />
+      {rowData ? (
+        <ViewProduct
+          open={viewProduct}
+          data={rowData}
+          handleClose={handleViewClose}
+        />
+      ) : null}
       {rowData ? (
         <ProductsUpdateForm
           open={updateopen}

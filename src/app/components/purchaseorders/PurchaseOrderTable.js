@@ -1,40 +1,13 @@
-// import MUIDataTable from 'mui-datatables';
 import MaterialTable, {MTableToolbar} from 'material-table';
 import React from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import {useDispatch} from 'react-redux';
-import {toast} from 'react-toastify';
-import axios from 'axios';
+
 import {useHistory} from 'react-router-dom';
-import {getPurchaseOrders} from '../../../redux/actions/PurchaseOrders';
-function PurchaseOrderTable({
-  columns,
-  data,
-  setCreateopen,
-  setUpdateopen,
-  setRowData,
-}) {
+function PurchaseOrderTable({columns, data}) {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const deactivate = async id => {
-    await axios
-      .delete(`https://test-api.zasket.in/customer/purchases/item/${id}`)
-      .then(res => {
-        console.log(res);
-        toast.success('Purchase deactivated', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-        dispatch(getPurchaseOrders());
-      })
-      .catch(err => {
-        console.log(err);
-        toast.error('Something went wrong', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-      });
+
+  const viewOrder = e => {
+    history.push({pathname: `/purchaseorders/${e.id}`, state: {orderId: e.id}});
   };
   return (
     <div style={{maxWidth: '100%'}}>
@@ -45,6 +18,7 @@ function PurchaseOrderTable({
           padding: 'dense',
           actionsColumnIndex: -1,
         }}
+        onRowClick={(event, e) => viewOrder(e)}
         components={{
           Toolbar: props => (
             <div className="p-2">
@@ -57,20 +31,13 @@ function PurchaseOrderTable({
             icon: () => <EditOutlinedIcon />,
             tooltip: 'Edit',
             onClick: (event, rowData) => {
-              console.log(rowData);
               history.push({
                 pathname: '/purchaseorders/update',
                 state: {item: rowData},
               });
             },
           },
-          {
-            icon: () => <RemoveCircleOutlineOutlinedIcon />,
-            tooltip: 'Deactivate',
-            onClick: (event, rowData) => {
-              deactivate(rowData.id);
-            },
-          },
+
           {
             icon: () => (
               <div

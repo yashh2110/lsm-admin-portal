@@ -9,13 +9,17 @@ import {useDispatch} from 'react-redux';
 import {getVendors} from '../../redux/actions/Vendors';
 import {getWarehouses} from '../../redux/actions/Warehouses';
 import {useSelector} from 'react-redux';
-import axios from 'axios';
-import ProductFilterItem from '../components/purchaseorders/ProductFilterItem';
-import ProductPreviewItem from '../components/purchaseorders/ProductPreviewItem';
+
 import animationData from '../../assets/loaders/empty.json';
 import Lottie from 'react-lottie';
 import {BiRupee} from 'react-icons/bi';
 import {toast} from 'react-toastify';
+import ProductUpdateFormPrev from '../components/purchaseorders/ProductUpdateFormPrev';
+import ProductUpdateFilter from '../components/purchaseorders/ProductUpdateFilter';
+import {
+  productSearchService,
+  updatePurchaseOrderService,
+} from '../components/purchaseorders/PurchaseOrderService';
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -24,9 +28,9 @@ const reducer = (state, {type, payload}) => {
     case 'warehouseId':
       return {...state, warehouseId: payload};
     case 'po_paymentState':
-      return {...state, po_paymentState: payload};
+      return {...state, paymentState: payload};
     case 'po_purchaseState':
-      return {...state, po_purchaseState: payload};
+      return {...state, purchaseState: payload};
     case 'comments':
       return {...state, comments: payload};
     case 'orderAmount':
@@ -34,48 +38,42 @@ const reducer = (state, {type, payload}) => {
     case 'addProductItems':
       return {
         ...state,
-        purchaseOrderItemsRequests: [
-          payload,
-          ...state.purchaseOrderItemsRequests,
-        ],
-        orderAmount: state.orderAmount + payload.totalQuantityPrice,
+        purchaseOrderItems: [payload, ...state.purchaseOrderItems],
+        orderAmount: state.orderAmount + payload.totalPrice,
       };
     case 'updateProducts':
       let count = 0;
-      const updatedProductItems = state.purchaseOrderItemsRequests.map(i => {
+      const updatedProductItems = state.purchaseOrderItems.map(i => {
         if (i['itemId'] === payload['itemId']) {
-          count = count + payload.totalQuantityPrice;
+          count = count + payload.totalPrice;
           return payload;
         } else {
-          count = count + i.totalQuantityPrice;
+          count = count + i.totalPrice;
           return i;
         }
       });
-      console.log(payload);
       return {
         ...state,
-        purchaseOrderItemsRequests: updatedProductItems,
+        purchaseOrderItems: updatedProductItems,
         orderAmount: count,
       };
     case 'removeProductItems':
-      const filterdList = state.purchaseOrderItemsRequests.filter(
+      const filterdList = state.purchaseOrderItems.filter(
         i => i['itemId'] !== payload['itemId'],
       );
-      console.log(filterdList);
       return {
         ...state,
-        purchaseOrderItemsRequests: filterdList,
-        orderAmount: state.orderAmount - payload.totalQuantityPrice,
+        purchaseOrderItems: filterdList,
+        orderAmount: state.orderAmount - payload.totalPrice,
       };
     case 'itemQuantity':
-      const quantityfilterdList = state.purchaseOrderItemsRequests.map(i => {
+      const quantityfilterdList = state.purchaseOrderItems.map(i => {
         if (i['id'] === payload['id']) {
           i['quantity'] = payload['quantity'];
         }
         return i;
       });
-      console.log(quantityfilterdList);
-      return {...state, purchaseOrderItemsRequests: quantityfilterdList};
+      return {...state, purchaseOrderItems: quantityfilterdList};
     default:
       return state;
   }
@@ -88,22 +86,11 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
   const [pocForm, formDispatch] = useReducer(reducer, item);
   const [filterProducts, setFilterProducts] = useState();
   const [filterLoading, setFilterloading] = useState(false);
-
   const productSearch = async query => {
     setFilterloading(true);
     if (query.length >= 1) {
-      await axios
-        .get(
-          `https://test-api.zasket.in/api/v1/inventory/products/list?productsNameLike=${query}`,
-          {
-            headers: {
-              'inventory-user-id': 1,
-              'session-id': 1,
-            },
-          },
-        )
+      productSearchService(query)
         .then(res => {
-          // console.log(res.data.products);
           setFilterProducts(res.data.products);
           setFilterloading(false);
         })
@@ -116,13 +103,10 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
       setFilterloading(false);
     }
   };
-  console.log(filterProducts);
   const pocSubmit = async () => {
-    await axios
-      .post('https://test-api.zasket.in/customer/purchases', pocForm)
+    updatePurchaseOrderService(item.id, pocForm)
       .then(res => {
-        console.log(res);
-        toast.success('Purchase Order Created', {
+        toast.success('Purchase Order updated', {
           position: 'top-right',
           autoClose: 2000,
         });
@@ -141,7 +125,6 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
     dispatch(getWarehouses());
     setActiveTab(3);
   }, []);
-  console.log(pocForm);
   return (
     <div className="vendor">
       <div className="pocreateHead">
@@ -221,7 +204,7 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
                 labelId="status"
                 id="selectStatus"
                 label="Status"
-                value={pocForm.po_purchaseState || pocForm.purchaseState}
+                value={pocForm.purchaseState}
                 onChange={e =>
                   formDispatch({
                     type: 'po_purchaseState',
@@ -249,7 +232,7 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
                 labelId="status"
                 id="selectStatus"
                 label="Status"
-                value={pocForm.po_paymentState || pocForm.paymentState}
+                value={pocForm.paymentState}
                 onChange={e =>
                   formDispatch({
                     type: 'po_paymentState',
@@ -307,11 +290,11 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
                 {filterProducts
                   ? filterProducts.map(i => {
                       return (
-                        <ProductFilterItem
+                        <ProductUpdateFilter
                           i={i}
                           key={i.id}
                           dispatch={formDispatch}
-                          addedProducts={pocForm.purchaseOrderItemsRequests}
+                          addedProducts={pocForm.purchaseOrderItems}
                         />
                       );
                     })
@@ -349,11 +332,11 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
             Checkout
           </p>
           <div className="productPrev">
-            {pocForm.purchaseOrderItemsRequests?.length >= 1 ? (
-              pocForm.purchaseOrderItemsRequests.map(e => (
-                <ProductPreviewItem
+            {pocForm.purchaseOrderItems?.length >= 1 ? (
+              pocForm.purchaseOrderItems.map(e => (
+                <ProductUpdateFormPrev
                   e={e}
-                  key={e.item.id}
+                  key={e.id}
                   dispatch={formDispatch}
                   pocForm={pocForm}
                 />
@@ -392,15 +375,8 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
               variant="contained"
               color="info"
               onClick={pocSubmit}
-              disabled={
-                pocForm.vendorId &&
-                pocForm.warehouseId &&
-                pocForm.po_paymentState &&
-                pocForm.po_purchaseState
-                  ? false
-                  : true
-              }>
-              Submit
+              disabled={pocForm.vendorId && pocForm.warehouseId ? false : true}>
+              Update
             </Button>
           </div>
         </div>

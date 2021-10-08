@@ -9,13 +9,16 @@ import {useDispatch} from 'react-redux';
 import {getVendors} from '../../redux/actions/Vendors';
 import {getWarehouses} from '../../redux/actions/Warehouses';
 import {useSelector} from 'react-redux';
-import axios from 'axios';
 import ProductFilterItem from '../components/purchaseorders/ProductFilterItem';
 import ProductPreviewItem from '../components/purchaseorders/ProductPreviewItem';
 import animationData from '../../assets/loaders/empty.json';
 import Lottie from 'react-lottie';
 import {BiRupee} from 'react-icons/bi';
 import {toast} from 'react-toastify';
+import {
+  createPurchaseOrderService,
+  productSearchService,
+} from '../components/purchaseorders/PurchaseOrderService';
 const initialState = {
   vendorId: '',
   warehouseId: '',
@@ -59,7 +62,6 @@ const reducer = (state, {type, payload}) => {
           return i;
         }
       });
-      console.log(payload);
       return {
         ...state,
         purchaseOrderItemsRequests: updatedProductItems,
@@ -69,7 +71,6 @@ const reducer = (state, {type, payload}) => {
       const filterdList = state.purchaseOrderItemsRequests.filter(
         i => i['itemId'] !== payload['itemId'],
       );
-      console.log(filterdList);
       return {
         ...state,
         purchaseOrderItemsRequests: filterdList,
@@ -82,7 +83,6 @@ const reducer = (state, {type, payload}) => {
         }
         return i;
       });
-      console.log(quantityfilterdList);
       return {...state, purchaseOrderItemsRequests: quantityfilterdList};
     default:
       return state;
@@ -100,18 +100,8 @@ function PurchaseOrderCreateForm({setActiveTab}) {
   const productSearch = async query => {
     setFilterloading(true);
     if (query.length >= 1) {
-      await axios
-        .get(
-          `https://test-api.zasket.in/api/v1/inventory/products/list?productsNameLike=${query}`,
-          {
-            headers: {
-              'inventory-user-id': 1,
-              'session-id': 1,
-            },
-          },
-        )
+      productSearchService(query)
         .then(res => {
-          // console.log(res.data.products);
           setFilterProducts(res.data.products);
           setFilterloading(false);
         })
@@ -124,12 +114,9 @@ function PurchaseOrderCreateForm({setActiveTab}) {
       setFilterloading(false);
     }
   };
-  console.log(filterProducts);
   const pocSubmit = async () => {
-    await axios
-      .post('https://test-api.zasket.in/customer/purchases', pocForm)
+    createPurchaseOrderService(pocForm)
       .then(res => {
-        console.log(res);
         toast.success('Purchase Order Created', {
           position: 'top-right',
           autoClose: 2000,
@@ -149,7 +136,6 @@ function PurchaseOrderCreateForm({setActiveTab}) {
     dispatch(getWarehouses());
     setActiveTab(3);
   }, []);
-  console.log(pocForm);
   return (
     <div className="vendor">
       <div className="pocreateHead">

@@ -6,13 +6,3 @@
   display: flex;
   justify-content: center;
 }
-@media screen and (max-width: 768px) {
-  .main {
-    position: relative;
-    margin-top: 70px;
-    margin-left: 0px;
-    height: calc(100vh - 70px);
-    display: flex;
-    justify-content: center;
-  }
-}

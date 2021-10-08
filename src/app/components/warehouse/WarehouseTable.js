@@ -5,8 +5,8 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import {useDispatch} from 'react-redux';
 import {toast} from 'react-toastify';
-import axios from 'axios';
 import {getWarehouses} from '../../../redux/actions/Warehouses';
+import {deactivateWarehouseService} from './WarehouseService';
 function WarehouseTable({
   columns,
   data,
@@ -15,11 +15,9 @@ function WarehouseTable({
   setRowData,
 }) {
   const dispatch = useDispatch();
-  const deactivate = async id => {
-    await axios
-      .delete(`https://test-api.zasket.in/customer/warehouses/${id}`)
+  const deactivate = id => {
+    deactivateWarehouseService(id)
       .then(res => {
-        console.log(res);
         toast.success('Warehouse deactivated', {
           position: 'top-right',
           autoClose: 2000,

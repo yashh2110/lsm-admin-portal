@@ -133,8 +133,21 @@
   margin-left: 10px;
   overflow: hidden;
   font-size: 0.9rem;
-  margin-bottom: 7px;
+  margin-bottom: 2px;
   font-weight: 500;
+}
+.unitPrice {
+  width: 90px;
+  margin-left: 5px;
+  border: none;
+  border-bottom: 1px solid lightgrey;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.unitPrice:focus {
+  outline: none;
+  border-bottom: 2.2px solid #0d6efd;
+  border-radius: 4px;
 }
 .price {
   width: 60%;

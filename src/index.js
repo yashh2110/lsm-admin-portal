@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import './app/css/index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import Store from './redux/Store';
+
 ReactDOM.render(
-    <Provider store={Store}>
+  <Provider store={Store}>
     <App />
-    </Provider>
-,
-  document.getElementById('root')
+  </Provider>,
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

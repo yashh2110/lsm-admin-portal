@@ -1,6 +1,6 @@
 import {ActionTypes} from '../actionTypes/ActionTypes';
 import axios from 'axios';
-const BASE_URL = 'https://test-api.zasket.in/customer/purchases';
+const BASE_URL = 'https://test-api.zasket.in/inventory/api/1/purchase-order';
 
 export const setPurchaseOrders = payload => {
   return {
@@ -14,7 +14,6 @@ export const getPurchaseOrders = () => {
     await axios
       .get(BASE_URL)
       .then(res => {
-        console.log(res);
         dispatch(setPurchaseOrders(res.data));
       })
       .catch(err => {

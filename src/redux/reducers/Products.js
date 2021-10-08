@@ -11,7 +11,6 @@ const ProductReducer = (state = initialState, {type, payload}) => {
     case ActionTypes.GET_ALL_PRODUCTS:
       return {...state, products: payload};
     case ActionTypes.ADD_PRODUCTS:
-      console.log(state.products, 'ashdh');
       return {...state, products: [...state.products, ...payload]};
     case ActionTypes.GET_ALL_CATEGORIES:
       return {...state, catogories: payload};

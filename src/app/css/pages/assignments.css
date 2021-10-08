@@ -1,0 +1,92 @@
+.map-assign {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 500px;
+}
+.map-data {
+  width: 70%;
+}
+.assign {
+  position: relative;
+  width: 30%;
+}
+.desDiv {
+  position: relative;
+}
+.assign-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.assign-title {
+  text-align: right;
+  padding: 5px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 10px;
+}
+
+.assign-date {
+  padding: 10px;
+  border: none;
+  border-bottom: 3px solid rgba(153, 115, 218, 0.585);
+  border-radius: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  color: rgba(30, 30, 30, 0.585);
+  background-color: white;
+}
+.assign-date:focus {
+  border-bottom: 3px solid rgb(150, 56, 238);
+  outline: none;
+}
+.assign-date-slot {
+  position: absolute;
+  top: 0;
+  padding: 5px;
+  margin: 5px;
+}
+.selectedOrderLabel {
+  padding: 5px;
+  padding-bottom: 0;
+  margin: 5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+}
+.selectedOrder {
+  padding: 5px;
+  padding-bottom: 0;
+  overflow: hidden;
+  /* height: 60px; */
+  overflow: auto;
+  margin: 5px;
+  font-size: 1rem;
+  /* opacity: 0.6; */
+}
+.selectOrderDelBtn:hover {
+  transform: scale(1.1);
+}
+.selectedOrder > p {
+  text-overflow: ellipsis;
+}
+.deCard {
+  padding: 5px;
+  padding-bottom: 0;
+  margin: 5px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.deCardDet {
+  display: flex;
+  align-items: center;
+}
+.deCardName {
+  margin: 0;
+  padding: 5px;
+  letter-spacing: 0.6px;
+}

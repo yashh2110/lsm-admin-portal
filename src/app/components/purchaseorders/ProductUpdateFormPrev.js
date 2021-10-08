@@ -5,28 +5,18 @@ import {IconButton} from '@mui/material';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {BiRupee} from 'react-icons/bi';
-function ProductPreviewItem({e, dispatch}) {
+function ProductUpdateFormPrev({e, dispatch}) {
   const [quantity, setQuantity] = useState(e.quantity);
   const item = {
     ...e,
-    totalQuantityPrice: e.unitPrice * quantity,
+    totalPrice: e.unitPrice * quantity,
   };
   return (
     <div className="item">
       <div className="itemDet">
-        <img
-          src={
-            e.item.productImageInfoList[0]
-              ? e.item.productImageInfoList[0].mediumImagePath
-              : img
-          }
-          alt=""
-          className="itemImg"
-        />
+        <img src={img} alt="" className="itemImg" />
         <div className="">
-          <p className="itemName">
-            {e.item.name} ({e.item.subName})
-          </p>
+          <p className="itemName">{e.itemName}</p>
           <div
             className="itemName d-flex align-items-center"
             style={{marginLeft: '10px'}}>
@@ -41,7 +31,7 @@ function ProductPreviewItem({e, dispatch}) {
                   payload: {
                     ...item,
                     unitPrice: newUnitPrice,
-                    totalQuantityPrice: newUnitPrice * e.quantity,
+                    totalPrice: newUnitPrice * e.quantity,
                   },
                 });
               }}
@@ -77,7 +67,7 @@ function ProductPreviewItem({e, dispatch}) {
                     payload: {
                       ...item,
                       quantity: parseInt(e.quantity) - 1,
-                      totalQuantityPrice: e.unitPrice * (e.quantity - 1),
+                      totalPrice: e.unitPrice * (e.quantity - 1),
                     },
                   });
                 } else {
@@ -96,7 +86,7 @@ function ProductPreviewItem({e, dispatch}) {
                   payload: {
                     ...item,
                     quantity: parseInt(k.target.value) || 0,
-                    totalQuantityPrice: e.unitPrice * (k.target.value - 1),
+                    totalPrice: e.unitPrice * (k.target.value - 1),
                   },
                 });
               }}
@@ -111,7 +101,7 @@ function ProductPreviewItem({e, dispatch}) {
                   payload: {
                     ...item,
                     quantity: parseInt(e.quantity) + 1,
-                    totalQuantityPrice: e.unitPrice * (e.quantity + 1),
+                    totalPrice: e.unitPrice * (e.quantity + 1),
                   },
                 });
               }}>
@@ -124,4 +114,4 @@ function ProductPreviewItem({e, dispatch}) {
   );
 }
 
-export default ProductPreviewItem;
+export default ProductUpdateFormPrev;

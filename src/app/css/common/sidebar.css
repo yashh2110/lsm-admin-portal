@@ -46,12 +46,7 @@
   border-radius: 5px;
   box-shadow: 0 0px 3px lightgrey;
 }
-.placeDiv > .placeName {
-  margin: 0;
-  padding: 0;
-  font-size: 1rem;
-  font-weight: 500;
-}
+
 /* user details */
 .user > .userDet {
   display: flex;
@@ -67,10 +62,25 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-.user > .userDet > .userName {
+.userandplace {
   margin-left: 5px;
+}
+.userandplace > p {
+  margin: 0;
+  max-width: 155px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.userName {
+  overflow: hidden;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 500;
+}
+.placeName {
+  padding-top: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.8;
 }
 .user > .userMore {
   transition: all 0.3s;
@@ -80,17 +90,20 @@
 }
 /* menue */
 .menu {
-  padding: 10px;
+  padding: 5px 10px 2px;
+  margin-bottom: 0;
 }
 .menu > .inventoryLabel {
+  margin-bottom: 10px;
   margin-left: 10px;
-  font-weight: 400;
+  font-weight: 500;
+  opacity: 0.85;
 }
 .menu > .menu-item {
-  padding: 12px;
-  margin: 8px;
+  padding: 9px;
+  margin: 1px;
   font-weight: 500;
-  transition: all 0.3s ease-in-out;
+  /* transition: all 0.3s ease-in-out; */
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -112,6 +125,8 @@
 /* foot */
 .foot {
   /* background-color:grey; */
+  position: absolute;
+  bottom: 10px;
   width: 100%;
   padding: 15px;
 }
@@ -137,24 +152,4 @@
 }
 .backDrop {
   display: none;
-}
-@media screen and (max-width: 768px) {
-  .sidebar {
-    left: -100%;
-  }
-  .sidebarDiv {
-    margin-top: 66px;
-    height: calc(100vh - 66px);
-    background-color: rgb(255, 246, 246) !important;
-  }
-  .backDrop {
-    position: absolute;
-    top: 0;
-    display: block;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    background-color: rgba(0, 0, 0, 0.4);
-  }
 }

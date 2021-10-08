@@ -1,4 +1,4 @@
-.product-toolbar {
+.toolbar {
   padding: 1rem;
   padding-right: 8px;
   min-height: 64px;
@@ -6,14 +6,14 @@
   align-items: center;
   justify-content: space-between;
 }
-.product-toolbar > .title {
+.toolbar > .title {
   font-size: 1.25rem;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 500;
   line-height: 1.6;
   letter-spacing: 0.0075em;
 }
-.product-toolbar > .filter {
+.toolbar > .filter {
   position: relative;
   width: 55%;
   display: flex;
@@ -31,10 +31,4 @@
 }
 .filter > .category {
   width: 25%;
-}
-@media (min-width: 600px) {
-  .product-toolbar {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
 }

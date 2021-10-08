@@ -6,10 +6,9 @@ import {
   productCatergoryFilter,
   productNameFilter,
 } from '../../../redux/actions/Products';
-import '../../css/common/productToolbar.css';
-function ProductToolbar({setPage}) {
+import '../../css/common/Toolbar.css';
+function ProductToolbar({setPage, setCreateopen}) {
   const cat = useSelector(state => state.products.catogories);
-  console.log(cat);
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [active, setActive] = useState('');
@@ -44,11 +43,12 @@ function ProductToolbar({setPage}) {
   }, [filters]);
 
   return (
-    <div className="product-toolbar">
+    <div className="toolbar">
       <div className="title">Products</div>
       <div className="filter ">
         <button
           className="btn "
+          onClick={() => setCreateopen(true)}
           style={{
             backgroundColor: 'rgb(223, 223, 223)',
             fontWeight: '500',

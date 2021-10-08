@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 function Navbar({sidebar}) {
   const sidebarHandle = () => {
-    if (sidebar.style.left == '0px') {
+    if (sidebar.style.left === '0px') {
       sidebar.style.left = '-100%';
     } else {
       sidebar.style.left = 0;

@@ -9,12 +9,33 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import DialogTitle from '@mui/material/DialogTitle';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {toast} from 'react-toastify';
+import {useSelector} from 'react-redux';
 import {getProducts} from '../../../redux/actions/Products';
-import {updateProduct} from './ProductService';
+import {createProduct} from './ProductService';
+
+const initial = {
+  name: '',
+  subName: '',
+  categoryId: '',
+  actualPrice: '',
+  thresholdQuantity: '',
+  discountedPrice: '',
+  eanCode: '',
+  imageUrlList: [],
+  estimationType: '',
+  estimationUnit: '',
+  hsnCode: '',
+  maxAllowedQuantity: '',
+  priority: '',
+  onDemand: '',
+  isActive: '',
+};
 const reducer = (state, {type, payload}) => {
   switch (type) {
+    case 'initial':
+      return initial;
     case 'imageUrlList':
       return {...state, imageUrlList: [payload]};
     case 'name':
@@ -50,15 +71,16 @@ const reducer = (state, {type, payload}) => {
       return state;
   }
 };
-function ProductsUpdateForm({open, handleClose, data}) {
-  const filters = useSelector(state => state.products.filters);
-  const initial = data;
+
+function ProductCreateForm({open, handleClose}) {
   const [form, dispatch] = useReducer(reducer, initial);
+  const filters = useSelector(state => state.products.filters);
   const categories = useSelector(state => state.products.catogories);
   const reducDispatch = useDispatch();
+
   const submit = async e => {
     e.preventDefault();
-    updateProduct(initial.id, form)
+    createProduct(form)
       .then(res => {
         reducDispatch(
           getProducts({
@@ -67,22 +89,62 @@ function ProductsUpdateForm({open, handleClose, data}) {
             active: filters.active,
           }),
         );
-        toast.success('Edited Succefully', {
+        toast.success('Vendor Created Succefully', {
           position: 'top-right',
           autoClose: 2000,
         });
         handleClose();
+        dispatch({type: 'initial'});
       })
       .catch(err => {
         console.log(err);
         toast.error('Something went wrong');
       });
   };
+
   return (
-    <Dialog open={open} onClose={handleClose} className="p-4">
-      <DialogTitle>Edit</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={() => {
+        dispatch({type: 'initial'});
+        handleClose();
+      }}
+      className="p-4">
+      <DialogTitle>Create Product</DialogTitle>
       <form onSubmit={submit}>
         <DialogContent>
+          {/* <FormControl
+          variant="standard"
+          fullWidth
+          //   sx={{m: 1}}
+          color="secondary"
+          className="imageUrl"> */}
+          {/* <InputLabel id="status">Select Image</InputLabel>
+          <Select
+            labelId="imageUrl"
+            id="imageUrl"
+            label="imageUrl"
+            value={form.imageUrl}
+            onChange={e =>
+              dispatch({type: 'imageUrl', payload: e.target.value})
+            }>
+            <MenuItem value="" className="d-block p-2">
+              None
+            </MenuItem>
+            {images
+              ? images.map(i =>
+                  i.fileType === 'FILE' ? (
+                    <MenuItem
+                      value={i.filePath}
+                      key={i.filePath}
+                      className="d-block p-2">
+                      {i.fileName}
+                    </MenuItem>
+                  ) : null,
+                )
+              : null}
+          </Select>
+        </FormControl> */}
           <TextField
             required
             autoFocus
@@ -133,7 +195,6 @@ function ProductsUpdateForm({open, handleClose, data}) {
                 : null}
             </Select>
           </FormControl>
-
           <TextField
             required
             fullWidth
@@ -208,6 +269,7 @@ function ProductsUpdateForm({open, handleClose, data}) {
             type="number"
             variant="standard"
           />
+
           <FormControl
             variant="standard"
             fullWidth
@@ -354,13 +416,14 @@ function ProductsUpdateForm({open, handleClose, data}) {
             </Select>
           </FormControl>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Update</Button>
+          <Button type="submit">Create</Button>
         </DialogActions>
       </form>
     </Dialog>
   );
 }
 
-export default ProductsUpdateForm;
+export default ProductCreateForm;

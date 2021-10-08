@@ -25,7 +25,6 @@ function Vendors({setActiveTab}) {
 
     setActiveTab(1);
   }, []);
-  console.log(vendors);
   const columns = [
     {title: 'Id', field: 'id'},
     {title: 'Vendor', field: 'name'},

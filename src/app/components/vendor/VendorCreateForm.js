@@ -9,10 +9,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import DialogTitle from '@mui/material/DialogTitle';
-import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import {getVendors} from '../../../redux/actions/Vendors';
 import {toast} from 'react-toastify';
+import {createVendorService} from './VendorService';
 
 const initial = {
   name: '',
@@ -49,11 +49,10 @@ const reducer = (state, {type, payload}) => {
 function VendorCreateForm({open, handleClose}) {
   const [form, dispatch] = useReducer(reducer, initial);
   const reducDispatch = useDispatch();
-  const submit = async () => {
-    await axios
-      .post(`https://test-api.zasket.in/customer/vendors`, form)
+  const submit = async e => {
+    e.preventDefault();
+    createVendorService(form)
       .then(res => {
-        console.log(res);
         reducDispatch(getVendors());
         toast.success('Vendor Created Succefully', {
           position: 'top-right',
@@ -66,7 +65,6 @@ function VendorCreateForm({open, handleClose}) {
         toast.error('Something went wrong');
       });
   };
-  console.log(form);
   return (
     <Dialog
       open={open}
@@ -76,100 +74,108 @@ function VendorCreateForm({open, handleClose}) {
       }}
       className="p-4">
       <DialogTitle>Create Vendor</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          value={form.name}
-          onChange={e => dispatch({type: 'name', payload: e.target.value})}
-          label="Vendor Name"
-          type="text"
-          variant="standard"
-          fullWidth
-        />
-        <TextField
-          fullWidth
-          margin="dense"
-          value={form.phoneNumber}
-          onChange={e =>
-            dispatch({type: 'phoneNumber', payload: e.target.value})
-          }
-          id="phone"
-          label="Phone Number"
-          type="text"
-          variant="standard"
-        />
-        <TextField
-          fullWidth
-          value={form.email}
-          onChange={e => dispatch({type: 'email', payload: e.target.value})}
-          margin="dense"
-          id="email"
-          label="Email Address"
-          type="text"
-          variant="standard"
-        />
-        <TextField
-          fullWidth
-          value={form.address}
-          onChange={e => dispatch({type: 'address', payload: e.target.value})}
-          margin="dense"
-          id="adress"
-          label="Address"
-          type="text"
-          variant="standard"
-        />
-        <TextField
-          fullWidth
-          margin="dense"
-          value={form.primaryContactName}
-          onChange={e =>
-            dispatch({type: 'primaryContactName', payload: e.target.value})
-          }
-          id="pcn"
-          label="Primary Contact Name"
-          type="text"
-          variant="standard"
-        />
-        <TextField
-          fullWidth
-          margin="dense"
-          value={form.primaryContactPhoneNumber}
-          onChange={e =>
-            dispatch({
-              type: 'primaryContactPhoneNumber',
-              payload: e.target.value,
-            })
-          }
-          id="pcnum"
-          label="Primary Contact Number"
-          type="text"
-          variant="standard"
-        />
-        <FormControl fullWidth variant="standard" sx={{m: 1, minWidth: 120}}>
-          <InputLabel id="status">Status</InputLabel>
-          <Select
-            labelId="status"
-            id="selectStatus"
-            label="Status"
+      <form onSubmit={submit}>
+        <DialogContent>
+          <TextField
+            required
+            autoFocus
+            margin="dense"
+            id="name"
+            value={form.name}
+            onChange={e => dispatch({type: 'name', payload: e.target.value})}
+            label="Vendor Name"
+            type="text"
+            variant="standard"
+            fullWidth
+          />
+          <TextField
+            required
+            fullWidth
+            margin="dense"
+            value={form.phoneNumber}
             onChange={e =>
-              dispatch({type: 'isActive', payload: e.target.value})
+              dispatch({type: 'phoneNumber', payload: e.target.value})
             }
-            value={form.isActive}>
-            <MenuItem value={true} className="d-block p-2">
-              True
-            </MenuItem>
-            <MenuItem value={false} className="d-block p-2">
-              false
-            </MenuItem>
-          </Select>
-        </FormControl>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={submit}>Create</Button>
-      </DialogActions>
+            id="phone"
+            label="Phone Number"
+            type="text"
+            variant="standard"
+          />
+          <TextField
+            required
+            fullWidth
+            value={form.email}
+            onChange={e => dispatch({type: 'email', payload: e.target.value})}
+            margin="dense"
+            id="email"
+            label="Email Address"
+            type="text"
+            variant="standard"
+          />
+          <TextField
+            required
+            fullWidth
+            value={form.address}
+            onChange={e => dispatch({type: 'address', payload: e.target.value})}
+            margin="dense"
+            id="adress"
+            label="Address"
+            type="text"
+            variant="standard"
+          />
+          <TextField
+            required
+            fullWidth
+            margin="dense"
+            value={form.primaryContactName}
+            onChange={e =>
+              dispatch({type: 'primaryContactName', payload: e.target.value})
+            }
+            id="pcn"
+            label="Primary Contact Name"
+            type="text"
+            variant="standard"
+          />
+          <TextField
+            required
+            fullWidth
+            margin="dense"
+            value={form.primaryContactPhoneNumber}
+            onChange={e =>
+              dispatch({
+                type: 'primaryContactPhoneNumber',
+                payload: e.target.value,
+              })
+            }
+            id="pcnum"
+            label="Primary Contact Number"
+            type="text"
+            variant="standard"
+          />
+          <FormControl fullWidth variant="standard" sx={{m: 1, minWidth: 120}}>
+            <InputLabel id="status">Status</InputLabel>
+            <Select
+              labelId="status"
+              id="selectStatus"
+              label="Status"
+              onChange={e =>
+                dispatch({type: 'isActive', payload: e.target.value})
+              }
+              value={form.isActive}>
+              <MenuItem value={true} className="d-block p-2">
+                True
+              </MenuItem>
+              <MenuItem value={false} className="d-block p-2">
+                false
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Create</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL_BASE = 'https://test-api.zasket.in/inventory/api/1/assignment/';
+const URL_BASE = 'https://api.zasket.in/inventory/api/1/assignment/';
 
 export const deleteAssignmentService = async rowData => {
   return await axios.delete(URL_BASE + `orders?order_id_csv=${rowData.orders}`);

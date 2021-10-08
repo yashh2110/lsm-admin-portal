@@ -19,6 +19,18 @@ export const newProducts = payload => {
     payload,
   };
 };
+export const allLsProducts = payload => {
+  return {
+    type: ActionTypes.GET_ALL_LOW_STOCK,
+    payload,
+  };
+};
+export const setLsProducts = payload => {
+  return {
+    type: ActionTypes.GET_LOW_STOCK,
+    payload,
+  };
+};
 export const productNameFilter = payload => {
   return {
     type: ActionTypes.PRODUCT_NAME_FILTER,
@@ -38,7 +50,7 @@ export const productActiveFilter = payload => {
   };
 };
 export const getProducts = ({name, category, active}) => {
-  let URL = 'https://test-api.zasket.in/inventory/api/1/products';
+  let URL = 'https://api.zasket.in/inventory/api/1/products';
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'size=' + 15 + '&';
   URL = URL + 'page=' + 0 + '&';
@@ -60,8 +72,28 @@ export const getProducts = ({name, category, active}) => {
       });
   };
 };
+export const getLowStockProducts = () => {
+  let URL = 'https://api.zasket.in/inventory/api/1/products/low-stock';
+  URL = URL + '?size=' + 1000 + '&';
+  URL = URL + 'page=' + 0 + '&';
+  return async dispatch => {
+    await axios
+      .get(URL, {
+        headers: {
+          'inventory-user-id': 1,
+          'session-id': 1,
+        },
+      })
+      .then(res => {
+        dispatch(allProducts(res.data.products));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
 export const addProducts = ({name, category, active, page}) => {
-  let URL = 'https://test-api.zasket.in/inventory/api/1/products';
+  let URL = 'https://api.zasket.in/inventory/api/1/products';
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'size=' + 15 + '&';
   URL = URL + 'page=' + page + '&';
@@ -83,11 +115,34 @@ export const addProducts = ({name, category, active, page}) => {
       });
   };
 };
+export const addLsProducts = ({name, category, active, page}) => {
+  let URL = 'https://api.zasket.in/inventory/api/1/products/low-stock';
+  URL = URL + '?productsNameLike=' + name + '&';
+  URL = URL + 'size=' + 15 + '&';
+  URL = URL + 'page=' + page + '&';
+  URL = URL + 'categoryId=' + category + '&';
+  if (active) URL = URL + 'isActive=' + active;
+  return async dispatch => {
+    await axios
+      .get(URL, {
+        headers: {
+          'inventory-user-id': 1,
+          'session-id': 1,
+        },
+      })
+      .then(res => {
+        dispatch(setLsProducts(res.data.products));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
 export const getProductCategory = () => {
   return async dispatch => {
     await axios
       .get(
-        'https://test-api.zasket.in/inventory/api/1/categories/list?isActive=true',
+        'https://api.zasket.in/inventory/api/1/categories/list?isActive=true',
         {
           headers: {
             'inventory-user-id': 1,
@@ -104,7 +159,7 @@ export const getProductCategory = () => {
   };
 };
 export const getProductsWithFilter = ({name, category, active}) => {
-  let URL = 'https://test-api.zasket.in/inventory/api/1/products';
+  let URL = 'https://api.zasket.in/inventory/api/1/products';
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'categoryId=' + category + '&';
   if (active) URL = URL + 'isActive=' + active;
@@ -118,6 +173,26 @@ export const getProductsWithFilter = ({name, category, active}) => {
       })
       .then(res => {
         dispatch(allProducts(res.data.products));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
+export const getLsProductsWithFilter = ({category, active}) => {
+  let URL = 'https://api.zasket.in/inventory/api/1/products/low-stock';
+  URL = URL + '?categoryId=' + category + '&';
+  if (active) URL = URL + 'isActive=' + active;
+  return async dispatch => {
+    await axios
+      .get(URL, {
+        headers: {
+          'inventory-user-id': 1,
+          'session-id': 1,
+        },
+      })
+      .then(res => {
+        dispatch(allLsProducts(res.data.products));
       })
       .catch(err => {
         console.log(err);

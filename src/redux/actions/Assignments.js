@@ -48,7 +48,7 @@ export const getActiveDes = () => {
   return async dispatch => {
     await axios
       .get(
-        'https://test-api.zasket.in/inventory/api/1/assignment/delivery-executives',
+        'https://api.zasket.in/inventory/api/1/assignment/delivery-executives',
       )
       .then(res => {
         dispatch(setActiveDes(res.data));
@@ -62,7 +62,7 @@ export const getActiveDes = () => {
 export const getZones = () => {
   return async dispatch => {
     await axios
-      .get('https://test-api.zasket.in/inventory/api/1/assignment/zones')
+      .get('https://api.zasket.in/inventory/api/1/assignment/zones')
       .then(res => {
         dispatch(setZones(res.data));
       })
@@ -89,7 +89,7 @@ export const getOrders = (date, slot) => {
     if (date) {
       await axios
         .get(
-          `https://test-api.zasket.in/inventory/api/1/assignment/orders?start-time=${start.getTime()}&end-time=${end.getTime()}&slot-id-list=${slot}`,
+          `https://api.zasket.in/inventory/api/1/assignment/orders?start-time=${start.getTime()}&end-time=${end.getTime()}&slot-id-list=${slot}`,
         )
         .then(res => {
           dispatch(setOrders(res.data));
@@ -111,7 +111,7 @@ export const getAssignedOrders = (date, slot) => {
     if (date) {
       await axios
         .get(
-          `https://test-api.zasket.in/inventory/api/1/assignment/delivery-executives/orders?start_time=${start.getTime()}&end_time=${end.getTime()}&slot-id-list=${slot}`,
+          `https://api.zasket.in/inventory/api/1/assignment/delivery-executives/orders?start_time=${start.getTime()}&end_time=${end.getTime()}&slot-id-list=${slot}`,
         )
         .then(res => {
           const data = Object.keys(res.data).map(i => {
@@ -142,7 +142,7 @@ export const getOrderStateSummary = date => {
     if (date) {
       await axios
         .get(
-          `https://test-api.zasket.in/inventory/api/1/assignment/orders/summary?orderDate=${formattedDate}`,
+          `https://api.zasket.in/inventory/api/1/assignment/orders/summary?orderDate=${formattedDate}`,
         )
         .then(res => {
           dispatch(setOrderStateSummary(res.data));

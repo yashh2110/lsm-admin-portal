@@ -1,19 +1,14 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  addProducts,
-  getProductCategory,
-  getProducts,
-} from '../../redux/actions/Products';
-import ProductsTable from '../components/products/ProductsTable';
+import {addLsProducts, getProductCategory} from '../../redux/actions/Products';
 import {Waypoint} from 'react-waypoint';
 import '../css/pages/vendor.css';
-import ProductsUpdateForm from '../components/products/ProductsUpdateForm';
-import ProductCreateForm from '../components/products/ProductsCreateForm';
-import ViewProduct from '../components/products/ViewProduct';
 
-function Products({setActiveTab}) {
-  const products = useSelector(state => state.products.products);
+import ViewProduct from '../components/products/ViewProduct';
+import LsProductTable from '../components/products/lowStock/LsProductTable';
+
+function LsProducts({setActiveTab}) {
+  const lsproducts = useSelector(state => state.products.lsproducts);
   const filters = useSelector(state => state.products.filters);
   const [page, setPage] = useState(0);
 
@@ -22,21 +17,14 @@ function Products({setActiveTab}) {
   const [createopen, setCreateopen] = useState(false);
   const [viewProduct, setViewProduct] = useState(false);
   const [rowData, setRowData] = useState(null);
-  const handleUpdateClose = () => {
-    setUpdateopen(false);
-    setRowData(null);
-  };
-  const handleCreateClose = () => {
-    setCreateopen(false);
-    setRowData(null);
-  };
+
   const handleViewClose = () => {
     setViewProduct(false);
     setRowData(null);
   };
   useEffect(() => {
     dispatch(
-      getProducts({
+      addLsProducts({
         name: filters.name,
         category: filters.category,
         active: filters.active,
@@ -56,9 +44,9 @@ function Products({setActiveTab}) {
           <>
             <Waypoint
               onEnter={() => {
-                if (rowdata.tableData.id === products.length - 2) {
+                if (rowdata.tableData.id === lsproducts.length - 2) {
                   dispatch(
-                    addProducts({
+                    addLsProducts({
                       name: filters.name,
                       category: filters.category,
                       active: filters.active,
@@ -93,7 +81,7 @@ function Products({setActiveTab}) {
   ];
   return (
     <div className="vendor">
-      <ProductsTable
+      <LsProductTable
         columns={columns}
         setPage={setPage}
         setUpdateopen={setUpdateopen}
@@ -104,15 +92,7 @@ function Products({setActiveTab}) {
         viewProduct={viewProduct}
         setRowData={setRowData}
       />
-      {/* {rowData ? (
-        <PurchaseOrderUpdateForm
-          open={updateopen}
-          handleClose={handleUpdateClose}
-          data={rowData}
-        />
-      ) : null}
-      {/* <Dtable /> */}
-      <ProductCreateForm open={createopen} handleClose={handleCreateClose} />
+
       {rowData ? (
         <ViewProduct
           open={viewProduct}
@@ -120,15 +100,8 @@ function Products({setActiveTab}) {
           handleClose={handleViewClose}
         />
       ) : null}
-      {rowData ? (
-        <ProductsUpdateForm
-          open={updateopen}
-          handleClose={handleUpdateClose}
-          data={rowData}
-        />
-      ) : null}
     </div>
   );
 }
 
-export default Products;
+export default LsProducts;

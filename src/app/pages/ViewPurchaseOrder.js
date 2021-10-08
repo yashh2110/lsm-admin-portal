@@ -15,9 +15,7 @@ function ViewPurchaseOrder({orderId}) {
   const history = useHistory();
   const fetchOrder = async () => {
     await axios
-      .get(
-        `https://test-api.zasket.in/inventory/api/1/purchase-order/${orderId}`,
-      )
+      .get(`https://api.zasket.in/inventory/api/1/purchase-order/${orderId}`)
       .then(res => {
         setP_order(res.data);
       })

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL_BASE = 'https://test-api.zasket.in/inventory/api/1/';
+const URL_BASE = 'https://api.zasket.in/inventory/api/1/';
 
 export const productSearchService = async query => {
   return await axios.get(URL_BASE + `products?productsNameLike=${query}`, {

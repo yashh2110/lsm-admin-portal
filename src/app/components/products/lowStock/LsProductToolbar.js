@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import {useHistory} from 'react-router';
 import {
-  getProductsWithFilter,
+  getLsProductsWithFilter,
+  getLowStockProducts,
   productActiveFilter,
   productCatergoryFilter,
-  productNameFilter,
-} from '../../../redux/actions/Products';
-import '../../css/common/Toolbar.css';
-function ProductToolbar({setPage, setCreateopen}) {
+} from '../../../../redux/actions/Products';
+
+import '../../../css/common/Toolbar.css';
+function LsProductToolbar({setPage}) {
   const cat = useSelector(state => state.products.catogories);
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
@@ -19,20 +21,18 @@ function ProductToolbar({setPage, setCreateopen}) {
   const filter = ({type, payload}) => {
     setPage(0);
     switch (type) {
-      case 'name':
-        setName(payload);
-        dispatch(productNameFilter(payload));
-        dispatch(getProductsWithFilter({name: payload, category, active}));
-        return;
       case 'active':
         setActive(payload);
         dispatch(productActiveFilter(payload));
-        dispatch(getProductsWithFilter({active: payload, category, name}));
+        dispatch(getLsProductsWithFilter({active: payload, category, name}));
         return;
       case 'category':
         setCategory(payload);
         dispatch(productCatergoryFilter(payload));
-        dispatch(getProductsWithFilter({category: payload, active, name}));
+        dispatch(getLsProductsWithFilter({category: payload, active, name}));
+        return;
+      case 'lowstock':
+        dispatch(getLowStockProducts());
         return;
       default:
         return;
@@ -46,37 +46,17 @@ function ProductToolbar({setPage, setCreateopen}) {
 
   return (
     <div className="toolbar">
-      <div className="title">Products</div>
-      <div className="filter ">
-        <button
-          className="btn "
-          onClick={() => history.push('/lowstock')}
-          style={{
-            backgroundColor: 'rgb(223, 223, 223)',
-            fontWeight: '500',
-            marginRight: '3px',
-          }}>
-          Low Stock
-        </button>
-        <button
-          className="btn "
-          onClick={() => setCreateopen(true)}
-          style={{
-            backgroundColor: 'rgb(223, 223, 223)',
-            fontWeight: '500',
-          }}>
-          Create
-        </button>
-
-        <input
-          className="form-control name"
-          type="text"
-          placeholder="Search Name"
-          value={name}
-          onChange={e => {
-            filter({type: 'name', payload: e.target.value});
-          }}
-        />
+      <div
+        onClick={() => {
+          history.goBack();
+        }}
+        className="d-flex align-items-center">
+        <ArrowBackOutlinedIcon sx={{fontSize: '24px', marginRight: '10px'}} />
+        <div className="title" style={{whiteSpace: 'nowrap'}}>
+          Low Stocks
+        </div>
+      </div>
+      <div className="filter justify-content-end">
         <select
           className="form-control category"
           onChange={e => filter({type: 'category', payload: e.target.value})}
@@ -105,4 +85,4 @@ function ProductToolbar({setPage, setCreateopen}) {
   );
 }
 
-export default ProductToolbar;
+export default LsProductToolbar;

@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: space-between;
 }
-.toolbar > .title {
+.title {
   font-size: 1.25rem;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 500;

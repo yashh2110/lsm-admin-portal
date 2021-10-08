@@ -10,6 +10,7 @@ import PurchaseOrderUpdateForm from './pages/PurchaseOrderUpdateForm';
 
 import ViewPurchaseOrder from './pages/ViewPurchaseOrder';
 import Assignments from './pages/Assignments';
+import LsProducts from './pages/LowStockProducts';
 
 function Routes() {
   const [activeTab, setActiveTab] = useState();
@@ -22,6 +23,15 @@ function Routes() {
           render={props => (
             <Index activeTab={activeTab}>
               <Products setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/lowstock"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <LsProducts setActiveTab={setActiveTab} />
             </Index>
           )}
         />

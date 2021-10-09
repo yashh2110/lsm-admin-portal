@@ -2,37 +2,37 @@
 import MaterialTable, {MTableToolbar} from 'material-table';
 import React from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import {getVendors} from '../../../redux/actions/Vendors';
-import {useDispatch} from 'react-redux';
-import {toast} from 'react-toastify';
-import {deactivateVendorService} from './VendorService';
-function VendorTable({
+// import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+// import {getVendors} from '../../../redux/actions/Vendors';
+// import {useDispatch} from 'react-redux';
+// import {toast} from 'react-toastify';
+// import {deactivateVendorService} from './VendorService';
+function BannerTable({
   columns,
   data,
   setCreateopen,
   setUpdateopen,
   setRowData,
 }) {
-  const dispatch = useDispatch();
+  //   const dispatch = useDispatch();
 
-  const deactivate = async id => {
-    deactivateVendorService(id)
-      .then(res => {
-        toast.success('Vendor deactivated', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-        dispatch(getVendors());
-      })
-      .catch(err => {
-        console.log(err);
-        toast.error('Something went wrong', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-      });
-  };
+  //   const deactivate = async id => {
+  //     deactivateVendorService(id)
+  //       .then(res => {
+  //         toast.success('Vendor deactivated', {
+  //           position: 'top-right',
+  //           autoClose: 2000,
+  //         });
+  //         dispatch(getVendors());
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //         toast.error('Something went wrong', {
+  //           position: 'top-right',
+  //           autoClose: 2000,
+  //         });
+  //       });
+  //   };
   return (
     <div style={{maxWidth: '100%'}}>
       <MaterialTable
@@ -59,16 +59,10 @@ function VendorTable({
           {
             icon: () => <EditOutlinedIcon />,
             tooltip: 'Edit',
+            disabled: true,
             onClick: (event, rowData) => {
               setUpdateopen(true);
               setRowData(rowData);
-            },
-          },
-          {
-            icon: () => <RemoveCircleOutlineOutlinedIcon />,
-            tooltip: 'Deactivate',
-            onClick: (event, rowData) => {
-              deactivate(rowData.id);
             },
           },
           {
@@ -82,7 +76,8 @@ function VendorTable({
                 Create
               </div>
             ),
-            tooltip: 'Create',
+            disabled: true,
+            tooltip: 'create',
             isFreeAction: true,
             onClick: event => {
               setCreateopen(true);
@@ -91,10 +86,10 @@ function VendorTable({
         ]}
         columns={columns}
         data={data}
-        title="Vendors"
+        title="Offer Management"
       />
     </div>
   );
 }
 
-export default VendorTable;
+export default BannerTable;

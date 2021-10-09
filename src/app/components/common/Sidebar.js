@@ -7,6 +7,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import {Link} from 'react-router-dom';
 const Sidebar = forwardRef(({activeTab}, ref) => {
   return (
@@ -47,6 +48,12 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
               className="menuicons"
             />
             <p>Assignments</p>
+          </Link>
+          <Link
+            to="/banners"
+            className={activeTab === 5 ? 'menu-item active' : 'menu-item'}>
+            <LocalOfferOutlinedIcon sx={{fontSize: 20}} className="menuicons" />
+            <p>Offer Management</p>
           </Link>
         </ul>
         <ul className="menu">

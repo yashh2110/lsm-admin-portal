@@ -7,6 +7,18 @@ const initial = {
   zones: [],
   orderStateSummary: [],
   selectedOrders: [],
+  dateandslot: {
+    date: '',
+    slots: {
+      1: false,
+      2: false,
+      3: false,
+      4: false,
+    },
+    all: true,
+    slotstr: '',
+  },
+  isfetching: false,
 };
 const AssignemenReducer = (state = initial, {type, payload}) => {
   switch (type) {
@@ -24,6 +36,16 @@ const AssignemenReducer = (state = initial, {type, payload}) => {
       return {...state, selectedOrders: payload};
     case ActionTypes.GET_ORDER_STATE_SUMMARY:
       return {...state, orderStateSummary: payload};
+    case ActionTypes.SET_ASSIGNMENT_DATE:
+      return {...state, dateandslot: {...state.dateandslot, date: payload}};
+    case ActionTypes.SET_ASSINGMENT_SLOT:
+      return {...state, dateandslot: {...state.dateandslot, slots: payload}};
+    case ActionTypes.SET_ALL_SLOTS:
+      return {...state, dateandslot: {...state.dateandslot, all: payload}};
+    case ActionTypes.SET_ASSIGNMENT_SLOT_STR:
+      return {...state, dateandslot: {...state.dateandslot, slotstr: payload}};
+    case ActionTypes.IS_FETCHING_ASSIGNMENT:
+      return {...state, isfetching: payload};
     default:
       return state;
   }

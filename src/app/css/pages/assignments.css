@@ -3,17 +3,29 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  height: 500px;
 }
 .map-data {
-  width: 70%;
+  width: 68%;
 }
 .assign {
   position: relative;
-  width: 30%;
+  width: 32%;
 }
 .desDiv {
   position: relative;
+  overflow: auto;
+  max-height: 1305px;
+}
+.desDiv::-webkit-scrollbar {
+  width: 5px;
+}
+.desDiv::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px rgb(214, 214, 214);
+  border-radius: 10px;
+}
+.desDiv::-webkit-scrollbar-thumb {
+  background: rgb(198, 198, 198);
+  border-radius: 10px;
 }
 .assign-head {
   display: flex;
@@ -29,7 +41,7 @@
 }
 
 .assign-date {
-  padding: 10px;
+  padding: 6px;
   border: none;
   border-bottom: 3px solid rgba(153, 115, 218, 0.585);
   border-radius: 5px;
@@ -46,7 +58,12 @@
   position: absolute;
   top: 0;
   padding: 5px;
+  display: flex;
+  flex-direction: column;
   margin: 5px;
+}
+.PrivateSwitchBase-root-14 {
+  padding: 0 3px 3px 9px !important;
 }
 .selectedOrderLabel {
   padding: 5px;
@@ -60,7 +77,7 @@
   padding: 5px;
   padding-bottom: 0;
   overflow: hidden;
-  /* height: 60px; */
+  max-height: 135px;
   overflow: auto;
   margin: 5px;
   font-size: 1rem;
@@ -89,4 +106,55 @@
   margin: 0;
   padding: 5px;
   letter-spacing: 0.6px;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.299);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.productPic {
+  width: 100%;
+  border: 2px solid rgb(221, 209, 209);
+  border-radius: 5px;
+  height: 162px;
+  width: 222px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 20px;
+}
+.productPic > label {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.bannerImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.imageUpload {
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0;
+  transition: all 0.1s;
+}
+.imageUpload:hover {
+  background-color: rgb(226, 226, 226) !important;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import Button from '@mui/material/Button';
-function ActiveDeCard({de, assignDeToOrder}) {
+import Button from '@material-ui/core/Button';
+function ActiveDeCard({de, assignDeToOrder, isLoading}) {
   return (
     <div className="deCard">
       <div className="deCardDet">
@@ -17,6 +17,7 @@ function ActiveDeCard({de, assignDeToOrder}) {
         <Button
           variant="outlined"
           size="small"
+          disabled={isLoading}
           onClick={() => assignDeToOrder(de)}
           style={{textTransform: 'capitalize'}}>
           assign
@@ -26,4 +27,4 @@ function ActiveDeCard({de, assignDeToOrder}) {
   );
 }
 
-export default ActiveDeCard;
+export default React.memo(ActiveDeCard);

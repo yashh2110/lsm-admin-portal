@@ -1,5 +1,5 @@
-import React, {useReducer} from 'react';
-import Button from '@mui/material/Button';
+import React, {useReducer, useRef, useState} from 'react';
+import Button from '@material-ui/core/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,7 +13,7 @@ import {useDispatch} from 'react-redux';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {getProducts} from '../../../redux/actions/Products';
-import {createProduct} from './ProductService';
+import {createProduct, uploadProductImgService} from './ProductService';
 
 const initial = {
   name: '',
@@ -66,7 +66,7 @@ const reducer = (state, {type, payload}) => {
       return {...state, onDemand: payload};
     case 'isActive':
       return {...state, isActive: payload};
-    // case 'img'
+
     default:
       return state;
   }
@@ -75,6 +75,12 @@ const reducer = (state, {type, payload}) => {
 function ProductCreateForm({open, handleClose}) {
   const [form, dispatch] = useReducer(reducer, initial);
   const filters = useSelector(state => state.products.filters);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
+  const [imageSelected, setImageSelected] = useState(false);
+  const productImgRef = useRef();
+  const [selectedImage, setSelectedImage] = useState('');
+
   const categories = useSelector(state => state.products.catogories);
   const reducDispatch = useDispatch();
 
@@ -95,13 +101,36 @@ function ProductCreateForm({open, handleClose}) {
         });
         handleClose();
         dispatch({type: 'initial'});
+        setImageUploaded(false);
       })
       .catch(err => {
         console.log(err);
         toast.error('Something went wrong');
       });
   };
-
+  const uploadImage = () => {
+    const e = productImgRef.current.files[0];
+    console.log(e);
+    if (e) {
+      setImageLoading(true);
+      let formData = new FormData();
+      formData.append('file', e);
+      uploadProductImgService(formData)
+        .then(res => {
+          console.log(res.data);
+          dispatch({type: 'imageUrlList', payload: res.data});
+          setImageUploaded(true);
+          setImageSelected(false);
+          setImageLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+          setImageLoading(false);
+        });
+    } else {
+      toast.error('Please Select image');
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -113,41 +142,78 @@ function ProductCreateForm({open, handleClose}) {
       <DialogTitle>Create Product</DialogTitle>
       <form onSubmit={submit}>
         <DialogContent>
-          {/* <FormControl
-          variant="standard"
-          fullWidth
-          //   sx={{m: 1}}
-          color="secondary"
-          className="imageUrl"> */}
-          {/* <InputLabel id="status">Select Image</InputLabel>
-          <Select
-            labelId="imageUrl"
-            id="imageUrl"
-            label="imageUrl"
-            value={form.imageUrl}
-            onChange={e =>
-              dispatch({type: 'imageUrl', payload: e.target.value})
-            }>
-            <MenuItem value="" className="d-block p-2">
-              None
-            </MenuItem>
-            {images
-              ? images.map(i =>
-                  i.fileType === 'FILE' ? (
-                    <MenuItem
-                      value={i.filePath}
-                      key={i.filePath}
-                      className="d-block p-2">
-                      {i.fileName}
-                    </MenuItem>
-                  ) : null,
-                )
-              : null}
-          </Select>
-        </FormControl> */}
+          {/* <div className="d-flex justify-content-center align-items-end">
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="imageUrlList"
+              inputRef={productImgRef}
+              onChange={() => {
+                setImageSelected(true);
+                setImageUploaded(false);
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{mr: '5px'}}
+              label="Product Image"
+              type="file"
+              variant="standard"
+              fullWidth
+            />
+            <Button
+              variant="outlined"
+              disabled={imageSelected ? false : true}
+              color="secondary"
+              onClick={uploadImage}
+              className="mb-1 ">
+              {imageLoading
+                ? 'loading..'
+                : imageUploaded
+                ? 'Uploaded'
+                : 'Upload'}
+            </Button>
+          </div> */}
+          <div className="productPic">
+            <label
+              htmlFor="image"
+              style={
+                selectedImage
+                  ? {
+                      backgroundImage: 'url(' + selectedImage + ')',
+                    }
+                  : null
+              }>
+              {selectedImage ? null : 'Upload Product'}
+            </label>
+            <input
+              ref={productImgRef}
+              type="file"
+              id="image"
+              className="d-none"
+              onChange={() => {
+                setImageSelected(true);
+                setImageUploaded(false);
+                setSelectedImage(
+                  URL.createObjectURL(productImgRef.current.files[0]),
+                );
+              }}
+            />
+            <button
+              className="btn btn-light imageUpload"
+              type="button"
+              disabled={imageSelected ? false : true}
+              onClick={() => uploadImage(productImgRef.current.files[0])}>
+              {imageLoading
+                ? 'loading..'
+                : imageUploaded
+                ? 'Uploaded'
+                : 'Upload'}
+            </button>
+          </div>
           <TextField
             required
-            autoFocus
             margin="dense"
             id="name"
             value={form.name}
@@ -419,7 +485,11 @@ function ProductCreateForm({open, handleClose}) {
 
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button
+            type="submit"
+            disabled={form.imageUrlList?.length >= 1 ? false : true}>
+            Create
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

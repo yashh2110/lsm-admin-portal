@@ -1,12 +1,9 @@
 import React, {useState} from 'react';
-import {Marker, InfoWindow} from 'react-google-maps';
-import {useDispatch} from 'react-redux';
+import {Marker, InfoWindow} from '@react-google-maps/api';
 import marker from '../../../assets/images/marker.svg';
-import {setOrders, setSelectedOrders} from '../../../redux/actions/Assignments';
 
-function MarkerAndInfo({i, orders}) {
+function MarkerAndInfo({i, orders, setSelectedOrders, setOrders}) {
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
   return (
     <Marker
       position={{
@@ -18,9 +15,9 @@ function MarkerAndInfo({i, orders}) {
         url: marker,
       }}
       onClick={() => {
-        dispatch(setSelectedOrders(i));
+        setSelectedOrders(e => [i, ...e]);
         const filterdOrders = orders.filter(k => k.id !== i.id);
-        dispatch(setOrders(filterdOrders));
+        setOrders(filterdOrders);
       }}
       onMouseOver={() => setOpen(true)}
       onMouseOut={() => setOpen(false)}>
@@ -43,4 +40,4 @@ function MarkerAndInfo({i, orders}) {
   );
 }
 
-export default MarkerAndInfo;
+export default React.memo(MarkerAndInfo);

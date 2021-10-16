@@ -6,6 +6,7 @@ import '../css/pages/vendor.css';
 
 import ViewProduct from '../components/products/ViewProduct';
 import LsProductTable from '../components/products/lowStock/LsProductTable';
+import ProductsUpdateForm from '../components/products/ProductsUpdateForm';
 
 function LsProducts({setActiveTab}) {
   const lsproducts = useSelector(state => state.products.lsproducts);
@@ -20,6 +21,10 @@ function LsProducts({setActiveTab}) {
 
   const handleViewClose = () => {
     setViewProduct(false);
+    setRowData(null);
+  };
+  const handleUpdateClose = () => {
+    setUpdateopen(false);
     setRowData(null);
   };
   useEffect(() => {
@@ -98,6 +103,13 @@ function LsProducts({setActiveTab}) {
           open={viewProduct}
           data={rowData}
           handleClose={handleViewClose}
+        />
+      ) : null}
+      {rowData ? (
+        <ProductsUpdateForm
+          open={updateopen}
+          handleClose={handleUpdateClose}
+          data={rowData}
         />
       ) : null}
     </div>

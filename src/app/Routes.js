@@ -12,6 +12,7 @@ import ViewPurchaseOrder from './pages/ViewPurchaseOrder';
 import Assignments from './pages/Assignments';
 import LsProducts from './pages/LowStockProducts';
 import Banners from './pages/Banners';
+import Zones from './pages/Zones';
 
 function Routes() {
   const [activeTab, setActiveTab] = useState();
@@ -91,6 +92,15 @@ function Routes() {
           render={props => (
             <Index activeTab={activeTab}>
               <Assignments setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/zones"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <Zones setActiveTab={setActiveTab} />
             </Index>
           )}
         />

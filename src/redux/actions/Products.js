@@ -1,6 +1,6 @@
 import {ActionTypes} from '../actionTypes/ActionTypes';
 import axios from 'axios';
-
+const URL_BASE = 'https://api.zasket.in/inventory/api/1/products';
 export const allProducts = payload => {
   return {
     type: ActionTypes.GET_ALL_PRODUCTS,
@@ -50,7 +50,7 @@ export const productActiveFilter = payload => {
   };
 };
 export const getProducts = ({name, category, active}) => {
-  let URL = 'https://api.zasket.in/inventory/api/1/products';
+  let URL = URL_BASE;
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'size=' + 15 + '&';
   URL = URL + 'page=' + 0 + '&';
@@ -73,7 +73,7 @@ export const getProducts = ({name, category, active}) => {
   };
 };
 export const getLowStockProducts = () => {
-  let URL = 'https://api.zasket.in/inventory/api/1/products/low-stock';
+  let URL = URL_BASE + '/low-stock';
   URL = URL + '?size=' + 1000 + '&';
   URL = URL + 'page=' + 0 + '&';
   return async dispatch => {
@@ -93,7 +93,7 @@ export const getLowStockProducts = () => {
   };
 };
 export const addProducts = ({name, category, active, page}) => {
-  let URL = 'https://api.zasket.in/inventory/api/1/products';
+  let URL = URL_BASE;
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'size=' + 15 + '&';
   URL = URL + 'page=' + page + '&';
@@ -116,7 +116,7 @@ export const addProducts = ({name, category, active, page}) => {
   };
 };
 export const addLsProducts = ({name, category, active, page}) => {
-  let URL = 'https://api.zasket.in/inventory/api/1/products/low-stock';
+  let URL = URL_BASE + '/low-stock';
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'size=' + 15 + '&';
   URL = URL + 'page=' + page + '&';
@@ -159,7 +159,7 @@ export const getProductCategory = () => {
   };
 };
 export const getProductsWithFilter = ({name, category, active}) => {
-  let URL = 'https://api.zasket.in/inventory/api/1/products';
+  let URL = URL_BASE;
   URL = URL + '?productsNameLike=' + name + '&';
   URL = URL + 'categoryId=' + category + '&';
   if (active) URL = URL + 'isActive=' + active;
@@ -180,7 +180,7 @@ export const getProductsWithFilter = ({name, category, active}) => {
   };
 };
 export const getLsProductsWithFilter = ({category, active}) => {
-  let URL = 'https://api.zasket.in/inventory/api/1/products/low-stock';
+  let URL = URL_BASE + '/low-stock';
   URL = URL + '?categoryId=' + category + '&';
   if (active) URL = URL + 'isActive=' + active;
   return async dispatch => {

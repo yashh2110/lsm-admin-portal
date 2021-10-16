@@ -59,7 +59,6 @@ function BannerTable({
           {
             icon: () => <EditOutlinedIcon />,
             tooltip: 'Edit',
-            disabled: true,
             onClick: (event, rowData) => {
               setUpdateopen(true);
               setRowData(rowData);
@@ -76,7 +75,6 @@ function BannerTable({
                 Create
               </div>
             ),
-            disabled: true,
             tooltip: 'create',
             isFreeAction: true,
             onClick: event => {

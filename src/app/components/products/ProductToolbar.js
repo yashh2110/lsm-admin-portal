@@ -49,12 +49,13 @@ function ProductToolbar({setPage, setCreateopen}) {
       <div className="title">Products</div>
       <div className="filter ">
         <button
-          className="btn "
+          className="btn"
           onClick={() => history.push('/lowstock')}
           style={{
             backgroundColor: 'rgb(223, 223, 223)',
             fontWeight: '500',
             marginRight: '3px',
+            whiteSpace: 'nowrap',
           }}>
           Low Stock
         </button>

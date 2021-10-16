@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useRef, useState} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -12,7 +12,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
 import {getProducts} from '../../../redux/actions/Products';
-import {updateProduct} from './ProductService';
+import {
+  updateProduct,
+  updateProductImgService,
+  uploadProductImgService,
+} from './ProductService';
+import axios from 'axios';
 const reducer = (state, {type, payload}) => {
   switch (type) {
     case 'imageUrlList':
@@ -56,9 +61,18 @@ function ProductsUpdateForm({open, handleClose, data}) {
   const [form, dispatch] = useReducer(reducer, initial);
   const categories = useSelector(state => state.products.catogories);
   const reducDispatch = useDispatch();
+  const [imageLoading, setImageLoading] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
+  const [imageSelected, setImageSelected] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+  const productImgRef = useRef();
   const submit = async e => {
     e.preventDefault();
-    updateProduct(initial.id, form)
+    axios
+      .all([
+        updateProduct(initial.id, form),
+        updateProductImgService(initial.id, form),
+      ])
       .then(res => {
         reducDispatch(
           getProducts({
@@ -73,16 +87,118 @@ function ProductsUpdateForm({open, handleClose, data}) {
         });
         handleClose();
       })
-      .catch(err => {
-        console.log(err);
+      .catch(e => {
         toast.error('Something went wrong');
       });
+  };
+  const uploadImage = () => {
+    const e = productImgRef.current.files[0];
+    console.log(e);
+    if (e) {
+      setImageLoading(true);
+      let formData = new FormData();
+      formData.append('file', e);
+      uploadProductImgService(formData)
+        .then(res => {
+          console.log(res.data);
+          dispatch({type: 'imageUrlList', payload: res.data});
+          setImageUploaded(true);
+          setImageSelected(false);
+          setImageLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+          setImageLoading(false);
+        });
+    } else {
+      toast.error('Please Select image');
+    }
   };
   return (
     <Dialog open={open} onClose={handleClose} className="p-4">
       <DialogTitle>Edit</DialogTitle>
       <form onSubmit={submit}>
         <DialogContent>
+          <div className="productPic">
+            <label
+              htmlFor="image"
+              style={
+                selectedImage
+                  ? {
+                      backgroundImage: 'url(' + selectedImage + ')',
+                    }
+                  : form.productImageInfoList[0]
+                  ? {
+                      backgroundImage:
+                        'url(' +
+                        form.productImageInfoList[0].mediumImagePath +
+                        ')',
+                    }
+                  : null
+              }>
+              {selectedImage || form.productImageInfoList[0]
+                ? null
+                : 'Upload Product'}
+            </label>
+            <input
+              ref={productImgRef}
+              type="file"
+              id="image"
+              className="d-none"
+              onChange={() => {
+                setImageSelected(true);
+                setImageUploaded(false);
+                setSelectedImage(
+                  URL.createObjectURL(productImgRef.current.files[0]),
+                );
+              }}
+            />
+            <button
+              className="btn btn-light imageUpload"
+              type="button"
+              disabled={imageSelected ? false : true}
+              onClick={() => uploadImage(productImgRef.current.files[0])}>
+              {imageLoading
+                ? 'loading..'
+                : imageUploaded
+                ? 'Uploaded'
+                : 'Upload'}
+            </button>
+          </div>
+          {/* <div className="d-flex justify-content-center align-items-end">
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="imageUrlList"
+              inputRef={productImgRef}
+              onChange={() => {
+                setImageSelected(true);
+                setImageUploaded(false);
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{mr: '5px'}}
+              label="Product Image"
+              type="file"
+              variant="standard"
+              fullWidth
+            />
+            
+            <Button
+              variant="outlined"
+              disabled={imageSelected ? false : true}
+              color="secondary"
+              onClick={uploadImage}
+              className="mb-1 ">
+              {imageLoading
+                ? 'loading..'
+                : imageUploaded
+                ? 'Uploaded'
+                : 'Upload'}
+            </Button>
+          </div> */}
           <TextField
             required
             autoFocus

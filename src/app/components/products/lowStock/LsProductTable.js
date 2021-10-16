@@ -2,8 +2,15 @@ import MaterialTable from 'material-table';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import LsProductToolbar from './LsProductToolbar';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
-function LsProductTable({columns, setRowData, setViewProduct, setPage}) {
+function LsProductTable({
+  columns,
+  setRowData,
+  setUpdateopen,
+  setViewProduct,
+  setPage,
+}) {
   const lsproducts = useSelector(state => state.products.lsproducts);
   return (
     <div style={{maxWidth: '100%'}}>
@@ -29,6 +36,16 @@ function LsProductTable({columns, setRowData, setViewProduct, setPage}) {
 
           draggable: false,
         }}
+        actions={[
+          {
+            icon: () => <EditOutlinedIcon />,
+            tooltip: 'Edit',
+            onClick: (event, rowData) => {
+              setUpdateopen(true);
+              setRowData(rowData);
+            },
+          },
+        ]}
         columns={columns}
         data={lsproducts}
         title="Products"

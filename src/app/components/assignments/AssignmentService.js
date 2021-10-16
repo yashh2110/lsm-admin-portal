@@ -5,20 +5,15 @@ export const deleteAssignmentService = async rowData => {
   return await axios.delete(URL_BASE + `orders?order_id_csv=${rowData.orders}`);
 };
 
-export const downloadInvoicesService = async (event, rowData) => {
+export const downloadInvoicesService = async rowData => {
   window.open(
     URL_BASE +
       `invoices/download?deId=${rowData.id}&orderIdCsv=${rowData.orders}`,
   );
 };
 
-export const downloadEstimationService = async (event, rowData) => {
-  let arr = [];
-  const orderArray = rowData.map(i => {
-    return i.orders;
-  });
-  for (let row of orderArray) for (let e of row) arr.push(e);
-  const orderStr = arr.join(',');
+export const downloadEstimationService = async checkedKeys => {
+  const orderStr = checkedKeys.join(',');
   window.open(URL_BASE + `orders/estimation?orderIdCsv=${orderStr}`);
 };
 
@@ -29,4 +24,73 @@ export const makeTransitService = async rowData => {
     deliveryState: 'IN_TRANSIT',
   };
   return await axios.put(URL_BASE + `orders/state`, params);
+};
+
+export const assignOrderService = async (de, selectedOrders) => {
+  const params = {
+    deliveryBoyId: de.id,
+    orderIdCsv: selectedOrders.map(i => i.id).join(','),
+  };
+  return await axios.post(URL_BASE + `orders`, params);
+};
+export const getOrders = async (date, slot) => {
+  if (date) {
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+    return await axios.get(
+      URL_BASE +
+        `orders?start-time=${start.getTime()}&end-time=${end.getTime()}&slot-id-list=${slot}`,
+    );
+  }
+};
+export const getAssignedOrders = async (date, slot) => {
+  if (date) {
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+    // try {
+    return await axios.get(
+      URL_BASE +
+        `delivery-executives/orders?start_time=${start.getTime()}&end_time=${end.getTime()}&slot-id-list=${slot}`,
+    );
+    //   const data = Object.keys(res.data).map(i => {
+    //     const item = {
+    //       id: i.split(':')[0],
+    //       de: i.split(':')[1],
+    //       orders: res.data[i],
+    //     };
+    //     return item;
+    //   });
+    //   dispatch(setAssignedOrders(data));
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  }
+};
+export const getOrderStateSummary = async date => {
+  if (date) {
+    const newDate = new Date(date);
+    const formattedDate =
+      newDate.getMonth() +
+      1 +
+      '/' +
+      newDate.getDate() +
+      '/' +
+      newDate.getFullYear();
+
+    return await axios.get(
+      URL_BASE + `orders/summary?orderDate=${formattedDate}`,
+    );
+  }
+};
+
+export const getAllService = async (date, slot) => {
+  return await axios.all([
+    getOrders(date, slot),
+    getAssignedOrders(date, slot),
+    getOrderStateSummary(date),
+  ]);
 };

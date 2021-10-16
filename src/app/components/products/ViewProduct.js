@@ -17,6 +17,19 @@ function ViewProduct({open, handleClose, data}) {
       fullWidth>
       <DialogTitle>{data.name}</DialogTitle>
       <DialogContent>
+        <div className="productPic">
+          <label
+            style={
+              data.productImageInfoList[0]
+                ? {
+                    backgroundImage:
+                      'url(' +
+                      data.productImageInfoList[0].mediumImagePath +
+                      ')',
+                  }
+                : null
+            }></label>
+        </div>
         <div className="mt-2 border-bottom p-1">
           <p className="m-0">Sub Name</p>
           <p className="m-0 mt-1">

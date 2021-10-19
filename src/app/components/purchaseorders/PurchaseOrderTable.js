@@ -1,9 +1,9 @@
-import MaterialTable, {MTableToolbar} from 'material-table';
+import MaterialTable from 'material-table';
 import React from 'react';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 import {useHistory} from 'react-router-dom';
-function PurchaseOrderTable({columns, data}) {
+import PurchaseOrderToolbar from './PurchaseOrdersToolbar';
+function PurchaseOrderTable({columns, data, setPage}) {
   const history = useHistory();
 
   const viewOrder = e => {
@@ -11,32 +11,34 @@ function PurchaseOrderTable({columns, data}) {
   };
   return (
     <div style={{maxWidth: '100%'}}>
+      <div className="p-2">
+        <PurchaseOrderToolbar setPage={setPage} />
+      </div>
       <MaterialTable
         style={{padding: '0 8px', boxShadow: 'none'}}
         options={{
           paging: false,
           padding: 'dense',
           actionsColumnIndex: -1,
+          toolbar: false,
+          minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
+          maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
+          rowStyle: {
+            fontSize: '15px',
+          },
         }}
         onRowClick={(event, e) => viewOrder(e)}
-        components={{
-          Toolbar: props => (
-            <div className="p-2">
-              <MTableToolbar {...props} />
-            </div>
-          ),
-        }}
         actions={[
-          {
-            icon: () => <EditOutlinedIcon />,
-            tooltip: 'Edit',
-            onClick: (event, rowData) => {
-              history.push({
-                pathname: '/purchaseorders/update',
-                state: {item: rowData},
-              });
-            },
-          },
+          // {
+          //   icon: () => <EditOutlinedIcon />,
+          //   tooltip: 'Edit',
+          //   onClick: (event, rowData) => {
+          //     history.push({
+          //       pathname: '/purchaseorders/update',
+          //       state: {item: rowData},
+          //     });
+          //   },
+          // },
 
           {
             icon: () => (

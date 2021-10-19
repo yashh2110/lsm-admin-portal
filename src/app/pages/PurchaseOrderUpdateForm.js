@@ -16,10 +16,14 @@ import {BiRupee} from 'react-icons/bi';
 import {toast} from 'react-toastify';
 import ProductUpdateFormPrev from '../components/purchaseorders/ProductUpdateFormPrev';
 import ProductUpdateFilter from '../components/purchaseorders/ProductUpdateFilter';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import {
   productSearchService,
   updatePurchaseOrderService,
 } from '../components/purchaseorders/PurchaseOrderService';
+import UploadInvoices from '../components/purchaseorders/UploadInvoices';
+import DownloadInvoices from '../components/purchaseorders/DownloadInvoices';
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -86,6 +90,14 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
   const [pocForm, formDispatch] = useReducer(reducer, item);
   const [filterProducts, setFilterProducts] = useState();
   const [filterLoading, setFilterloading] = useState(false);
+  const [createopen, setCreateopen] = useState(false);
+  const [downloadOpen, setDownloadOpen] = useState(false);
+  const handleCreateClose = () => {
+    setCreateopen(false);
+  };
+  const handleDownloadClose = () => {
+    setDownloadOpen(false);
+  };
   const productSearch = async query => {
     setFilterloading(true);
     if (query.length >= 1) {
@@ -128,14 +140,43 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
   return (
     <div className="vendor">
       <div className="pocreateHead">
-        <div
-          className="pocBack"
-          onClick={() => {
-            history.goBack();
-          }}>
-          <ArrowBackOutlinedIcon sx={{fontSize: '24px'}} />
+        <div className="d-flex justify-content-center align-items-center">
+          <div
+            className="pocBack"
+            onClick={() => {
+              history.goBack();
+            }}>
+            <ArrowBackOutlinedIcon sx={{fontSize: '24px'}} />
+          </div>
+          <p className="pocTitle">Update Purchase Order</p>
         </div>
-        <p className="pocTitle">Update Purchase Order</p>
+        <div>
+          <Button
+            variant="contained"
+            onClick={() => setDownloadOpen(true)}
+            style={{
+              backgroundColor: ' rgb(223, 223, 223)',
+              boxShadow: 'none',
+              color: '#333',
+              textTransform: 'capitalize',
+              marginLeft: '20px',
+            }}>
+            <FileDownloadOutlinedIcon />
+            Download Invoices
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => setCreateopen(true)}
+            style={{
+              backgroundColor: ' rgb(223, 223, 223)',
+              boxShadow: 'none',
+              color: '#333',
+              textTransform: 'capitalize',
+              marginLeft: '20px',
+            }}>
+            <FileUploadOutlinedIcon /> Upload Invoice
+          </Button>
+        </div>
       </div>
       <div className="pocFormDiv">
         <div className="pocForm">
@@ -381,6 +422,18 @@ function PurchaseOrderUpdateForm({setActiveTab, item}) {
           </div>
         </div>
       </div>
+      <UploadInvoices
+        open={createopen}
+        handleClose={handleCreateClose}
+        purchaseId={item.id}
+      />
+      {downloadOpen ? (
+        <DownloadInvoices
+          open={downloadOpen}
+          handleClose={handleDownloadClose}
+          purchaseId={item.id}
+        />
+      ) : null}
     </div>
   );
 }

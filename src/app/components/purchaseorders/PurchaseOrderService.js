@@ -14,6 +14,22 @@ export const createPurchaseOrderService = async form => {
   return await axios.post(URL_BASE + 'purchase-order', form);
 };
 
+export const getPurchaseOrder = async id => {
+  return await axios.get(URL_BASE + `purchase-order/${id}`);
+};
+export const getInvoices = async id => {
+  return await axios.get(URL_BASE + `purchase-order/${id}/invoices`);
+};
+export const deleteInvoice = async (purchaseId, id) => {
+  return await axios.delete(
+    URL_BASE + `purchase-order/${purchaseId}/invoices/${id}`,
+  );
+};
+export const deleteInvoices = async purchaseId => {
+  return await axios.delete(
+    URL_BASE + `purchase-order/${purchaseId}/invoices/`,
+  );
+};
 export const updatePurchaseOrderService = async (id, form) => {
   const params = {
     vendorId: form.vendorId,
@@ -25,4 +41,15 @@ export const updatePurchaseOrderService = async (id, form) => {
     comments: form.comments,
   };
   await axios.put(URL_BASE + `purchase-order/${id}`, params);
+};
+
+export const uploadInvoices = async file => {
+  return await axios.post(
+    URL_BASE + 'purchase-order/invoices/file/upload',
+    file,
+  );
+};
+
+export const createInvoices = async (id, form) => {
+  return await axios.post(URL_BASE + `purchase-order/${id}/invoices`, form);
 };

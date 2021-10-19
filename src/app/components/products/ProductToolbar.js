@@ -57,7 +57,7 @@ function ProductToolbar({setPage, setCreateopen}) {
             marginRight: '3px',
             whiteSpace: 'nowrap',
           }}>
-          Low Stock
+          Low Stock Items
         </button>
         <button
           className="btn "

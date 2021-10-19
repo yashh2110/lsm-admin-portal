@@ -9,7 +9,6 @@ import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import {Link} from 'react-router-dom';
-import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 const Sidebar = forwardRef(({activeTab}, ref) => {
   return (
     <div ref={ref} className="sidebar">
@@ -56,7 +55,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
             <LocalOfferOutlinedIcon sx={{fontSize: 20}} className="menuicons" />
             <p>Offer Management</p>
           </Link>
-          <Link
+          {/* <Link
             to="/zones"
             className={activeTab === 6 ? 'menu-item active' : 'menu-item'}>
             <EditLocationOutlinedIcon
@@ -64,7 +63,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
               className="menuicons"
             />
             <p>Zones</p>
-          </Link>
+          </Link> */}
         </ul>
         <ul className="menu">
           {/* <p className="inventoryLabel">Inventory</p> */}

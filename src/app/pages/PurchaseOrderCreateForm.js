@@ -139,14 +139,16 @@ function PurchaseOrderCreateForm({setActiveTab}) {
   return (
     <div className="vendor">
       <div className="pocreateHead">
-        <div
-          className="pocBack"
-          onClick={() => {
-            history.goBack();
-          }}>
-          <ArrowBackOutlinedIcon sx={{fontSize: '24px'}} />
+        <div className="d-flex justify-content-center align-items-center">
+          <div
+            className="pocBack"
+            onClick={() => {
+              history.goBack();
+            }}>
+            <ArrowBackOutlinedIcon sx={{fontSize: '24px'}} />
+          </div>
+          <p className="pocTitle">Create Purchase Order</p>
         </div>
-        <p className="pocTitle">Create Purchase Order</p>
       </div>
       <div className="pocFormDiv">
         <div className="pocForm">

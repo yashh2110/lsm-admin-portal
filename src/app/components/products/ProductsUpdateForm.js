@@ -56,6 +56,7 @@ const reducer = (state, {type, payload}) => {
   }
 };
 function ProductsUpdateForm({open, handleClose, data}) {
+  console.log(data);
   const filters = useSelector(state => state.products.filters);
   const initial = data;
   const [form, dispatch] = useReducer(reducer, initial);

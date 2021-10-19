@@ -1,6 +1,8 @@
 import {ActionTypes} from '../actionTypes/ActionTypes';
 import axios from 'axios';
 const URL_BASE = 'https://api.zasket.in/inventory/api/1/products';
+const CAT_URL =
+  'https://api.zasket.in/inventory/api/1/categories/list?isActive=true';
 export const allProducts = payload => {
   return {
     type: ActionTypes.GET_ALL_PRODUCTS,
@@ -141,15 +143,12 @@ export const addLsProducts = ({name, category, active, page}) => {
 export const getProductCategory = () => {
   return async dispatch => {
     await axios
-      .get(
-        'https://api.zasket.in/inventory/api/1/categories/list?isActive=true',
-        {
-          headers: {
-            'inventory-user-id': 1,
-            'session-id': 1,
-          },
+      .get(CAT_URL, {
+        headers: {
+          'inventory-user-id': 1,
+          'session-id': 1,
         },
-      )
+      })
       .then(res => {
         dispatch(allCategories(res.data.categories));
       })

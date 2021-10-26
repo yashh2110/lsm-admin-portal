@@ -47,13 +47,15 @@ function AssignedOrders({assignedOrders}) {
   }
 
   const handleCheckAll = e => {
-    const keys = e.target.checked ? assignedOrders.map(item => item.id) : [];
+    const keys = e.target.checked
+      ? assignedOrders.map(item => item.orders.toString())
+      : [];
     setCheckedKeys(keys);
     console.log(keys);
   };
   const handleCheck = e => {
     const keys = e.target.checked
-      ? [...checkedKeys, e.target.value]
+      ? [...checkedKeys, e.target.value.toString()]
       : checkedKeys.filter(item => item !== e.target.value);
     setCheckedKeys(keys);
     console.log(keys);
@@ -143,10 +145,12 @@ function AssignedOrders({assignedOrders}) {
             {rowData => (
               <div style={{lineHeight: '46px'}}>
                 <Checkbox
-                  value={rowData.id}
+                  value={rowData.orders}
                   inline
                   onChange={handleCheck}
-                  checked={checkedKeys.some(i => i === rowData.id)}
+                  checked={checkedKeys.some(
+                    i => i === rowData.orders.toString(),
+                  )}
                 />
               </div>
             )}

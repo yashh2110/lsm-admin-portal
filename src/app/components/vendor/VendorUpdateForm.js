@@ -87,7 +87,6 @@ function VendorUpdateForm({open, handleClose, data}) {
             variant="standard"
           />
           <TextField
-            required
             fullWidth
             value={form.email}
             onChange={e => dispatch({type: 'email', payload: e.target.value})}

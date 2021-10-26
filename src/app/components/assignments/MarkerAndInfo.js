@@ -23,11 +23,18 @@ function MarkerAndInfo({i, orders, setSelectedOrders, setOrders}) {
       onMouseOut={() => setOpen(false)}>
       {open ? (
         <InfoWindow onCloseClick={() => setOpen(false)}>
-          <div>
+          <div style={{maxWidth: '200px'}}>
             <p style={{fontWeight: '600', letterSpacing: '0.8px'}}>
               {i.associatedAddress.recepientName}
             </p>
-            <p>{i.associatedAddress.addressLine_1}</p>
+            <p
+              style={{
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                width: '100%',
+              }}>
+              {i.associatedAddress.addressLine_1}
+            </p>
             <p>
               {i.associatedAddress.landmark
                 ? 'near ' + i.associatedAddress.landmark

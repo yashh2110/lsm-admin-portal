@@ -84,7 +84,7 @@ function UploadInvoices({open, handleClose, purchaseId}) {
         handleClose();
       }}
       className="p-4">
-      <DialogTitle>Create Product</DialogTitle>
+      <DialogTitle>Create Invoice</DialogTitle>
       <form onSubmit={submit}>
         <DialogContent>
           <div className="d-flex justify-content-center align-items-end">
@@ -102,7 +102,7 @@ function UploadInvoices({open, handleClose, purchaseId}) {
                 shrink: true,
               }}
               sx={{mr: '5px'}}
-              label="Product Image"
+              label="Invoice"
               type="file"
               variant="standard"
               fullWidth

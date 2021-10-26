@@ -10,10 +10,13 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import {BiRupee} from 'react-icons/bi';
 import img from '../../assets/images/img.jpg';
 import UploadInvoices from '../components/purchaseorders/UploadInvoices';
-import {getPurchaseOrder} from '../components/purchaseorders/PurchaseOrderService';
+import {
+  downloadPurchaseOrder,
+  getPurchaseOrder,
+} from '../components/purchaseorders/PurchaseOrderService';
 import DownloadInvoices from '../components/purchaseorders/DownloadInvoices';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 function ViewPurchaseOrder({orderId}) {
   const [p_order, setP_order] = useState();
   const [createopen, setCreateopen] = useState(false);
@@ -35,6 +38,11 @@ function ViewPurchaseOrder({orderId}) {
   const handleDownloadClose = () => {
     setDownloadOpen(false);
   };
+  // const downloadPo = ()=>{
+  //   downloadPurchaseOrder(orderId).then(res=>{
+
+  //   })
+  // }
   useEffect(() => {
     fetchOrder();
   }, []);
@@ -53,10 +61,11 @@ function ViewPurchaseOrder({orderId}) {
               </div>
               <p className="pocTitle">{p_order.vendorName}'s Order</p>
             </div>
-            <div>
+            <div className="d-flex">
               <Button
                 variant="contained"
-                onClick={() => setDownloadOpen(true)}
+                className="dropdown-item"
+                onClick={() => downloadPurchaseOrder(orderId)}
                 style={{
                   backgroundColor: ' rgb(223, 223, 223)',
                   boxShadow: 'none',
@@ -64,21 +73,55 @@ function ViewPurchaseOrder({orderId}) {
                   textTransform: 'capitalize',
                   marginLeft: '20px',
                 }}>
-                <FileDownloadOutlinedIcon />
-                Download Invoices
+                <FileDownloadOutlinedIcon /> Download PO
               </Button>
-              <Button
-                variant="contained"
-                onClick={() => setCreateopen(true)}
-                style={{
-                  backgroundColor: ' rgb(223, 223, 223)',
-                  boxShadow: 'none',
-                  color: '#333',
-                  textTransform: 'capitalize',
-                  marginLeft: '20px',
-                }}>
-                <FileUploadOutlinedIcon /> Upload Invoice
-              </Button>
+              <div class="dropdown">
+                <button
+                  class="btn dropdown-toggle"
+                  style={{
+                    backgroundColor: ' rgb(223, 223, 223)',
+                    boxShadow: 'none',
+                    color: '#333',
+                    textTransform: 'capitalize',
+                    marginLeft: '20px',
+                    fontWeight: '500',
+                  }}
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+                  <DescriptionOutlinedIcon sx={{fontSize: 24}} /> Invoices
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <Button
+                    variant="contained"
+                    className="dropdown-item"
+                    onClick={() => setDownloadOpen(true)}
+                    style={{
+                      backgroundColor: 'white',
+                      boxShadow: 'none',
+                      color: '#333',
+                      textTransform: 'capitalize',
+                      textAlign: 'left',
+                    }}>
+                    <FileDownloadOutlinedIcon />
+                    Download Invoices
+                  </Button>
+                  <Button
+                    variant="contained"
+                    className="dropdown-item"
+                    onClick={() => setCreateopen(true)}
+                    style={{
+                      backgroundColor: ' white',
+                      boxShadow: 'none',
+                      color: '#333',
+                      textTransform: 'capitalize',
+                    }}>
+                    <FileUploadOutlinedIcon /> Upload Invoice
+                  </Button>
+                </div>
+              </div>
               <Button
                 variant="contained"
                 onClick={() =>

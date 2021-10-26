@@ -13,6 +13,10 @@ import Assignments from './pages/Assignments';
 import LsProducts from './pages/LowStockProducts';
 import Banners from './pages/Banners';
 import Zones from './pages/Zones';
+import Customers from './pages/Customers';
+import ViewCustomers from './pages/ViewCustomers';
+import CreateZones from './pages/CreateZones';
+import ViewZone from './pages/ViewZone';
 
 function Routes() {
   const [activeTab, setActiveTab] = useState();
@@ -106,10 +110,60 @@ function Routes() {
         />
         <Route
           exact
+          path="/zones/create"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <CreateZones setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/zones/:zoneId"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <ViewZone
+                setActiveTab={setActiveTab}
+                zoneId={props.match.params.zoneId}
+                zone={
+                  props.location.state.zone ? props.location.state.zone : {}
+                }
+              />
+            </Index>
+          )}
+        />
+        <Route
+          exact
           path="/banners"
           render={props => (
             <Index activeTab={activeTab}>
               <Banners setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/customers"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <Customers setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/customers/:customerId"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <ViewCustomers
+                setActiveTab={setActiveTab}
+                id={props.match.params.customerId}
+                customer={
+                  props.location.state?.customer
+                    ? props.location.state.customer
+                    : ''
+                }
+              />
             </Index>
           )}
         />

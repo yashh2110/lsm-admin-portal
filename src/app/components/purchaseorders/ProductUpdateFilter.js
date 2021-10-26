@@ -40,9 +40,10 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
             <input
               type="number"
               value={unitPrice}
+              step={0.01}
               className="unitPrice"
               onChange={e => {
-                const newUnitPrice = parseInt(e.target.value) || 0;
+                const newUnitPrice = e.target.value || 0;
                 setUnitPrice(newUnitPrice);
                 dispatch({
                   type: 'updateProducts',

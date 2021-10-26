@@ -1,23 +1,49 @@
 .zones {
   position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
 }
-.zones > .zone-map {
+
+.zone-map {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 100% !important;
 }
+
 .in-map-form {
   position: absolute;
   right: 0;
   background-color: white;
-  width: 250px;
+  width: 300px;
   padding: 10px;
   border-radius: 10px;
+  max-height: 100%;
+  overflow: auto;
 }
 .zonesCoord {
   max-height: 195px;
   overflow: auto;
+}
+
+.submitBtn {
+  padding-top: 10px;
+  margin-left: 15px;
+}
+.activeDeDropDown {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: auto;
+  box-shadow: 0 1px 5px lightgrey;
+}
+.addedDes {
+  padding: 5px;
+  max-height: 100px;
+  overflow: auto;
+  display: flex;
+}
+.addedDe {
+  padding: 3px;
 }

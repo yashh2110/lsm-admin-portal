@@ -4,37 +4,70 @@ import {
   DrawingManager,
   Polygon,
 } from '@react-google-maps/api';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {getZones} from '../../../redux/actions/Zones';
 import ZoneMapStyle from '../common/ZoneMapStyle';
 import CoordinatesAndColor from './CoordinatesAndColor';
-function ZoneMap() {
-  const [color, setColor] = useState('#000');
-  const [coord, setCoord] = useState('');
+function ZoneMap({
+  color,
+  setColor,
+  coord,
+  setCoord,
+  activeDes,
+  addActiveDeHandle,
+  partnerIds,
+}) {
+  const dispatch = useDispatch();
+  const [path, setPath] = useState([]);
   const onLoad = drawingManager => {
     console.log(drawingManager);
   };
+  const zones = useSelector(state =>
+    state.zones?.zonesInfo
+      ? state.zones.zonesInfo.map(i => {
+          const latlng = i.points.map(e => ({
+            lat: e.latitude,
+            lng: e.longitude,
+          }));
+          return {...i, latlng};
+        })
+      : null,
+  );
+  useEffect(() => {
+    dispatch(getZones());
+  }, []);
   const onPolygonComplete = polygon => {
     const path = polygon.getPath();
     var bounds = [];
+    var bounds1 = [];
     for (var i = 0; i < path.length; i++) {
       var point = {
+        latitude: path.getAt(i).lat(),
+        longitude: path.getAt(i).lng(),
+      };
+      var point1 = {
         lat: path.getAt(i).lat(),
         lng: path.getAt(i).lng(),
       };
       bounds.push(point);
+      bounds1.push(point1);
     }
     setCoord(bounds);
+    setPath(bounds1);
     polygon.setMap(null);
   };
+  console.log(zones);
+  const [libraries] = useState(['drawing']);
   return (
     <LoadScript
       googleMapsApiKey="AIzaSyDfo_edO8vVa26PQolLeKUF_eLO_IiknlY"
-      libraries={['drawing']}>
+      libraries={libraries}>
       <GoogleMap
         zoom={12}
         center={{lat: 16.5062, lng: 80.648}}
         mapContainerStyle={{
-          height: '500px',
+          height: '100%',
         }}
         options={{
           zoomControl: false,
@@ -43,9 +76,9 @@ function ZoneMap() {
           fullscreenControl: false,
           styles: ZoneMapStyle,
         }}>
-        {coord.length >= 1 ? (
+        {path.length >= 1 ? (
           <Polygon
-            paths={coord}
+            paths={path}
             options={{
               strokeColor: color,
               fillColor: color,
@@ -54,11 +87,25 @@ function ZoneMap() {
             }}
           />
         ) : null}
+        {zones
+          ? zones.map((i, index) => (
+              <Polygon
+                path={i.latlng}
+                key={JSON.stringify(i)}
+                options={{
+                  fillColor: i.color,
+                  fillOpacity: 0.3,
+                  strokeColor: i.color,
+                  strokeOpacity: 1,
+                  strokeWeight: 1,
+                }}
+              />
+            ))
+          : null}
         <DrawingManager
           onLoad={onLoad}
           onPolygonComplete={onPolygonComplete}
           options={{
-            // drawingControl: true,
             drawingControlOptions: {
               drawingModes: ['polygon'],
             },
@@ -72,10 +119,17 @@ function ZoneMap() {
             },
           }}
         />
-        <CoordinatesAndColor setColor={setColor} coord={coord} color={color} />
+        <CoordinatesAndColor
+          addActiveDeHandle={addActiveDeHandle}
+          partnerIds={partnerIds}
+          setColor={setColor}
+          coord={coord}
+          color={color}
+          activeDes={activeDes}
+        />
       </GoogleMap>
     </LoadScript>
   );
 }
 
-export default ZoneMap;
+export default React.memo(ZoneMap);

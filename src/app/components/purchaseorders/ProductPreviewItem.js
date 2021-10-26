@@ -34,8 +34,9 @@ function ProductPreviewItem({e, dispatch}) {
             <input
               type="number"
               value={e.unitPrice}
+              step={0.01}
               onChange={k => {
-                const newUnitPrice = parseInt(k.target.value) || 0;
+                const newUnitPrice = k.target.value || 0;
                 dispatch({
                   type: 'updateProducts',
                   payload: {

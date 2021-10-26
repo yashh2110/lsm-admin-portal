@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router';
 import {
-  getPurchaseOrdersByFilter,
+  getPurchaseOrders,
   setVendorFilter,
 } from '../../../redux/actions/PurchaseOrders';
 import '../../css/common/Toolbar.css';
@@ -10,7 +10,7 @@ function PurchaseOrderToolbar({setPage}) {
   const [vendor, setVendor] = useState('');
   const vendorFilter = e => {
     setPage(0);
-    dispatch(getPurchaseOrdersByFilter(e));
+    dispatch(getPurchaseOrders(e));
     setVendor(e);
     dispatch(setVendorFilter(e));
   };

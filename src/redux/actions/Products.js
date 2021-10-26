@@ -1,8 +1,8 @@
 import {ActionTypes} from '../actionTypes/ActionTypes';
 import axios from 'axios';
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/products';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/products';
 const CAT_URL =
-  'https://api.zasket.in/inventory/api/1/categories/list?isActive=true';
+  process.env.REACT_APP_API + 'inventory/api/1/categories/list?isActive=true';
 export const allProducts = payload => {
   return {
     type: ActionTypes.GET_ALL_PRODUCTS,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/assignment/';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/assignment/';
 
 export const deleteAssignmentService = async rowData => {
   return await axios.delete(URL_BASE + `orders?order_id_csv=${rowData.orders}`);
@@ -14,6 +14,7 @@ export const downloadInvoicesService = async rowData => {
 
 export const downloadEstimationService = async checkedKeys => {
   const orderStr = checkedKeys.join(',');
+  console.log(checkedKeys);
   window.open(URL_BASE + `orders/estimation?orderIdCsv=${orderStr}`);
 };
 

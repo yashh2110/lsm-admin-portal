@@ -1,7 +1,7 @@
 import {ActionTypes} from '../actionTypes/ActionTypes';
 import axios from 'axios';
 
-const BASE_URL = 'https://api.zasket.in/inventory/api/1/purchase-order';
+const BASE_URL = process.env.REACT_APP_API + 'inventory/api/1/purchase-order';
 
 export const setPurchaseOrders = payload => {
   return {
@@ -23,26 +23,9 @@ export const setVendorFilter = payload => {
 };
 export const getPurchaseOrders = id => {
   let URL = BASE_URL;
-  URL = URL + '?vendorId=' + id + '&';
-  URL = URL + 'size=' + 25 + '&';
+  URL = URL + '?size=' + 25 + '&';
   URL = URL + 'page=' + 0 + '&';
-  return async dispatch => {
-    await axios
-      .get(URL)
-      .then(res => {
-        dispatch(setPurchaseOrders(res.data));
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-};
-
-export const getPurchaseOrdersByFilter = id => {
-  let URL = BASE_URL;
-  URL = URL + '?vendorId=' + id + '&';
-  URL = URL + 'size=' + 25 + '&';
-  URL = URL + 'page=' + 0 + '&';
+  if (id) URL = URL + 'vendorId=' + id + '&';
   return async dispatch => {
     await axios
       .get(URL)
@@ -57,9 +40,9 @@ export const getPurchaseOrdersByFilter = id => {
 
 export const getPurchaseOrdersByPage = ({id, page}) => {
   let URL = BASE_URL;
-  URL = URL + '?vendorId=' + id + '&';
-  URL = URL + 'size=' + 25 + '&';
+  URL = URL + '?size=' + 25 + '&';
   URL = URL + 'page=' + page + '&';
+  if (id) URL = URL + 'vendorId=' + id + '&';
   return async dispatch => {
     await axios
       .get(URL)

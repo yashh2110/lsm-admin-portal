@@ -1,26 +1,31 @@
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Input,
-} from '@mui/material';
-import React, {useEffect} from 'react';
-import ZoneCapacity from '../components/zones/ZoneCapacity';
-import ZoneMap from '../components/zones/ZoneMap';
-import '../css/pages/zones.css';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {getVendors} from '../../redux/actions/Vendors';
+import '../css/pages/vendor.css';
+
+import ZoneTable from '../components/zones/ZoneTable';
+import {getZones} from '../../redux/actions/Zones';
+import {useHistory} from 'react-router';
 function Zones({setActiveTab}) {
+  const zones = useSelector(state => state.zones.zonesInfo);
+  const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(getZones());
     setActiveTab(6);
   }, []);
+  const columns = [
+    {title: 'Id', field: 'zoneId'},
+    {title: 'Zone Type', field: 'zoneType'},
+    {
+      title: 'Partners',
+      field: 'partnerIds',
+      render: e => <p>{e.partnerIds.join(' ,')}</p>,
+    },
+    {title: 'Color', field: 'color'},
+  ];
   return (
     <div className="vendor">
-      <div className="zones">
-        <div className="zone-map">
-          <ZoneMap />
-        </div>
-      </div>
+      <ZoneTable columns={columns} data={zones} />
     </div>
   );
 }

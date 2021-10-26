@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/products';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/products';
 export const createProduct = async form => {
   return await axios.post(URL_BASE + `/add`, form, {
     headers: {'inventory-user-id': 1, 'session-id': 1},

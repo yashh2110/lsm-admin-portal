@@ -17,7 +17,6 @@ function AssignmentsTableToolBar({checkedKeys, title, downloadEstimation}) {
       {downloadEstimation ? (
         <Button
           variant="outlined"
-          color="info"
           disabled={checkedKeys.length >= 1 ? false : true}
           className="mt-3"
           onClick={() => downloadEstimationService(checkedKeys)}>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/banners';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/banners';
 
 export const uploadBannerService = async file => {
   return await axios.post(URL_BASE + '/images/upload', file, {

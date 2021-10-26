@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/vendors';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/vendors';
 
 export const createVendorService = async form => {
   return await axios.post(URL_BASE, form);

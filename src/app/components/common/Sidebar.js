@@ -8,6 +8,8 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import {Link} from 'react-router-dom';
 const Sidebar = forwardRef(({activeTab}, ref) => {
   return (
@@ -55,7 +57,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
             <LocalOfferOutlinedIcon sx={{fontSize: 20}} className="menuicons" />
             <p>Offer Management</p>
           </Link>
-          {/* <Link
+          <Link
             to="/zones"
             className={activeTab === 6 ? 'menu-item active' : 'menu-item'}>
             <EditLocationOutlinedIcon
@@ -63,7 +65,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
               className="menuicons"
             />
             <p>Zones</p>
-          </Link> */}
+          </Link>
         </ul>
         <ul className="menu">
           {/* <p className="inventoryLabel">Inventory</p> */}
@@ -72,6 +74,12 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
             className={activeTab === 0 ? 'menu-item active' : 'menu-item'}>
             <ListAltOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>Products</p>
+          </Link>
+          <Link
+            to="/customers"
+            className={activeTab === 7 ? 'menu-item active' : 'menu-item'}>
+            <GroupsOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
+            <p>Customers</p>
           </Link>
           <Link
             to="/vendors"

@@ -1,38 +1,13 @@
 // import MUIDataTable from 'mui-datatables';
 import MaterialTable, {MTableToolbar} from 'material-table';
 import React from 'react';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import {getVendors} from '../../../redux/actions/Vendors';
 import {useDispatch} from 'react-redux';
+import {useHistory} from 'react-router';
 import {toast} from 'react-toastify';
-import {deactivateVendorService} from './VendorService';
-function VendorTable({
-  columns,
-  data,
-  setCreateopen,
-  setUpdateopen,
-  setRowData,
-}) {
+function ZoneTable({columns, data}) {
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const deactivate = async id => {
-    deactivateVendorService(id)
-      .then(res => {
-        toast.success('Vendor deactivated', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-        dispatch(getVendors());
-      })
-      .catch(err => {
-        console.log(err);
-        toast.error('Something went wrong', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-      });
-  };
   return (
     <div style={{maxWidth: '100%'}}>
       <MaterialTable
@@ -40,14 +15,19 @@ function VendorTable({
         options={{
           paging: false,
           padding: 'dense',
+          search: false,
           actionsColumnIndex: -1,
+          margin: 'dense',
           debounceInterval: 1000,
           minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
           maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
           rowStyle: {
-            fontSize: '15px',
+            fontSize: '13px',
           },
         }}
+        onRowClick={(event, e) =>
+          history.push({pathname: `/zones/${e.zoneId}`, state: {zone: e}})
+        }
         localization={{
           toolbar: {},
         }}
@@ -59,21 +39,6 @@ function VendorTable({
           ),
         }}
         actions={[
-          {
-            icon: () => <EditOutlinedIcon />,
-            tooltip: 'Edit',
-            onClick: (event, rowData) => {
-              setUpdateopen(true);
-              setRowData(rowData);
-            },
-          },
-          {
-            icon: () => <RemoveCircleOutlineOutlinedIcon />,
-            tooltip: 'Deactivate',
-            onClick: (event, rowData) => {
-              deactivate(rowData.id);
-            },
-          },
           {
             icon: () => (
               <div
@@ -88,16 +53,16 @@ function VendorTable({
             tooltip: 'Create',
             isFreeAction: true,
             onClick: event => {
-              setCreateopen(true);
+              history.push('/zones/create');
             },
           },
         ]}
         columns={columns}
         data={data}
-        title="Vendors"
+        title="Zones"
       />
     </div>
   );
 }
 
-export default VendorTable;
+export default ZoneTable;

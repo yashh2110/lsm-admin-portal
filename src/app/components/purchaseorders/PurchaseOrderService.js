@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/';
 
 export const productSearchService = async query => {
   return await axios.get(URL_BASE + `products?productsNameLike=${query}`, {
@@ -19,6 +19,10 @@ export const getPurchaseOrder = async id => {
 };
 export const getInvoices = async id => {
   return await axios.get(URL_BASE + `purchase-order/${id}/invoices`);
+};
+export const downloadPurchaseOrder = async id => {
+  // return await axios.get(URL_BASE + `purchase-order/${id}/download-receipt`);
+  window.open(URL_BASE + `purchase-order/${id}/download-receipt`);
 };
 export const deleteInvoice = async (purchaseId, id) => {
   return await axios.delete(

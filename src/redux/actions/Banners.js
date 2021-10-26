@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {ActionTypes} from '../actionTypes/ActionTypes';
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/banners';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/banners';
 export const setBanners = payload => {
   return {
     type: ActionTypes.GET_BANNERS,

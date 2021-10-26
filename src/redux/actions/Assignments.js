@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {batch} from 'react-redux';
 import {ActionTypes} from '../actionTypes/ActionTypes';
-const URL_BASE = 'https://api.zasket.in/inventory/api/1/assignment/';
+const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/assignment/';
 export const setActiveDes = payload => {
   return {
     type: ActionTypes.GET_ACTIVE_DE,

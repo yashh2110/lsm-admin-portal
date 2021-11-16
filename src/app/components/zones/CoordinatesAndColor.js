@@ -213,20 +213,32 @@ function CoordinatesAndColor({
             </div>
             <div className="activeDeDropDown">
               {des
-                ? des.map(i => (
-                    <div className="d-flex justify-content-between align-items-center p-1">
-                      <p className="">
-                        {i.id}. {i.name}
-                      </p>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        type="button"
-                        onClick={() => addActiveDeHandle(i.id)}>
-                        {isPartnerAdded(i.id) ? 'Remove' : 'Add'}
-                      </Button>
-                    </div>
-                  ))
+                ? des.map(i =>
+                    i.deliveryBoyType === 'PARTNER' ? (
+                      <div className="d-flex justify-content-between align-items-center p-1">
+                        <p className="m-0">
+                          {i.id}. {i.name}
+                          <p
+                            className="m-0"
+                            style={{
+                              fontSize: '0.9rem',
+                              opacity: 0.6,
+                              fontWeight: '500',
+                              paddingTop: '2px',
+                            }}>
+                            {i.phoneNumber}
+                          </p>
+                        </p>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          type="button"
+                          onClick={() => addActiveDeHandle(i.id)}>
+                          {isPartnerAdded(i.id) ? 'Remove' : 'Add'}
+                        </Button>
+                      </div>
+                    ) : null,
+                  )
                 : null}
             </div>
           </div>

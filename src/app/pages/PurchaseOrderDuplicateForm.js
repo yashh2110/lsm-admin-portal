@@ -16,15 +16,13 @@ import {BiRupee} from 'react-icons/bi';
 import {toast} from 'react-toastify';
 import ProductUpdateFormPrev from '../components/purchaseorders/ProductUpdateFormPrev';
 import ProductUpdateFilter from '../components/purchaseorders/ProductUpdateFilter';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+
 import {
+  createDuplicatePurchaseOrderService,
+  getPurchaseOrder,
   productSearchService,
-  updatePurchaseOrderService,
 } from '../components/purchaseorders/PurchaseOrderService';
-import UploadInvoices from '../components/purchaseorders/UploadInvoices';
-import DownloadInvoices from '../components/purchaseorders/DownloadInvoices';
-import {getPurchaseOrder} from '../components/purchaseorders/PurchaseOrderService';
+
 const reducer = (state, {type, payload}) => {
   switch (type) {
     case 'initial':
@@ -101,24 +99,22 @@ const reducer = (state, {type, payload}) => {
       return state;
   }
 };
-function PurchaseOrderUpdateForm({setActiveTab, id}) {
+function PurchaseOrderDuplicateForm({setActiveTab, id}) {
   const vendors = useSelector(state => state.vendors);
   const warehouses = useSelector(state => state.warehouses);
   const history = useHistory();
   const dispatch = useDispatch();
   const [filterProducts, setFilterProducts] = useState();
   const [filterLoading, setFilterloading] = useState(false);
-  const [createopen, setCreateopen] = useState(false);
-  const [downloadOpen, setDownloadOpen] = useState(false);
   const [item, setItem] = useState({});
   const [pocForm, formDispatch] = useReducer(reducer, item);
 
-  const handleCreateClose = () => {
-    setCreateopen(false);
-  };
-  const handleDownloadClose = () => {
-    setDownloadOpen(false);
-  };
+  //   const handleCreateClose = () => {
+  //     setCreateopen(false);
+  //   };
+  //   const handleDownloadClose = () => {
+  //     setDownloadOpen(false);
+  //   };
   const productSearch = async query => {
     setFilterloading(true);
     if (query.length >= 1) {
@@ -136,22 +132,10 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
       setFilterloading(false);
     }
   };
-
-  useEffect(() => {
-    getPurchaseOrder(id)
-      .then(res => {
-        setItem(res.data);
-        formDispatch({type: 'initial', payload: res.data});
-      })
-      .then(err => {
-        console.log(err);
-      });
-  }, []);
-
   const pocSubmit = async () => {
-    updatePurchaseOrderService(item.id, pocForm)
+    createDuplicatePurchaseOrderService(pocForm)
       .then(res => {
-        toast.success('Purchase Order updated', {
+        toast.success('Purchase Order Created', {
           position: 'top-right',
           autoClose: 2000,
         });
@@ -169,10 +153,19 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
     dispatch(getVendors());
     dispatch(getWarehouses());
     setActiveTab(3);
+    getPurchaseOrder(id)
+      .then(res => {
+        setItem(res.data);
+        formDispatch({type: 'initial', payload: res.data});
+      })
+      .then(err => {
+        console.log(err);
+      });
   }, []);
+
   return (
     <div className="vendor">
-      {item && pocForm ? (
+      {item ? (
         <>
           <div className="pocreateHead">
             <div className="d-flex justify-content-center align-items-center">
@@ -183,39 +176,13 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
                 }}>
                 <ArrowBackOutlinedIcon sx={{fontSize: '24px'}} />
               </div>
-              <p className="pocTitle">Update Purchase Order</p>
+              <p className="pocTitle">Duplicate Purchase Order</p>
             </div>
-            <div>
-              <Button
-                variant="contained"
-                onClick={() => setDownloadOpen(true)}
-                style={{
-                  backgroundColor: ' rgb(223, 223, 223)',
-                  boxShadow: 'none',
-                  color: '#333',
-                  textTransform: 'capitalize',
-                  marginLeft: '20px',
-                }}>
-                <FileDownloadOutlinedIcon />
-                Download Invoices
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => setCreateopen(true)}
-                style={{
-                  backgroundColor: ' rgb(223, 223, 223)',
-                  boxShadow: 'none',
-                  color: '#333',
-                  textTransform: 'capitalize',
-                  marginLeft: '20px',
-                }}>
-                <FileUploadOutlinedIcon /> Upload Invoice
-              </Button>
-            </div>
+            <div></div>
           </div>
           <div className="pocFormDiv">
-            <div className="pocForm ">
-              <div className="d-flex justify-content-center align-self-center">
+            <div className="pocForm">
+              <div className="d-flex justify-content-center">
                 <FormControl
                   variant="standard"
                   sx={{m: 1, maxWidth: '34%'}}
@@ -309,7 +276,7 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
                 </FormControl>
                 <FormControl
                   variant="standard"
-                  sx={{m: 1}}
+                  sx={{m: 1, maxWidth: '34%'}}
                   color="secondary"
                   className="pocInput">
                   <InputLabel id="status">Payment State</InputLabel>
@@ -421,7 +388,6 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
                   pocForm.purchaseOrderItems.map(e => (
                     <ProductUpdateFormPrev
                       e={e}
-                      key={e.id}
                       dispatch={formDispatch}
                       pocForm={pocForm}
                     />
@@ -463,29 +429,17 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
                   disabled={
                     pocForm.vendorId && pocForm.warehouseId ? false : true
                   }>
-                  Update
+                  Create
                 </Button>
               </div>
             </div>
           </div>
-          <UploadInvoices
-            open={createopen}
-            handleClose={handleCreateClose}
-            purchaseId={item.id}
-          />
         </>
       ) : (
-        <p>loading</p>
+        <p>loading...</p>
       )}
-      {downloadOpen ? (
-        <DownloadInvoices
-          open={downloadOpen}
-          handleClose={handleDownloadClose}
-          purchaseId={item.id}
-        />
-      ) : null}
     </div>
   );
 }
 
-export default PurchaseOrderUpdateForm;
+export default PurchaseOrderDuplicateForm;

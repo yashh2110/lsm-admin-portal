@@ -1,4 +1,4 @@
-import React, {useReducer, useRef, useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,7 +8,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import DialogTitle from '@mui/material/DialogTitle';
-import CustomerAlert from './CustomerAlert';
 import {blockStatusService} from './CustomerService';
 import {toast} from 'react-toastify';
 import CustomAlert from '../common/CustomAlert';

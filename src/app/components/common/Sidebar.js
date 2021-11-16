@@ -10,6 +10,10 @@ import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurned
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
+import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
+import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlined';
 import {Link} from 'react-router-dom';
 const Sidebar = forwardRef(({activeTab}, ref) => {
   return (
@@ -66,6 +70,15 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
             />
             <p>Zones</p>
           </Link>
+          <Link
+            to="/estimations"
+            className={activeTab === 11 ? 'menu-item active' : 'menu-item'}>
+            <InsertChartOutlinedIcon
+              sx={{fontSize: 20}}
+              className="menuicons"
+            />
+            <p>Estimation</p>
+          </Link>
         </ul>
         <ul className="menu">
           {/* <p className="inventoryLabel">Inventory</p> */}
@@ -94,6 +107,12 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
             <p>Warehouses</p>
           </Link>
           <Link
+            to="/partners"
+            className={activeTab === 9 ? 'menu-item active' : 'menu-item'}>
+            <PersonPinOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
+            <p>Partners</p>
+          </Link>
+          <Link
             to="/purchaseorders"
             className={activeTab === 3 ? 'menu-item active' : 'menu-item'}>
             <ShoppingCartOutlinedIcon
@@ -102,14 +121,26 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
             />{' '}
             <p>Purchase Orders</p>
           </Link>
-        </ul>
-
-        <div className="foot">
-          <div className="signout">
-            <LogoutOutlinedIcon sx={{fontSize: 20}} />
-            <p> Sign Out</p>
+          <Link
+            to="/returnsandrefunds"
+            className={activeTab === 10 ? 'menu-item active' : 'menu-item'}>
+            <KeyboardReturnOutlinedIcon
+              sx={{fontSize: 20}}
+              className="menuicons"
+            />{' '}
+            <p>Returns And Refunds</p>
+          </Link>
+          <Link
+            to="/codsummary"
+            className={activeTab === 8 ? 'menu-item active' : 'menu-item'}>
+            <AssignmentOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
+            <p>COD Summary</p>
+          </Link>
+          <div className={activeTab === 8 ? 'menu-item active' : 'menu-item'}>
+            <LogoutOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
+            <p>Sign Out</p>
           </div>
-        </div>
+        </ul>
       </div>
       <div
         className="backDrop"

@@ -97,7 +97,7 @@ function ProductPreviewItem({e, dispatch}) {
                   payload: {
                     ...item,
                     quantity: parseInt(k.target.value) || 0,
-                    totalQuantityPrice: e.unitPrice * (k.target.value - 1),
+                    totalQuantityPrice: e.unitPrice * k.target.value,
                   },
                 });
               }}

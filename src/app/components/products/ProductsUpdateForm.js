@@ -380,7 +380,6 @@ function ProductsUpdateForm({open, handleClose, data}) {
             variant="standard"
           />
           <TextField
-            required
             fullWidth
             margin="dense"
             value={form.hsnCode}
@@ -396,7 +395,6 @@ function ProductsUpdateForm({open, handleClose, data}) {
             variant="standard"
           />
           <TextField
-            required
             fullWidth
             margin="dense"
             value={form.eanCode}

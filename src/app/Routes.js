@@ -17,6 +17,11 @@ import Customers from './pages/Customers';
 import ViewCustomers from './pages/ViewCustomers';
 import CreateZones from './pages/CreateZones';
 import ViewZone from './pages/ViewZone';
+import PurchaseOrderDuplicateForm from './pages/PurchaseOrderDuplicateForm';
+import CodSummary from './pages/CodSummary';
+import Partners from './pages/Partners';
+import ReturnsAndRefunds from './pages/ReturnsAndRefunds';
+import Estimations from './pages/Estimation';
 
 function Routes() {
   const [activeTab, setActiveTab] = useState();
@@ -68,7 +73,15 @@ function Routes() {
             </Index>
           )}
         />
-
+        <Route
+          exact
+          path="/codsummary"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <CodSummary setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
         <Route
           exact
           path="/purchaseorders/new"
@@ -80,12 +93,24 @@ function Routes() {
         />
         <Route
           exact
-          path="/purchaseorders/update"
+          path="/purchaseorders/update/:id"
           render={props => (
             <Index activeTab={activeTab}>
               <PurchaseOrderUpdateForm
                 setActiveTab={setActiveTab}
-                item={props.location.state['item']}
+                id={props.match.params.id}
+              />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/purchaseorders/duplicate/:id"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <PurchaseOrderDuplicateForm
+                setActiveTab={setActiveTab}
+                id={props.match.params.id}
               />
             </Index>
           )}
@@ -125,9 +150,6 @@ function Routes() {
               <ViewZone
                 setActiveTab={setActiveTab}
                 zoneId={props.match.params.zoneId}
-                zone={
-                  props.location.state.zone ? props.location.state.zone : {}
-                }
               />
             </Index>
           )}
@@ -147,6 +169,33 @@ function Routes() {
           render={props => (
             <Index activeTab={activeTab}>
               <Customers setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/partners"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <Partners setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/returnsandrefunds"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <ReturnsAndRefunds setActiveTab={setActiveTab} />
+            </Index>
+          )}
+        />
+        <Route
+          exact
+          path="/estimations"
+          render={props => (
+            <Index activeTab={activeTab}>
+              <Estimations setActiveTab={setActiveTab} />
             </Index>
           )}
         />

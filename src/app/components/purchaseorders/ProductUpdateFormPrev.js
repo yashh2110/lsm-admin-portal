@@ -10,13 +10,20 @@ function ProductUpdateFormPrev({e, dispatch}) {
   const item = {
     ...e,
     totalPrice: e.unitPrice * quantity,
+    image: e?.itemImages[0] ? e.itemImages[0].mediumImagePath : img,
   };
   return (
-    <div className="item">
+    <div className="item" key={e.id}>
       <div className="itemDet">
-        <img src={img} alt="" className="itemImg" />
+        <img
+          src={e.itemImages[0] ? e.itemImages[0].mediumImagePath : img}
+          alt=""
+          className="itemImg"
+        />
         <div className="">
-          <p className="itemName">{e.itemName}</p>
+          <p className="itemName">
+            {e.itemName} ({e.itemSubName})
+          </p>
           <div
             className="itemName d-flex align-items-center"
             style={{marginLeft: '10px'}}>
@@ -87,7 +94,7 @@ function ProductUpdateFormPrev({e, dispatch}) {
                   payload: {
                     ...item,
                     quantity: parseInt(k.target.value) || 0,
-                    totalPrice: e.unitPrice * (k.target.value - 1),
+                    totalPrice: e.unitPrice * k.target.value,
                   },
                 });
               }}

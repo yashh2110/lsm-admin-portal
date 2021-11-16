@@ -22,15 +22,6 @@ function ViewPurchaseOrder({orderId}) {
   const [createopen, setCreateopen] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
   const history = useHistory();
-  const fetchOrder = async () => {
-    getPurchaseOrder(orderId)
-      .then(res => {
-        setP_order(res.data);
-      })
-      .then(err => {
-        console.log(err);
-      });
-  };
 
   const handleCreateClose = () => {
     setCreateopen(false);
@@ -44,7 +35,13 @@ function ViewPurchaseOrder({orderId}) {
   //   })
   // }
   useEffect(() => {
-    fetchOrder();
+    getPurchaseOrder(orderId)
+      .then(res => {
+        setP_order(res.data);
+      })
+      .then(err => {
+        console.log(err);
+      });
   }, []);
   return (
     <div className="vendor">
@@ -126,7 +123,7 @@ function ViewPurchaseOrder({orderId}) {
                 variant="contained"
                 onClick={() =>
                   history.push({
-                    pathname: '/purchaseorders/update',
+                    pathname: `/purchaseorders/update/${orderId}`,
                     state: {item: p_order},
                   })
                 }
@@ -221,9 +218,19 @@ function ViewPurchaseOrder({orderId}) {
                   p_order.purchaseOrderItems.map(e => (
                     <div className="item" key={e.id}>
                       <div className="itemDet">
-                        <img src={img} alt="" className="itemImg" />
+                        <img
+                          src={
+                            e.itemImages[0]?.mediumImagePath
+                              ? e.itemImages[0].mediumImagePath
+                              : img
+                          }
+                          alt=""
+                          className="itemImg"
+                        />
                         <div className="" style={{pointerEvents: 'none'}}>
-                          <p className="itemName">{e.itemName}</p>
+                          <p className="itemName">
+                            {e.itemName} ({e.itemSubName})
+                          </p>
                         </div>
                       </div>
                       <div className="quantityDiv">
@@ -239,7 +246,7 @@ function ViewPurchaseOrder({orderId}) {
                               className="form-control counter"
                               value={e.quantity}
                               disabled
-                              style={{width: '50px'}}
+                              style={{width: '75px'}}
                             />
                           </div>
                         </div>
@@ -262,7 +269,9 @@ function ViewPurchaseOrder({orderId}) {
             </div>
           </div>
         </>
-      ) : null}
+      ) : (
+        <p>Loading...</p>
+      )}
       <UploadInvoices
         open={createopen}
         handleClose={handleCreateClose}

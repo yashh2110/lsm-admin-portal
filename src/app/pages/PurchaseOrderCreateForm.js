@@ -155,7 +155,7 @@ function PurchaseOrderCreateForm({setActiveTab}) {
           <div className="d-flex justify-content-center">
             <FormControl
               variant="standard"
-              sx={{m: 1}}
+              sx={{m: 1, maxWidth: '34%'}}
               color="secondary"
               className="pocInput">
               <InputLabel id="status">Select Vendor</InputLabel>
@@ -181,7 +181,7 @@ function PurchaseOrderCreateForm({setActiveTab}) {
             </FormControl>
             <FormControl
               variant="standard"
-              sx={{m: 1}}
+              sx={{m: 1, maxWidth: '34%'}}
               color="secondary"
               className="pocInput">
               <InputLabel id="status">Select Warehouse</InputLabel>
@@ -209,7 +209,7 @@ function PurchaseOrderCreateForm({setActiveTab}) {
           <div className="d-flex justify-content-center">
             <FormControl
               variant="standard"
-              sx={{m: 1}}
+              sx={{m: 1, maxWidth: '34%'}}
               color="secondary"
               className="pocInput">
               <InputLabel id="status">Purchase State</InputLabel>
@@ -237,7 +237,7 @@ function PurchaseOrderCreateForm({setActiveTab}) {
             </FormControl>
             <FormControl
               variant="standard"
-              sx={{m: 1}}
+              sx={{m: 1, maxWidth: '34%'}}
               color="secondary"
               className="pocInput">
               <InputLabel id="status">Payment State</InputLabel>

@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getVendors} from '../../redux/actions/Vendors';
 import '../css/pages/vendor.css';
 
 import ZoneTable from '../components/zones/ZoneTable';
 import {getZones} from '../../redux/actions/Zones';
-import {useHistory} from 'react-router';
 function Zones({setActiveTab}) {
   const zones = useSelector(state => state.zones.zonesInfo);
   const dispatch = useDispatch();
@@ -18,8 +16,9 @@ function Zones({setActiveTab}) {
     {title: 'Zone Type', field: 'zoneType'},
     {
       title: 'Partners',
-      field: 'partnerIds',
-      render: e => <p>{e.partnerIds.join(' ,')}</p>,
+      field: 'partnerInfo',
+      render: e =>
+        e.partnersInfo ? e.partnersInfo.map(i => i.name).join(' , ') : null,
     },
     {title: 'Color', field: 'color'},
   ];

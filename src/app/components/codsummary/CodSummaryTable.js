@@ -1,30 +1,28 @@
 // import MUIDataTable from 'mui-datatables';
 import MaterialTable, {MTableToolbar} from 'material-table';
 import React from 'react';
-import {useHistory} from 'react-router';
-function ZoneTable({columns, data}) {
-  const history = useHistory();
+import CodSummaryToolbar from './CodSummaryToolbar';
 
+function CodSummaryTable({columns, data}) {
   return (
     <div style={{maxWidth: '100%'}}>
+      <div className="p-2">
+        <CodSummaryToolbar />
+      </div>
       <MaterialTable
         style={{padding: '0 8px', boxShadow: 'none'}}
         options={{
           paging: false,
           padding: 'dense',
-          search: false,
           actionsColumnIndex: -1,
-          margin: 'dense',
+          toolbar: false,
           debounceInterval: 1000,
           minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
           maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
           rowStyle: {
-            fontSize: '13px',
+            fontSize: '15px',
           },
         }}
-        onRowClick={(event, e) =>
-          history.push({pathname: `/zones/${e.zoneId}`, state: {zone: e}})
-        }
         localization={{
           toolbar: {},
         }}
@@ -35,31 +33,12 @@ function ZoneTable({columns, data}) {
             </div>
           ),
         }}
-        actions={[
-          {
-            icon: () => (
-              <div
-                className="btn"
-                style={{
-                  backgroundColor: 'rgb(223, 223, 223)',
-                  fontWeight: '500',
-                }}>
-                Create
-              </div>
-            ),
-            tooltip: 'Create',
-            isFreeAction: true,
-            onClick: event => {
-              history.push('/zones/create');
-            },
-          },
-        ]}
         columns={columns}
         data={data}
-        title="Zones"
+        title="COD Summary"
       />
     </div>
   );
 }
 
-export default ZoneTable;
+export default CodSummaryTable;

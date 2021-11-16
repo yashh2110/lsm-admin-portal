@@ -4,17 +4,31 @@ import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import {useHistory} from 'react-router';
 import Button from '@material-ui/core/Button';
 import {GoogleMap, LoadScript, Polygon} from '@react-google-maps/api';
-import {deactivateZone} from '../components/zones/ZoneService';
+import {deactivateZone, getZoneById} from '../components/zones/ZoneService';
 import {toast} from 'react-toastify';
 import CustomAlert from '../components/common/CustomAlert';
 import ZoneSlotTable from '../components/zones/ZoneSlotTable';
+import ZoneSlotEdit from '../components/zones/ZoneSlotEdit';
 
-function ViewZone({zone, zoneId, setActiveTab}) {
+function ViewZone({zoneId, setActiveTab}) {
   const history = useHistory();
   const [path, setPath] = useState();
   const [libraries] = useState(['drawing']);
   const [alertOpen, setAlertOpen] = useState(false);
-
+  const [createopen, setCreateopen] = useState(false);
+  const [zone, setZone] = useState();
+  const handleCreateClose = () => {
+    setCreateopen(false);
+  };
+  const getZone = () => {
+    getZoneById(zoneId)
+      .then(res => {
+        setZone(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   const deactivate = () => {
     deactivateZone(zoneId)
       .then(res => {
@@ -22,6 +36,7 @@ function ViewZone({zone, zoneId, setActiveTab}) {
           autoClose: 2000,
         });
         history.goBack();
+        getZone();
         setAlertOpen(false);
       })
       .catch(err => {
@@ -34,13 +49,18 @@ function ViewZone({zone, zoneId, setActiveTab}) {
   console.log(zone);
   useEffect(() => {
     setActiveTab(6);
-    setPath(i =>
-      zone.points.map(i => ({
-        lat: i.latitude,
-        lng: i.longitude,
-      })),
-    );
+    getZone();
   }, []);
+  useEffect(() => {
+    if (zone) {
+      setPath(i =>
+        zone.points.map(i => ({
+          lat: i.latitude,
+          lng: i.longitude,
+        })),
+      );
+    }
+  }, [zone]);
   return zone ? (
     <>
       <div className="vendor">
@@ -81,7 +101,8 @@ function ViewZone({zone, zoneId, setActiveTab}) {
               <b>Zone Type</b>: {zone.zoneType}
             </p>
             <p>
-              <b>Zone Partners</b>: {zone.partnerIds.join(' , ')}
+              <b>Zone Partners</b>:{' '}
+              {zone.partnersInfo.map(i => i.name).join(' , ')}
             </p>
             <p>
               <b>Zone Color</b>: {zone.color}
@@ -122,7 +143,13 @@ function ViewZone({zone, zoneId, setActiveTab}) {
           </div>
         </div>
         <div>
-          <ZoneSlotTable data={zone.slotsInfo} />
+          {zone ? (
+            <ZoneSlotTable
+              data={zone}
+              setCreateopen={setCreateopen}
+              zoneId={zoneId}
+            />
+          ) : null}
         </div>
         {alertOpen ? (
           <CustomAlert
@@ -133,6 +160,12 @@ function ViewZone({zone, zoneId, setActiveTab}) {
             confirmFunction={deactivate}
           />
         ) : null}
+        <ZoneSlotEdit
+          open={createopen}
+          handleClose={handleCreateClose}
+          zoneId={zoneId}
+          setZone={setZone}
+        />
       </div>
     </>
   ) : (

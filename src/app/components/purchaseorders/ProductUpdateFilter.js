@@ -9,10 +9,14 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
   const [unitPrice, setUnitPrice] = useState(i.discountedPrice);
   const item = {
     itemName: i.name,
+    itemSubName: i.subName,
     itemId: i.id,
     quantity: quantity,
     unitPrice: i.discountedPrice,
     totalPrice: i.discountedPrice * quantity,
+    image: i.productImageInfoList[0]?.mediumImagePath
+      ? i.productImageInfoList[0].mediumImagePath
+      : img,
   };
   const isProductAdded = () => {
     if (addedProducts.length === 0) return false;
@@ -32,9 +36,19 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
   return (
     <div className="filterItem">
       <div className="filterDet">
-        <img src={img} alt="img" className="filterItemImg" />
+        <img
+          src={
+            i.productImageInfoList[0]
+              ? i.productImageInfoList[0].mediumImagePath
+              : img
+          }
+          alt="img"
+          className="filterItemImg"
+        />
         <div className="filterItemNamePrice">
-          <p className="filterItemName">{i.name}</p>
+          <p className="filterItemName">
+            {i.name} ({i.subName})
+          </p>
           <div className="filterItemPrice d-flex align-items-center">
             <p className="p-0 m-0">Unit Price : </p>
             <input

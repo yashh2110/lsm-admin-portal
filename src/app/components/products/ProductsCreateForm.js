@@ -391,7 +391,6 @@ function ProductCreateForm({open, handleClose}) {
             variant="standard"
           />
           <TextField
-            required
             fullWidth
             margin="dense"
             value={form.hsnCode}
@@ -407,7 +406,6 @@ function ProductCreateForm({open, handleClose}) {
             variant="standard"
           />
           <TextField
-            required
             fullWidth
             margin="dense"
             value={form.eanCode}

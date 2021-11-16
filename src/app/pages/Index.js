@@ -7,12 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 function Index({children, activeTab}) {
   const sidebarRef = useRef();
   return (
-    <React.Fragment>
+    <>
       <Sidebar ref={sidebarRef} activeTab={activeTab} />
       <Navbar sidebar={sidebarRef.current} />
       <ToastContainer />
       <div className="main">{children}</div>
-    </React.Fragment>
+    </>
   );
 }
 

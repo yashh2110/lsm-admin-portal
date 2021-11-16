@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import ZoneCapacity from '../components/zones/ZoneCapacity';
 import ZoneMap from '../components/zones/ZoneMap';
-import ActiveDaCard from '../components/zones/ActiveDaCard';
 import '../css/pages/zones.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {getActiveDes} from '../../redux/actions/Assignments';
 function CreateZones({setActiveTab}) {
   const [color, setColor] = useState('#000');
   const [coord, setCoord] = useState('');
-  const [type, setType] = useState('');
   const [partnerIds, setPartnerIds] = useState([]);
   const dispatch = useDispatch();
   const activeDes = useSelector(state => state.assignments.activeDes);

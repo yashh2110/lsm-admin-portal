@@ -45,7 +45,9 @@ export const getCustomersByPage = ({name, page}) => {
   if (name) URL = URL + 'customersLike=' + name;
   return async dispatch => {
     await axios
-      .get(URL)
+      .get(URL, {
+        headers: {'inventory-user-id': 1, 'session-id': 1},
+      })
       .then(res => {
         dispatch(addCustomers(res.data.customers));
       })

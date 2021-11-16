@@ -90,7 +90,7 @@
 }
 /* menue */
 .menu {
-  padding: 5px 10px 5px;
+  padding: 5px 10px 15px;
   margin-bottom: 0;
 }
 .menu > .inventoryLabel {
@@ -106,6 +106,7 @@
   /* transition: all 0.3s ease-in-out; */
   border-radius: 5px;
   display: flex;
+  font-size: 0.9rem;
   align-items: center;
   justify-content: flex-start;
   color: rgb(57, 57, 57);

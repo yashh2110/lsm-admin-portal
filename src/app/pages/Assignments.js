@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getActiveDes, getZones} from '../../redux/actions/Assignments';
-
+import '../css/pages/vendor.css';
 import '../css/pages/assignments.css';
 import AssignedOrders from '../components/assignments/AssignedOrders';
 import OrderStateSummary from '../components/assignments/OrderStateSummary';

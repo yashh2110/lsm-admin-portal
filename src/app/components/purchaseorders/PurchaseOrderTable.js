@@ -1,13 +1,20 @@
 import MaterialTable from 'material-table';
-import React from 'react';
-
+import React, {useState} from 'react';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {useHistory} from 'react-router-dom';
 import PurchaseOrderToolbar from './PurchaseOrdersToolbar';
+import {Menu, MenuItem} from '@material-ui/core';
 function PurchaseOrderTable({columns, data, setPage}) {
   const history = useHistory();
-
+  const [anchorEl, setAnchorEl] = useState({});
   const viewOrder = e => {
     history.push({pathname: `/purchaseorders/${e.id}`, state: {orderId: e.id}});
+  };
+  const handleClick = (event, rowData) => {
+    setAnchorEl({anchor: event.currentTarget, data: rowData});
+  };
+  const handleClose = () => {
+    setAnchorEl({anchor: null, data: undefined});
   };
   return (
     <div style={{maxWidth: '100%'}}>
@@ -29,17 +36,11 @@ function PurchaseOrderTable({columns, data, setPage}) {
         }}
         onRowClick={(event, e) => viewOrder(e)}
         actions={[
-          // {
-          //   icon: () => <EditOutlinedIcon />,
-          //   tooltip: 'Edit',
-          //   onClick: (event, rowData) => {
-          //     history.push({
-          //       pathname: '/purchaseorders/update',
-          //       state: {item: rowData},
-          //     });
-          //   },
-          // },
-
+          {
+            icon: MoreVertIcon,
+            tooltip: 'More',
+            onClick: handleClick,
+          },
           {
             icon: () => (
               <div
@@ -51,7 +52,7 @@ function PurchaseOrderTable({columns, data, setPage}) {
                 Create
               </div>
             ),
-            tooltip: 'Deactivate',
+            tooltip: 'Create',
             isFreeAction: true,
             onClick: event => {
               history.push('/purchaseorders/new');
@@ -62,6 +63,22 @@ function PurchaseOrderTable({columns, data, setPage}) {
         data={data}
         title="Purchase Orders"
       />
+      <Menu
+        id="more-menu"
+        anchorEl={anchorEl.anchor}
+        keepMounted={true}
+        open={Boolean(anchorEl.anchor)}
+        onClose={handleClose}>
+        <MenuItem
+          onClick={() =>
+            history.push({
+              pathname: `/purchaseorders/duplicate/${anchorEl.data.id}`,
+              state: {item: anchorEl.data},
+            })
+          }>
+          Duplicate
+        </MenuItem>
+      </Menu>
     </div>
   );
 }

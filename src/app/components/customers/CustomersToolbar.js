@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router';
 import {
   getCustomers,
   setCustomerFilter,
@@ -16,7 +15,6 @@ function CustomerToolbar({setPage}) {
     dispatch(setCustomerFilter(e));
   };
   const dispatch = useDispatch();
-  const history = useHistory();
   const customerfilter = useSelector(
     state => state.purchaseorders.customerfilter,
   );

@@ -33,3 +33,19 @@
   font-weight: 600;
   color: rgb(57, 57, 57);
 }
+@media screen and (max-width: 768px) {
+  .navbar {
+    position: fixed !important;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background-color: white;
+    width: calc(100vw);
+    margin-left: 0;
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(211, 211, 211, 0.789);
+    display: flex;
+    justify-content: flex-end !important;
+    align-items: center;
+  }
+}

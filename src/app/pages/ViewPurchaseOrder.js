@@ -14,6 +14,7 @@ import {
   downloadPurchaseOrder,
   getPurchaseOrder,
 } from '../components/purchaseorders/PurchaseOrderService';
+import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import DownloadInvoices from '../components/purchaseorders/DownloadInvoices';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -119,6 +120,24 @@ function ViewPurchaseOrder({orderId}) {
                   </Button>
                 </div>
               </div>
+              <Button
+                variant="contained"
+                className="dropdown-item"
+                onClick={() =>
+                  history.push({
+                    pathname: `/purchaseorders/duplicate/${orderId}`,
+                    state: {item: p_order},
+                  })
+                }
+                style={{
+                  backgroundColor: ' rgb(223, 223, 223)',
+                  boxShadow: 'none',
+                  color: '#333',
+                  textTransform: 'capitalize',
+                  marginLeft: '20px',
+                }}>
+                <FileCopyOutlinedIcon sx={{fontSize: 20}} /> Duplicate
+              </Button>
               <Button
                 variant="contained"
                 onClick={() =>

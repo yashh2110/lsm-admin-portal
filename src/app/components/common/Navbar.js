@@ -2,7 +2,6 @@ import React from 'react';
 import '../../css/common/navbar.css';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import MenuIcon from '@mui/icons-material/Menu';
 function Navbar({sidebar}) {
   const sidebarHandle = () => {
     if (sidebar.style.left === '0px') {

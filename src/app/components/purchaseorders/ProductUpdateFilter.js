@@ -5,12 +5,14 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {BiRupee} from 'react-icons/bi';
 function ProductUpdateFilter({i, dispatch, addedProducts}) {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1 / i.estimationUnit);
   const [unitPrice, setUnitPrice] = useState(i.discountedPrice);
   const item = {
     itemName: i.name,
     itemSubName: i.subName,
     itemId: i.id,
+    estimationType: i.estimationType,
+    estimationUnit: i.estimationUnit,
     quantity: quantity,
     unitPrice: i.discountedPrice,
     totalPrice: i.discountedPrice * quantity,
@@ -85,17 +87,27 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
           </Button>
         ) : (
           <div className="qantity d-flex">
+            <p className="m-0 text-right p-1 pb-0 pt-0">
+              {i.estimationType}
+              {i.estimationUnit}
+            </p>
+
             <button
               className=" counterBtn"
               onClick={() => {
                 if (quantity > 1) {
-                  setQuantity(e => e - 1);
+                  setQuantity(
+                    e => (e * i.estimationUnit - 1) / i.estimationUnit,
+                  );
                   dispatch({
                     type: 'updateProducts',
                     payload: {
                       ...item,
-                      quantity: quantity - 1,
-                      totalPrice: i.discountedPrice * (quantity - 1),
+                      quantity:
+                        (quantity * i.estimationUnit - 1) / i.estimationUnit,
+                      totalPrice:
+                        i.discountedPrice *
+                        ((quantity * i.estimationUnit - 1) / i.estimationUnit),
                     },
                   });
                 } else {
@@ -107,15 +119,17 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
             <input
               type="text"
               className="form-control counter"
-              value={quantity}
+              value={quantity * i.estimationUnit}
               onChange={e => {
-                setQuantity(parseInt(e.target.value) || 0);
+                const units = parseInt(e.target.value) / i.estimationUnit;
+                setQuantity(units || 0);
+
                 dispatch({
                   type: 'updateProducts',
                   payload: {
                     ...item,
-                    quantity: parseInt(e.target.value) || null,
-                    totalPrice: i.discountedPrice * (e.target.value - 1),
+                    quantity: units || null,
+                    totalPrice: i.discountedPrice * units,
                   },
                 });
               }}
@@ -124,13 +138,16 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
             <button
               className="counterBtn"
               onClick={() => {
-                setQuantity(e => e + 1);
+                setQuantity(e => (e * i.estimationUnit + 1) / i.estimationUnit);
                 dispatch({
                   type: 'updateProducts',
                   payload: {
                     ...item,
-                    quantity: quantity + 1,
-                    totalPrice: i.discountedPrice * (quantity + 1),
+                    quantity:
+                      (quantity * i.estimationUnit + 1) / i.estimationUnit,
+                    totalPrice:
+                      i.discountedPrice *
+                      ((quantity * i.estimationUnit + 1) / i.estimationUnit),
                   },
                 });
               }}>

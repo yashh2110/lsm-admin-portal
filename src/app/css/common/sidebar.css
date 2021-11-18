@@ -163,4 +163,11 @@
     height: 100vh;
     transition: all 0.2s ease-in-out;
   }
+  .sidebarDiv {
+    z-index: 300;
+    overflow: auto;
+    width: 250px;
+    height: 100vh;
+    background-color: rgba(253, 231, 231, 1);
+  }
 }

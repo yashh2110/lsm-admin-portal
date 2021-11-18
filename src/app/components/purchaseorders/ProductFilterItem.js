@@ -5,11 +5,13 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {BiRupee} from 'react-icons/bi';
 function ProductFilterItem({i, dispatch, addedProducts}) {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1 / i.estimationUnit);
   const [unitPrice, setUnitPrice] = useState(i.discountedPrice);
   const item = {
     item: i,
     itemId: i.id,
+    estimationType: i.estimationType,
+    estimationUnit: i.estimationUnit,
     quantity: quantity,
     unitPrice: unitPrice,
     totalQuantityPrice: unitPrice * quantity,
@@ -80,58 +82,78 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
             Add
           </Button>
         ) : (
-          <div className="qantity d-flex">
-            <button
-              className=" counterBtn"
-              onClick={() => {
-                if (quantity > 1) {
-                  setQuantity(e => e - 1);
+          <div>
+            <div className="qantity d-flex">
+              <p className="m-0 text-right p-1 pb-0 pt-0">
+                {i.estimationType}
+                {i.estimationUnit}
+              </p>
+
+              <button
+                className=" counterBtn"
+                onClick={() => {
+                  if (quantity > 1) {
+                    setQuantity(
+                      e => (e * i.estimationUnit - 1) / i.estimationUnit,
+                    );
+                    dispatch({
+                      type: 'updateProducts',
+                      payload: {
+                        ...item,
+                        quantity:
+                          (quantity * i.estimationUnit - 1) / i.estimationUnit,
+                        totalQuantityPrice:
+                          unitPrice *
+                          ((quantity * i.estimationUnit - 1) /
+                            i.estimationUnit),
+                      },
+                    });
+                  } else {
+                    dispatch({type: 'removeProductItems', payload: item});
+                  }
+                }}>
+                <RemoveIcon fontSize="14px" />
+              </button>
+              <input
+                type="text"
+                className="form-control counter"
+                value={quantity * i.estimationUnit}
+                onChange={e => {
+                  const units = parseInt(e.target.value) / i.estimationUnit;
+                  setQuantity(units || 0);
+
                   dispatch({
                     type: 'updateProducts',
                     payload: {
                       ...item,
-                      quantity: quantity - 1,
-                      totalQuantityPrice: unitPrice * (quantity - 1),
+                      quantity: units || null,
+                      totalQuantityPrice: unitPrice * units,
                     },
                   });
-                } else {
-                  dispatch({type: 'removeProductItems', payload: item});
-                }
-              }}>
-              <RemoveIcon fontSize="14px" />
-            </button>
-            <input
-              type="text"
-              className="form-control counter"
-              value={quantity}
-              onChange={e => {
-                setQuantity(parseInt(e.target.value) || 0);
-                dispatch({
-                  type: 'updateProducts',
-                  payload: {
-                    ...item,
-                    quantity: parseInt(e.target.value) || null,
-                    totalQuantityPrice: unitPrice * (e.target.value - 1),
-                  },
-                });
-              }}
-              style={{width: '50px'}}
-            />
-            <button
-              className="counterBtn"
-              onClick={() => {
-                setQuantity(e => e + 1);
-                dispatch({
-                  type: 'updateProducts',
-                  payload: {
-                    ...item,
-                    quantity: quantity + 1,
-                    totalQuantityPrice: unitPrice * (quantity + 1),
-                  },
-                });
-              }}>
-              <AddOutlinedIcon fontSize="14px" />
-            </button>
+                }}
+                style={{width: '50px'}}
+              />
+              <button
+                className="counterBtn"
+                onClick={() => {
+                  setQuantity(
+                    e => (e * i.estimationUnit + 1) / i.estimationUnit,
+                  );
+                  dispatch({
+                    type: 'updateProducts',
+                    payload: {
+                      ...item,
+                      quantity:
+                        (quantity * i.estimationUnit + 1) / i.estimationUnit,
+                      totalQuantityPrice:
+                        unitPrice *
+                        ((quantity * i.estimationUnit + 1) / i.estimationUnit),
+                    },
+                  });
+                }}>
+                <AddOutlinedIcon fontSize="14px" />
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -65,17 +65,25 @@ function ProductUpdateFormPrev({e, dispatch}) {
             <DeleteOutlineOutlinedIcon style={{color: 'grey'}} />
           </IconButton>
           <div className="qantity d-flex">
+            <p className="m-0 text-right p-1 pb-0 pt-0">{e.estimationType}</p>
+
             <button
               className="counterBtn"
               onClick={() => {
                 if (e.quantity > 1) {
-                  setQuantity(e => e - 1);
+                  setQuantity(
+                    k => (k * e.estimationUnit - 1) / e.estimationUnit,
+                  );
                   dispatch({
                     type: 'updateProducts',
                     payload: {
                       ...item,
-                      quantity: parseInt(e.quantity) - 1,
-                      totalPrice: e.unitPrice * (e.quantity - 1),
+                      quantity:
+                        (e.quantity * e.estimationUnit - 1) / e.estimationUnit,
+                      totalPrice:
+                        e.unitPrice *
+                        ((e.quantity * e.estimationUnit - 1) /
+                          e.estimationUnit),
                     },
                   });
                 } else {
@@ -87,14 +95,16 @@ function ProductUpdateFormPrev({e, dispatch}) {
             <input
               type="text"
               className="form-control counter"
-              value={e.quantity}
+              value={e.quantity * e.estimationUnit}
               onChange={k => {
+                const units = parseInt(k.target.value) / e.estimationUnit;
+
                 dispatch({
                   type: 'updateProducts',
                   payload: {
                     ...item,
-                    quantity: parseInt(k.target.value) || 0,
-                    totalPrice: e.unitPrice * k.target.value,
+                    quantity: units || 0,
+                    totalPrice: e.unitPrice * units,
                   },
                 });
               }}
@@ -103,13 +113,17 @@ function ProductUpdateFormPrev({e, dispatch}) {
             <button
               className="counterBtn"
               onClick={() => {
-                setQuantity(e => e + 1);
+                setQuantity(k => (k * e.estimationUnit + 1) / e.estimationUnit);
+
                 dispatch({
                   type: 'updateProducts',
                   payload: {
                     ...item,
-                    quantity: parseInt(e.quantity) + 1,
-                    totalPrice: e.unitPrice * (e.quantity + 1),
+                    quantity:
+                      (e.quantity * e.estimationUnit + 1) / e.estimationUnit,
+                    totalPrice:
+                      e.unitPrice *
+                      ((e.quantity * e.estimationUnit + 1) / e.estimationUnit),
                   },
                 });
               }}>

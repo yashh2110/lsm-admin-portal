@@ -7,6 +7,6 @@ export const downloadEstimationService = ({
 }) => {
   window.open(
     URL_BASE +
-      `/download?category=${category}&startDate=${startDate}&endDate=${endDate}&slotId=${slotId}`,
+      `/download?category=${category}&deliveryStartDate=${startDate}&deliveryEndDate=${endDate}&slotId=${slotId}`,
   );
 };

@@ -25,7 +25,7 @@ function PurchaseOrderToolbar({setPage}) {
   return (
     <div className="toolbar">
       <div className="title">Purchase Orders</div>
-      <div className="filter justify-content-end">
+      <div className="filter">
         <button
           className="btn"
           onClick={() => history.push('/purchaseorders/new')}

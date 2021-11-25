@@ -95,6 +95,12 @@ const reducer = (state, {type, payload}) => {
         return i;
       });
       return {...state, purchaseOrderItems: quantityfilterdList};
+    case 'bulkExpDate':
+      const poitems = state.purchaseOrderItems.map(e => ({
+        ...e,
+        expiresAt: payload,
+      }));
+      return {...state, purchaseOrderItems: poitems};
     default:
       return state;
   }
@@ -318,13 +324,15 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
                   }
                 />
               </div>
-              <div className="d-flex justify-content-center flex-column align-items-center">
+            </div>
+            <div className="pocPrev">
+              <div className="d-flex  flex-column">
                 <TextField
                   label="Search & Add Products"
                   variant="standard"
                   onChange={e => productSearch(e.target.value)}
                   sx={{
-                    width: '74%',
+                    width: '100%',
                     margin: '10px',
                     marginBottom: '0',
                     paddingBottom: '0',
@@ -333,10 +341,10 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
                 {!filterLoading ? (
                   <div
                     style={{
-                      width: '74%',
+                      width: '100%',
                       margin: '10px',
                       marginTop: '0',
-                      height: '500px',
+                      height: '300px',
                       overflow: 'auto',
                     }}>
                     {filterProducts
@@ -356,24 +364,26 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
                   <p>loading...</p>
                 )}
                 {/* {!filterLoading ? (
-              <div
-                style={{
-                  width: '74%',
-                  margin: '10px',
-                  marginTop: '0',
-                  height: '230px',
-                  overflow: 'auto',
-                }}>
-                {filterProducts ? (
-                  filterProducts.map(i => <div key={i.id}>{i.name}</div>)
-                ) : (
-                  <p>loading...</p>
-                )}
-              </div>
-            ) : null} */}
+                  <div
+                    style={{
+                      width: '74%',
+                      margin: '10px',
+                      marginTop: '0',
+                      height: '230px',
+                      overflow: 'auto',
+                    }}>
+                    {filterProducts ? (
+                      filterProducts.map(i => <div key={i.id}>{i.name}</div>)
+                    ) : (
+                      <p>loading...</p>
+                    )}
+                  </div>
+                ) : null} */}
               </div>
             </div>
-            <div className="pocPrev">
+          </div>
+          <div className="checkout">
+            <div className="d-flex justify-content-between align-items-center">
               <p
                 className=""
                 style={{
@@ -383,55 +393,72 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
                 }}>
                 Checkout
               </p>
-              <div className="productPrev">
-                {pocForm.purchaseOrderItems?.length >= 1 ? (
-                  pocForm.purchaseOrderItems.map(e => (
-                    <ProductUpdateFormPrev
-                      e={e}
-                      dispatch={formDispatch}
-                      pocForm={pocForm}
-                    />
-                  ))
-                ) : (
-                  <div
-                    className="d-flex align-items-center justify-content-center flex-column"
-                    style={{height: '100%'}}>
-                    <Lottie
-                      height={150}
-                      width={150}
-                      options={{
-                        loop: true,
-                        autoplay: true,
-                        animationData: animationData,
-                        // rendererSettings: {
-                        //   preserveAspectRatio: 'xMidYMid slice',
-                        // },
-                      }}
-                    />
-                    <p style={{fontSize: '1.1rem', fontWeight: '500'}}>
-                      No Products
-                    </p>
-                  </div>
-                )}
+              <div className="d-flex">
+                <label for="exp" style={{paddingRight: '10px'}}>
+                  Exp for all items
+                </label>
+                <input
+                  type="date"
+                  className="form-control counter"
+                  onChange={k => {
+                    let date = new Date(k.target.value);
+                    formDispatch({
+                      type: 'bulkExpDate',
+                      payload: date.getTime(),
+                    });
+                  }}
+                  style={{width: '170px'}}
+                />
               </div>
-              <div className="totalPriceDiv">
-                <p className="totalPriceLabel">Total Price :</p>
-                <p className="totalPrice">
-                  <BiRupee className="mb-1" />
-                  {pocForm.orderAmount}
-                </p>
-              </div>
-              <div className="d-flex justify-content-end">
-                <Button
-                  variant="contained"
-                  color="info"
-                  onClick={pocSubmit}
-                  disabled={
-                    pocForm.vendorId && pocForm.warehouseId ? false : true
-                  }>
-                  Create
-                </Button>
-              </div>
+            </div>
+            <div className="productPrev">
+              {pocForm.purchaseOrderItems?.length >= 1 ? (
+                pocForm.purchaseOrderItems.map(e => (
+                  <ProductUpdateFormPrev
+                    e={e}
+                    dispatch={formDispatch}
+                    pocForm={pocForm}
+                  />
+                ))
+              ) : (
+                <div
+                  className="d-flex align-items-center justify-content-center flex-column"
+                  style={{height: '100%'}}>
+                  <Lottie
+                    height={150}
+                    width={150}
+                    options={{
+                      loop: true,
+                      autoplay: true,
+                      animationData: animationData,
+                      // rendererSettings: {
+                      //   preserveAspectRatio: 'xMidYMid slice',
+                      // },
+                    }}
+                  />
+                  <p style={{fontSize: '1.1rem', fontWeight: '500'}}>
+                    No Products
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="totalPriceDiv">
+              <p className="totalPriceLabel">Total Price :</p>
+              <p className="totalPrice">
+                <BiRupee className="mb-1" />
+                {pocForm.orderAmount}
+              </p>
+            </div>
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="contained"
+                color="info"
+                onClick={pocSubmit}
+                disabled={
+                  pocForm.vendorId && pocForm.warehouseId ? false : true
+                }>
+                Create
+              </Button>
             </div>
           </div>
         </>

@@ -5,6 +5,7 @@ import CodReducer from './CodSummary';
 import CustomersReducer from './Customers';
 import EstimationReducer from './Estimation';
 import InvoiceReducer from './Invoices';
+import LoaderReducer from './Loader';
 import PartnerReducer from './Partners';
 import ProductReducer from './Products';
 import PurchaseReduser from './PurchaseOrder';
@@ -13,8 +14,10 @@ import ReturnsAndRefundsReducer from './ReturnsAndRefunds';
 import VendorReducer from './Vendors';
 import WarehouseReduser from './Warehouses';
 import ZoneReducer from './Zones';
+import UserReducer from './User';
 
 const allReducer = combineReducers({
+  user: UserReducer,
   vendors: VendorReducer,
   warehouses: WarehouseReduser,
   purchaseorders: PurchaseReduser,
@@ -28,6 +31,7 @@ const allReducer = combineReducers({
   partners: PartnerReducer,
   returnsandrefunds: ReturnsAndRefundsReducer,
   estimations: EstimationReducer,
+  loader: LoaderReducer,
 });
 
 export default allReducer;

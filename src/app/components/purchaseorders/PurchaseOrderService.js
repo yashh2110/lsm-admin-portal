@@ -2,12 +2,7 @@ import axios from 'axios';
 const URL_BASE = process.env.REACT_APP_API + 'inventory/api/1/';
 
 export const productSearchService = async query => {
-  return await axios.get(URL_BASE + `products?productsNameLike=${query}`, {
-    headers: {
-      'inventory-user-id': 1,
-      'session-id': 1,
-    },
-  });
+  return await axios.get(URL_BASE + `products?productsNameLike=${query}`);
 };
 
 export const createPurchaseOrderService = async form => {

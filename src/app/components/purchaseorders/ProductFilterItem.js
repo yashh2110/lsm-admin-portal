@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import img from '../../../assets/images/img.jpg';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import RemoveIcon from '@mui/icons-material/Remove';
+// import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+// import RemoveIcon from '@mui/icons-material/Remove';
 import {BiRupee} from 'react-icons/bi';
 function ProductFilterItem({i, dispatch, addedProducts}) {
   const [quantity, setQuantity] = useState(1 / i.estimationUnit);
@@ -85,11 +85,10 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
           <div>
             <div className="qantity d-flex">
               <p className="m-0 text-right p-1 pb-0 pt-0">
-                {i.estimationType}
-                {i.estimationUnit}
+                Enter in {i.estimationType} :
               </p>
 
-              <button
+              {/* <button
                 className=" counterBtn"
                 onClick={() => {
                   if (quantity > 1) {
@@ -113,7 +112,7 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                   }
                 }}>
                 <RemoveIcon fontSize="14px" />
-              </button>
+              </button> */}
               <input
                 type="text"
                 className="form-control counter"
@@ -131,9 +130,9 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                     },
                   });
                 }}
-                style={{width: '50px'}}
+                style={{width: '70px'}}
               />
-              <button
+              {/* <button
                 className="counterBtn"
                 onClick={() => {
                   setQuantity(
@@ -152,7 +151,7 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                   });
                 }}>
                 <AddOutlinedIcon fontSize="14px" />
-              </button>
+              </button> */}
             </div>
           </div>
         )}

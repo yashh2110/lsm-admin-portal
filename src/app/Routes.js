@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {HashRouter as Router, Switch, Route} from 'react-router-dom';
+import {HashRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import PurchaseOrderCreateForm from './pages/PurchaseOrderCreateForm';
 import Index from './pages/Index';
 import Products from './pages/Products';
@@ -22,9 +22,16 @@ import CodSummary from './pages/CodSummary';
 import Partners from './pages/Partners';
 import ReturnsAndRefunds from './pages/ReturnsAndRefunds';
 import Estimations from './pages/Estimation';
-
+import {useSelector} from 'react-redux';
+import axios from 'axios';
 function Routes() {
   const [activeTab, setActiveTab] = useState();
+  const {sessionId, id} = useSelector(state => state.user);
+  axios.interceptors.request.use(req => {
+    req.headers['session-id'] = sessionId;
+    req.headers['inventory-user-id'] = id;
+    return req;
+  });
   return (
     <Router>
       <Switch>
@@ -228,6 +235,7 @@ function Routes() {
             </Index>
           )}
         />
+        <Redirect to="/" />
       </Switch>
     </Router>
   );

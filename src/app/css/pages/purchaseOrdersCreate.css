@@ -39,13 +39,13 @@
   /* margin-top: 76px; */
   padding: 10px;
   width: 100%;
-  height: calc(100% - 76px) !important;
+  height: auto;
   display: flex;
   justify-content: center;
 }
 .pocForm {
   position: relative;
-  width: 60%;
+  width: 50%;
   height: 100%;
   overflow: auto;
 
@@ -99,7 +99,7 @@
 }
 .pocPrev {
   position: relative;
-  width: 40%;
+  width: 50%;
   display: flex;
   padding-left: 15px;
   flex-direction: column;
@@ -126,7 +126,7 @@
 }
 .itemDet {
   position: relative;
-  width: 60%;
+  width: 30%;
   display: flex;
   align-items: center;
 }
@@ -154,7 +154,7 @@
   border-radius: 4px;
 }
 .price {
-  width: 60%;
+  width: 70px;
   margin: 0;
   padding: 0;
   font-size: 1rem;
@@ -175,10 +175,9 @@
   justify-content: center;
 } */
 .quantityDiv {
-  width: 40%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
 }
 .btn,
@@ -197,7 +196,7 @@
 }
 .totalPriceDiv {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 5px;
   margin-top: 10px;
@@ -205,10 +204,17 @@
 .totalPriceLabel {
   font-size: 1.2rem;
   font-weight: 500;
+  padding-right: 15px;
 }
 .totalPrice {
   font-size: 1.3rem;
   font-weight: 600;
+}
+.checkout {
+  width: 95%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 @media screen and (max-width: 768px) {
   .pocreateHead {

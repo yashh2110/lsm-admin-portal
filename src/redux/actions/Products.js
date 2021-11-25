@@ -60,12 +60,7 @@ export const getProducts = ({name, category, active}) => {
   if (active) URL = URL + 'isActive=' + active;
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(URL)
       .then(res => {
         dispatch(allProducts(res.data.products));
       })
@@ -80,12 +75,7 @@ export const getLowStockProducts = () => {
   URL = URL + 'page=' + 0 + '&';
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(URL)
       .then(res => {
         dispatch(allProducts(res.data.products));
       })
@@ -103,12 +93,7 @@ export const addProducts = ({name, category, active, page}) => {
   if (active) URL = URL + 'isActive=' + active;
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(URL)
       .then(res => {
         dispatch(newProducts(res.data.products));
       })
@@ -126,12 +111,7 @@ export const addLsProducts = ({name, category, active, page}) => {
   if (active) URL = URL + 'isActive=' + active;
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(URL)
       .then(res => {
         dispatch(setLsProducts(res.data.products));
       })
@@ -143,12 +123,7 @@ export const addLsProducts = ({name, category, active, page}) => {
 export const getProductCategory = () => {
   return async dispatch => {
     await axios
-      .get(CAT_URL, {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(CAT_URL)
       .then(res => {
         dispatch(allCategories(res.data.categories));
       })
@@ -164,12 +139,7 @@ export const getProductsWithFilter = ({name, category, active}) => {
   if (active) URL = URL + 'isActive=' + active;
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(URL)
       .then(res => {
         dispatch(allProducts(res.data.products));
       })
@@ -184,12 +154,7 @@ export const getLsProductsWithFilter = ({category, active}) => {
   if (active) URL = URL + 'isActive=' + active;
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(URL)
       .then(res => {
         dispatch(allLsProducts(res.data.products));
       })

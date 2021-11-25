@@ -27,6 +27,7 @@ function ProductsTable({
         options={{
           paging: false,
           padding: 'dense',
+          sorting: false,
           actionsColumnIndex: -1,
           toolbar: false,
           minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',

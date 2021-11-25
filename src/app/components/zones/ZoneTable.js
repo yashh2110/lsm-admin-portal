@@ -13,6 +13,8 @@ function ZoneTable({columns, data}) {
           paging: false,
           padding: 'dense',
           search: false,
+          sorting: false,
+
           actionsColumnIndex: -1,
           margin: 'dense',
           debounceInterval: 1000,

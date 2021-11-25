@@ -22,6 +22,7 @@ function ViewPurchaseOrder({orderId}) {
   const [p_order, setP_order] = useState();
   const [createopen, setCreateopen] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
+  // const [expiryDate, setExpiryDate] = useState();
   const history = useHistory();
 
   const handleCreateClose = () => {
@@ -35,6 +36,7 @@ function ViewPurchaseOrder({orderId}) {
 
   //   })
   // }
+
   useEffect(() => {
     getPurchaseOrder(orderId)
       .then(res => {
@@ -234,44 +236,63 @@ function ViewPurchaseOrder({orderId}) {
               </p>
               <div className="productPrev">
                 {p_order.purchaseOrderItems.length >= 1 ? (
-                  p_order.purchaseOrderItems.map(e => (
-                    <div className="item" key={e.id}>
-                      <div className="itemDet">
-                        <img
-                          src={
-                            e.itemImages[0]?.mediumImagePath
-                              ? e.itemImages[0].mediumImagePath
-                              : img
-                          }
-                          alt=""
-                          className="itemImg"
-                        />
-                        <div className="" style={{pointerEvents: 'none'}}>
-                          <p className="itemName">
-                            {e.itemName} ({e.itemSubName})
-                          </p>
+                  p_order.purchaseOrderItems.map(e => {
+                    let date;
+                    if (e.expiresAt) {
+                      const expdate = new Date(e.expiresAt);
+                      date = expdate.toDateString();
+                    } else {
+                      date = 'No Expiry';
+                    }
+                    return (
+                      <div className="item" key={e.id}>
+                        <div className="itemDet">
+                          <img
+                            src={
+                              e.itemImages[0]?.mediumImagePath
+                                ? e.itemImages[0].mediumImagePath
+                                : img
+                            }
+                            alt=""
+                            className="itemImg"
+                          />
+                          <div className="" style={{pointerEvents: 'none'}}>
+                            <p className="itemName">
+                              {e.itemName} ({e.itemSubName})
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="quantityDiv">
-                        <p className="price">
-                          <BiRupee className="mb-1" />
-                          {e.totalPrice}
-                        </p>
+                        <div className="quantityDiv">
+                          <p className="price">
+                            <BiRupee className="mb-1" />
+                            {e.totalPrice}
+                          </p>
 
-                        <div className="d-flex justify-content-center align-items-center">
-                          <div className="qantity d-flex">
-                            <input
-                              type="text"
-                              className="form-control counter"
-                              value={e.quantity}
-                              disabled
-                              style={{width: '75px'}}
-                            />
+                          <div className="d-flex justify-content-center align-items-center">
+                            <div className="qantity d-flex">
+                              <div className="d-flex">
+                                <p>Expires At :</p>
+                                <p
+                                  style={{
+                                    marginRight: '10px',
+                                    marginLeft: '10px',
+                                  }}>
+                                  {date}
+                                </p>
+                              </div>
+                              <input
+                                type="text"
+                                className="form-control counter"
+                                value={e.quantity}
+                                disabled
+                                style={{width: '75px'}}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <p style={{fontSize: '1.1rem', fontWeight: '500'}}>
                     No Products

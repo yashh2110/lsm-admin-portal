@@ -26,9 +26,7 @@ export const getCustomers = name => {
   if (name) URL = URL + 'customersLike=' + name;
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {'inventory-user-id': 1, 'session-id': 1},
-      })
+      .get(URL)
       .then(res => {
         dispatch(setCustomers(res.data.customers));
       })
@@ -45,9 +43,7 @@ export const getCustomersByPage = ({name, page}) => {
   if (name) URL = URL + 'customersLike=' + name;
   return async dispatch => {
     await axios
-      .get(URL, {
-        headers: {'inventory-user-id': 1, 'session-id': 1},
-      })
+      .get(URL)
       .then(res => {
         dispatch(addCustomers(res.data.customers));
       })

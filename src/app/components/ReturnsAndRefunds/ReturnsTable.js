@@ -13,6 +13,8 @@ function ReturnsTable({columns, data, setPage}) {
         options={{
           paging: false,
           padding: 'dense',
+          sorting: false,
+
           toolbar: false,
           actionsColumnIndex: -1,
           debounceInterval: 1000,

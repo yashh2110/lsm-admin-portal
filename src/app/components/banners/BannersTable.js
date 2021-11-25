@@ -38,6 +38,7 @@ function BannerTable({
       <MaterialTable
         style={{padding: '0 8px', boxShadow: 'none'}}
         options={{
+          sorting: false,
           paging: false,
           padding: 'dense',
           actionsColumnIndex: -1,

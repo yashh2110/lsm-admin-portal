@@ -87,6 +87,7 @@ function PartnersTable({columns, data}) {
           style={{padding: '0 8px', boxShadow: 'none'}}
           options={{
             paging: false,
+            sorting: false,
             padding: 'dense',
             actionsColumnIndex: -1,
             debounceInterval: 1000,

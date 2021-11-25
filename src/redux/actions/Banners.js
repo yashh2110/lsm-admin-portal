@@ -11,12 +11,7 @@ export const setBanners = payload => {
 export const getBanners = () => {
   return async dispatch => {
     await axios
-      .get(URL_BASE + '/list?size=1000', {
-        headers: {
-          'inventory-user-id': 1,
-          'session-id': 1,
-        },
-      })
+      .get(URL_BASE + '/list?size=1000')
       .then(res => {
         console.log(res.data);
         dispatch(setBanners(res.data.banners));

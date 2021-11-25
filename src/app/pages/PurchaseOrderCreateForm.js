@@ -27,6 +27,7 @@ const initialState = {
   comments: '',
   purchaseOrderItemsRequests: [],
   orderAmount: 0,
+  AllExpDate: '',
 };
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -84,6 +85,12 @@ const reducer = (state, {type, payload}) => {
         return i;
       });
       return {...state, purchaseOrderItemsRequests: quantityfilterdList};
+    case 'bulkExpDate':
+      const poitems = state.purchaseOrderItemsRequests.map(e => ({
+        ...e,
+        expiresAt: payload,
+      }));
+      return {...state, purchaseOrderItemsRequests: poitems};
     default:
       return state;
   }
@@ -279,13 +286,15 @@ function PurchaseOrderCreateForm({setActiveTab}) {
               }
             />
           </div>
-          <div className="d-flex justify-content-center flex-column align-items-center">
+        </div>
+        <div className="pocPrev">
+          <div className="d-flex  flex-column ">
             <TextField
               label="Search & Add Products"
               variant="standard"
               onChange={e => productSearch(e.target.value)}
               sx={{
-                width: '74%',
+                width: '100%',
                 margin: '10px',
                 marginBottom: '0',
                 paddingBottom: '0',
@@ -294,10 +303,10 @@ function PurchaseOrderCreateForm({setActiveTab}) {
             {!filterLoading ? (
               <div
                 style={{
-                  width: '74%',
+                  width: '100%',
                   margin: '10px',
                   marginTop: '0',
-                  height: '500px',
+                  height: '300px',
                   overflow: 'auto',
                 }}>
                 {filterProducts
@@ -316,25 +325,11 @@ function PurchaseOrderCreateForm({setActiveTab}) {
             ) : (
               <p>loading...</p>
             )}
-            {/* {!filterLoading ? (
-              <div
-                style={{
-                  width: '74%',
-                  margin: '10px',
-                  marginTop: '0',
-                  height: '230px',
-                  overflow: 'auto',
-                }}>
-                {filterProducts ? (
-                  filterProducts.map(i => <div key={i.id}>{i.name}</div>)
-                ) : (
-                  <p>loading...</p>
-                )}
-              </div>
-            ) : null} */}
           </div>
         </div>
-        <div className="pocPrev">
+      </div>
+      <div className="checkout">
+        <div className="d-flex justify-content-between align-items-center">
           <p
             className=""
             style={{
@@ -344,61 +339,77 @@ function PurchaseOrderCreateForm({setActiveTab}) {
             }}>
             Checkout
           </p>
-          <div className="productPrev">
-            {pocForm.purchaseOrderItemsRequests.length >= 1 ? (
-              pocForm.purchaseOrderItemsRequests.map(e => (
-                <ProductPreviewItem
-                  e={e}
-                  key={e.item.id}
-                  dispatch={formDispatch}
-                  pocForm={pocForm}
-                />
-              ))
-            ) : (
-              <div
-                className="d-flex align-items-center justify-content-center flex-column"
-                style={{height: '100%'}}>
-                <Lottie
-                  height={150}
-                  width={150}
-                  options={{
-                    loop: true,
-                    autoplay: true,
-                    animationData: animationData,
-                    // rendererSettings: {
-                    //   preserveAspectRatio: 'xMidYMid slice',
-                    // },
-                  }}
-                />
-                <p style={{fontSize: '1.1rem', fontWeight: '500'}}>
-                  No Products
-                </p>
-              </div>
-            )}
+          <div className="d-flex">
+            <label for="exp" style={{paddingRight: '10px'}}>
+              Exp for all items
+            </label>
+            <input
+              type="date"
+              className="form-control counter"
+              onChange={k => {
+                let date = new Date(k.target.value);
+                formDispatch({
+                  type: 'bulkExpDate',
+                  payload: date.getTime(),
+                });
+              }}
+              style={{width: '170px'}}
+            />
           </div>
-          <div className="totalPriceDiv">
-            <p className="totalPriceLabel">Total Price :</p>
-            <p className="totalPrice">
-              <BiRupee className="mb-1" />
-              {pocForm.orderAmount}
-            </p>
-          </div>
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="contained"
-              color="info"
-              onClick={pocSubmit}
-              disabled={
-                pocForm.vendorId &&
-                pocForm.warehouseId &&
-                pocForm.po_paymentState &&
-                pocForm.po_purchaseState
-                  ? false
-                  : true
-              }>
-              Submit
-            </Button>
-          </div>
+        </div>
+
+        <div className="productPrev">
+          {pocForm.purchaseOrderItemsRequests.length >= 1 ? (
+            pocForm.purchaseOrderItemsRequests.map(e => (
+              <ProductPreviewItem
+                e={e}
+                key={e.item.id}
+                dispatch={formDispatch}
+                pocForm={pocForm}
+              />
+            ))
+          ) : (
+            <div
+              className="d-flex align-items-center justify-content-center flex-column"
+              style={{height: '100%'}}>
+              <Lottie
+                height={150}
+                width={150}
+                options={{
+                  loop: true,
+                  autoplay: true,
+                  animationData: animationData,
+                  // rendererSettings: {
+                  //   preserveAspectRatio: 'xMidYMid slice',
+                  // },
+                }}
+              />
+              <p style={{fontSize: '1.1rem', fontWeight: '500'}}>No Products</p>
+            </div>
+          )}
+        </div>
+        <div className="totalPriceDiv">
+          <p className="totalPriceLabel">Total Price :</p>
+          <p className="totalPrice">
+            <BiRupee className="mb-1" />
+            {pocForm.orderAmount}
+          </p>
+        </div>
+        <div className="d-flex justify-content-end">
+          <Button
+            variant="contained"
+            color="info"
+            onClick={pocSubmit}
+            disabled={
+              pocForm.vendorId &&
+              pocForm.warehouseId &&
+              pocForm.po_paymentState &&
+              pocForm.po_purchaseState
+                ? false
+                : true
+            }>
+            Submit
+          </Button>
         </div>
       </div>
     </div>

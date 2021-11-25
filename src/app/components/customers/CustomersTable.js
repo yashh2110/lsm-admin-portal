@@ -21,6 +21,7 @@ function CustomersTable({columns, data, setPage}) {
           paging: false,
           padding: 'dense',
           actionsColumnIndex: -1,
+          sorting: false,
           toolbar: false,
           minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
           maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',

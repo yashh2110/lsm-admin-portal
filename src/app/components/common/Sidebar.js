@@ -15,19 +15,33 @@ import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlined';
 import {Link} from 'react-router-dom';
+import logo from '../../../assets/icons/logo.png';
+import {setUser} from '../../../redux/actions/Users';
+
+import {useSelector, useDispatch} from 'react-redux';
+import {signoutService} from '../../auth/AuthService';
 const Sidebar = forwardRef(({activeTab}, ref) => {
+  const {name} = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const signout = () => {
+    dispatch(setUser({islogged: false}));
+    signoutService()
+      .then(res => {
+        localStorage.removeItem('sessionId');
+        localStorage.removeItem('user');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   return (
     <div ref={ref} className="sidebar">
       <div className="sidebarDiv">
         <div className="user">
           <div className="userDet">
-            <div
-              className="userImg"
-              style={{
-                backgroundImage: 'url("https://i.pravatar.cc/150?img=3")',
-              }}></div>
+            <img src={logo} alt="user" className="userImg" />
             <div className="userandplace">
-              <p className="userName">Admin</p>
+              <p className="userName">{name}</p>
               <p className="placeName">Vijayawada-Guntur</p>
             </div>
           </div>
@@ -136,7 +150,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
             <AssignmentOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>COD Summary</p>
           </Link>
-          <div className={activeTab === 8 ? 'menu-item active' : 'menu-item'}>
+          <div className="menu-item" onClick={signout}>
             <LogoutOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>Sign Out</p>
           </div>

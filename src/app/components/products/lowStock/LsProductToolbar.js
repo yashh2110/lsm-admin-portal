@@ -10,6 +10,7 @@ import {
 } from '../../../../redux/actions/Products';
 
 import '../../../css/common/Toolbar.css';
+import {downloadLowStock} from '../ProductService';
 function LsProductToolbar({setPage}) {
   const cat = useSelector(state => state.products.catogories);
   const [name, setName] = useState('');
@@ -57,6 +58,19 @@ function LsProductToolbar({setPage}) {
         </div>
       </div>
       <div className="filter justify-content-end">
+        <button
+          className="btn"
+          onClick={() =>
+            downloadLowStock({cat: filters.category, active: filters.active})
+          }
+          style={{
+            backgroundColor: 'rgb(223, 223, 223)',
+            fontWeight: '500',
+            marginRight: '3px',
+            whiteSpace: 'nowrap',
+          }}>
+          Download Low Stock
+        </button>
         <select
           className="form-control category"
           onChange={e => filter({type: 'category', payload: e.target.value})}

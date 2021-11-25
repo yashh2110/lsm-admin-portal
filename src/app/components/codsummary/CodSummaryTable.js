@@ -14,6 +14,7 @@ function CodSummaryTable({columns, data}) {
         options={{
           paging: false,
           padding: 'dense',
+          sorting: false,
           actionsColumnIndex: -1,
           toolbar: false,
           debounceInterval: 1000,

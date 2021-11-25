@@ -10,9 +10,11 @@ import {
 import CustomerTransactionTable from '../components/customers/CustomerTransactionTable';
 import CustomerBlockStatus from '../components/customers/CustomerBlockStatus';
 import AddCredits from '../components/customers/AddCredits';
+import CustomerCodStatus from '../components/customers/CustomerCodStatus';
 function ViewCustomers({id, setActiveTab}) {
   const [transactions, setTransactions] = useState();
   const [blockOpen, setBlockOpen] = useState(false);
+  const [codOpen, setCodOpen] = useState(false);
   const [addCreditOpen, setAddCreditOpen] = useState(false);
   const [customer, setCustomer] = useState();
   const history = useHistory();
@@ -31,6 +33,9 @@ function ViewCustomers({id, setActiveTab}) {
   };
   const handleBlockClose = () => {
     setBlockOpen(false);
+  };
+  const handleCodClose = () => {
+    setCodOpen(false);
   };
   const handleAddCreditClose = () => {
     setAddCreditOpen(false);
@@ -60,6 +65,18 @@ function ViewCustomers({id, setActiveTab}) {
             <p className="pocTitle">{customer.name}s' Details</p>
           </div>
           <div className="m-4 mt-0 mb-0">
+            <Button
+              variant="contained"
+              onClick={() => setCodOpen(true)}
+              style={{
+                backgroundColor: ' rgb(223, 223, 223)',
+                boxShadow: 'none',
+                color: '#333',
+                textTransform: 'capitalize',
+                marginLeft: '20px',
+              }}>
+              COD Status
+            </Button>
             <Button
               variant="contained"
               onClick={() => setBlockOpen(true)}
@@ -114,6 +131,14 @@ function ViewCustomers({id, setActiveTab}) {
         ) : (
           <p className="text-center">No Transactions</p>
         )}
+        {codOpen ? (
+          <CustomerCodStatus
+            open={codOpen}
+            handleClose={handleCodClose}
+            getCustomer={getCustomer}
+            id={id}
+          />
+        ) : null}
         {blockOpen ? (
           <CustomerBlockStatus
             open={blockOpen}

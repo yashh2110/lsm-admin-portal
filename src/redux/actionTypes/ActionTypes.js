@@ -1,4 +1,7 @@
 export const ActionTypes = {
+  // user
+  GET_USER_DETAILS: 'GET_USER_DETAILS',
+
   // vendors
   GET_ALL_VENDOR: 'GET_ALL_VENDOR',
   ERROR_GETTING_VENDORS: 'ERROR_GETTING_VENDORS',

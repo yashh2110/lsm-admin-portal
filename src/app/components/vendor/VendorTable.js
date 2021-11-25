@@ -40,6 +40,8 @@ function VendorTable({
         options={{
           paging: false,
           padding: 'dense',
+          sorting: false,
+
           actionsColumnIndex: -1,
           debounceInterval: 1000,
           minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',

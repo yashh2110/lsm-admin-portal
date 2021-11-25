@@ -1,17 +1,19 @@
 .main {
   position: relative;
-  margin-top: 70px;
+  margin-top: 87.01px;
   margin-left: 250px;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 87.01px);
   display: flex;
   justify-content: center;
 }
 @media screen and (max-width: 768px) {
   .main {
     position: relative;
-    margin-top: 70px;
+    margin-top: 87.01px;
+
     margin-left: 0px;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 87.01px);
+
     display: flex;
     justify-content: center;
   }

@@ -65,7 +65,7 @@ function ViewCustomers({id, setActiveTab}) {
             <p className="pocTitle">{customer.name}s' Details</p>
           </div>
           <div className="m-4 mt-0 mb-0">
-            <Button
+            {/* <Button
               variant="contained"
               onClick={() => setCodOpen(true)}
               style={{
@@ -76,7 +76,7 @@ function ViewCustomers({id, setActiveTab}) {
                 marginLeft: '20px',
               }}>
               COD Status
-            </Button>
+            </Button> */}
             <Button
               variant="contained"
               onClick={() => setBlockOpen(true)}
@@ -120,6 +120,11 @@ function ViewCustomers({id, setActiveTab}) {
               {customer.isBlocked ? 'Blocked' : 'Not Blocked'}
             </p>
           </div>
+          {/* <div>
+            <p>
+              <b>COD</b>: {customer.codStatus ? 'Disabled' : 'Enabled'}
+            </p>
+          </div> */}
           <div>
             <p>
               <b>Available Credits</b>: {customer.creditBalance}

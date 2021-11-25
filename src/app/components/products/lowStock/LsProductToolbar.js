@@ -58,7 +58,7 @@ function LsProductToolbar({setPage}) {
         </div>
       </div>
       <div className="filter justify-content-end">
-        <button
+        {/* <button
           className="btn"
           onClick={() =>
             downloadLowStock({cat: filters.category, active: filters.active})
@@ -70,7 +70,7 @@ function LsProductToolbar({setPage}) {
             whiteSpace: 'nowrap',
           }}>
           Download Low Stock
-        </button>
+        </button> */}
         <select
           className="form-control category"
           onChange={e => filter({type: 'category', payload: e.target.value})}

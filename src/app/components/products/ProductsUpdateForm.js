@@ -1,4 +1,4 @@
-import React, {useReducer, useRef, useState} from 'react';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -58,7 +58,7 @@ const reducer = (state, {type, payload}) => {
 function ProductsUpdateForm({open, handleClose, data}) {
   console.log(data);
   const filters = useSelector(state => state.products.filters);
-  const initial = data;
+  const initial = {...data, imageUrlList: []};
   const [form, dispatch] = useReducer(reducer, initial);
   const categories = useSelector(state => state.products.catogories);
   const reducDispatch = useDispatch();
@@ -115,6 +115,14 @@ function ProductsUpdateForm({open, handleClose, data}) {
       toast.error('Please Select image');
     }
   };
+  useEffect(() => {
+    if (data.productImageInfoList[0]) {
+      dispatch({
+        type: 'imageUrlList',
+        payload: data.productImageInfoList[0].mediumImagePath,
+      });
+    }
+  }, []);
   return (
     <Dialog open={open} onClose={handleClose} className="p-4">
       <DialogTitle>Edit</DialogTitle>

@@ -77,7 +77,7 @@ function ProductPreviewItem({e, dispatch}) {
         <input
           type="text"
           className="form-control counter"
-          value={e.quantity * e.estimationUnit}
+          value={e.quantity * e.estimationUnit || 0}
           onChange={k => {
             const units = parseInt(k.target.value) / e.estimationUnit;
             dispatch({
@@ -125,14 +125,15 @@ function ProductPreviewItem({e, dispatch}) {
           <input
             type="text"
             className="form-control counter"
-            value={e.quantity}
+            value={e.quantity || 0}
             onChange={k => {
               dispatch({
                 type: 'updateProducts',
                 payload: {
                   ...item,
-                  quantity: parseInt(k.target.value),
-                  totalQuantityPrice: e.unitPrice * parseInt(k.target.value),
+                  quantity: parseInt(k.target.value) || 0,
+                  totalQuantityPrice:
+                    e.unitPrice * parseInt(k.target.value) || 0,
                 },
               });
             }}
@@ -243,7 +244,7 @@ function ProductPreviewItem({e, dispatch}) {
       <div className="quantityDiv">
         <p className="price">
           <BiRupee className="mb-1" />
-          {e.quantity * e.unitPrice}
+          {e.quantity * e.unitPrice || 0}
         </p>
       </div>
       <IconButton

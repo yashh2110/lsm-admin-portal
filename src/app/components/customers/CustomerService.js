@@ -23,5 +23,5 @@ export const blockStatusService = async (id, form) => {
 };
 
 export const codStatusService = async (id, form) => {
-  return await axios.post(BASE_URL + `/${id}/cod_status/update`, form);
+  return await axios.post(BASE_URL + `/${id}/disable_cod/update`, form);
 };

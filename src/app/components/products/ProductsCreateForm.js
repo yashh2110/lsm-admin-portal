@@ -95,7 +95,7 @@ function ProductCreateForm({open, handleClose}) {
             active: filters.active,
           }),
         );
-        toast.success('Vendor Created Succefully', {
+        toast.success('Product Created Succefully', {
           position: 'top-right',
           autoClose: 2000,
         });

@@ -20,8 +20,8 @@ const reducer = (state, {type, payload}) => {
   switch (type) {
     case 'initial':
       return initial;
-    case 'codStatus':
-      return {codStatus: payload};
+    case 'disableCodStatus':
+      return {disableCodStatus: payload};
     default:
       return state;
   }
@@ -75,9 +75,9 @@ function CustomerCodStatus({open, handleClose, id, getCustomer}) {
                 id="codStatus"
                 label="Is Active"
                 onChange={e =>
-                  dispatch({type: 'codStatus', payload: e.target.value})
+                  dispatch({type: 'disableCodStatus', payload: e.target.value})
                 }
-                value={form.codStatus}>
+                value={form.disableCodStatus}>
                 <MenuItem value={true} className="d-block p-2">
                   Block
                 </MenuItem>

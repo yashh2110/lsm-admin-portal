@@ -24,7 +24,9 @@ const initial = '';
 function AddCredits({open, handleClose, id, getCustomer}) {
   const [form, dispatch] = useReducer(reducer, initial);
   const [alertOpen, setAlertOpen] = useState(false);
-  const addCredits = () => {
+  const addCredits = setIsDisabled => {
+    setIsDisabled(() => true);
+
     const date = new Date(form.expiryTime);
     const dateInMilli = date.getTime();
     const finalForm = {...form, expiryTime: dateInMilli};
@@ -42,6 +44,7 @@ function AddCredits({open, handleClose, id, getCustomer}) {
           autoClose: 3000,
         });
         setAlertOpen(false);
+        setIsDisabled(() => false);
       });
   };
   const submit = e => {
@@ -53,10 +56,10 @@ function AddCredits({open, handleClose, id, getCustomer}) {
     <div>
       <Dialog
         open={open}
-        onClose={() => {
-          dispatch({type: 'initial'});
-          handleClose();
-        }}
+        // onClose={() => {
+        //   dispatch({type: 'initial'});
+        //   // handleClose();
+        // }}
         className="p-4">
         <DialogTitle>Block Status</DialogTitle>
         <form onSubmit={submit}>

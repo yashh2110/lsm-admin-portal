@@ -134,7 +134,7 @@ function AssignedOrders({assignedOrders}) {
           <HeaderCell style={{padding: 0}}>
             <div style={{lineHeight: '40px'}}>
               <Checkbox
-                inline
+                inline={true}
                 checked={checked}
                 indeterminate={indeterminate}
                 onChange={handleCheckAll}
@@ -146,7 +146,7 @@ function AssignedOrders({assignedOrders}) {
               <div style={{lineHeight: '46px'}}>
                 <Checkbox
                   value={rowData.orders}
-                  inline
+                  inline={true}
                   onChange={handleCheck}
                   checked={checkedKeys.some(
                     i => i === rowData.orders.toString(),

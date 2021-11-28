@@ -24,7 +24,6 @@ function ViewCustomers({id, setActiveTab}) {
   const getCustomer = () => {
     getCustomerById(id)
       .then(res => {
-        console.log(res.data);
         setCustomer(res.data);
       })
       .catch(err => {
@@ -44,7 +43,6 @@ function ViewCustomers({id, setActiveTab}) {
     getCustomer();
     getTransactionService({id})
       .then(res => {
-        console.log(res.data);
         setTransactions(res.data.creditTransactions);
       })
       .catch(err => console.log(err));
@@ -65,7 +63,7 @@ function ViewCustomers({id, setActiveTab}) {
             <p className="pocTitle">{customer.name}s' Details</p>
           </div>
           <div className="m-4 mt-0 mb-0">
-            {/* <Button
+            <Button
               variant="contained"
               onClick={() => setCodOpen(true)}
               style={{
@@ -76,7 +74,7 @@ function ViewCustomers({id, setActiveTab}) {
                 marginLeft: '20px',
               }}>
               COD Status
-            </Button> */}
+            </Button>
             <Button
               variant="contained"
               onClick={() => setBlockOpen(true)}
@@ -120,11 +118,11 @@ function ViewCustomers({id, setActiveTab}) {
               {customer.isBlocked ? 'Blocked' : 'Not Blocked'}
             </p>
           </div>
-          {/* <div>
+          <div>
             <p>
               <b>COD</b>: {customer.codStatus ? 'Disabled' : 'Enabled'}
             </p>
-          </div> */}
+          </div>
           <div>
             <p>
               <b>Available Credits</b>: {customer.creditBalance}

@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useState} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -37,8 +37,11 @@ function VendorUpdateForm({open, handleClose, data}) {
   const initial = data;
   const [form, dispatch] = useReducer(reducer, initial);
   const reducDispatch = useDispatch();
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const submit = async e => {
     e.preventDefault();
+    setIsDisabled(() => true);
     updateVendorService(initial.id, form)
       .then(res => {
         reducDispatch(getVendors());
@@ -54,6 +57,7 @@ function VendorUpdateForm({open, handleClose, data}) {
           position: 'top-right',
           autoClose: 2000,
         });
+        setIsDisabled(() => false);
       });
   };
   return (
@@ -157,7 +161,9 @@ function VendorUpdateForm({open, handleClose, data}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Update</Button>
+          <Button type="submit" disabled={isDisabled}>
+            Update
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

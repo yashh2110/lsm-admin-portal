@@ -11,6 +11,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {createZoneService} from './ZoneService';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router';
+import {useDispatch} from 'react-redux';
+import {setLoader} from '../../../redux/actions/Loader';
 
 function CoordinatesAndColor({
   setColor,
@@ -24,6 +26,7 @@ function CoordinatesAndColor({
   const [isPartner, setIsPartner] = useState(true);
   const [zoneType, setZoneType] = useState('PARTNER_ZONE');
   const history = useHistory();
+  const dispatch = useDispatch();
   const zoneTypeHandler = e => {
     setZoneType(e);
     if (e === 'PARTNER_ZONE') setIsPartner(true);
@@ -40,6 +43,7 @@ function CoordinatesAndColor({
     return false;
   };
   const submit = () => {
+    dispatch(setLoader(true));
     const params = {
       cityId: 1,
       color: color,
@@ -90,11 +94,13 @@ function CoordinatesAndColor({
           autoClose: 2000,
         });
         history.goBack();
+        dispatch(setLoader(false));
       })
       .catch(err => {
         toast.error('something went wrong', {
           autoClose: 2000,
         });
+        dispatch(setLoader(false));
       });
   };
   useEffect(() => {

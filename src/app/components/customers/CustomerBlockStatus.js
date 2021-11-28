@@ -11,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {blockStatusService} from './CustomerService';
 import {toast} from 'react-toastify';
 import CustomAlert from '../common/CustomAlert';
+import {setLoader} from '../../../redux/actions/Loader';
 
 const initial = {
   blockStatus: '',
@@ -33,7 +34,9 @@ function CustomerBlockStatus({open, handleClose, id, getCustomer}) {
     e.preventDefault();
     setAlertOpen(true);
   };
-  const blockCustomer = () => {
+  const blockCustomer = setIsDisabled => {
+    setIsDisabled(() => true);
+    dispatch(setLoader(true));
     blockStatusService(id, form)
       .then(res => {
         toast.success('Blocked customer succesfully', {
@@ -42,22 +45,25 @@ function CustomerBlockStatus({open, handleClose, id, getCustomer}) {
         setAlertOpen(false);
         getCustomer();
         handleClose();
+        dispatch(setLoader(true));
       })
       .catch(err => {
         toast.error('something went wrong', {
           autoClose: 3000,
         });
         setAlertOpen(false);
+        dispatch(setLoader(true));
+        setIsDisabled(() => false);
       });
   };
   return (
     <div>
       <Dialog
         open={open}
-        onClose={() => {
-          dispatch({type: 'initial'});
-          handleClose();
-        }}
+        // onClose={() => {
+        //   dispatch({type: 'initial'});
+        //   handleClose();
+        // }}
         className="p-4">
         <DialogTitle>Block Status</DialogTitle>
         <form onSubmit={submit}>

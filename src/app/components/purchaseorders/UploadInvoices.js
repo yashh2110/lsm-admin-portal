@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {toast} from 'react-toastify';
 
 import {createInvoices, uploadInvoices} from './PurchaseOrderService';
+import {setLoader} from '../../../redux/actions/Loader';
 
 const initial = {
   name: '',
@@ -35,9 +36,13 @@ function UploadInvoices({open, handleClose, purchaseId}) {
   const [imageLoading, setImageLoading] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const invoiceFileRef = useRef();
   console.log(form);
   const submit = async e => {
+    dispatch(setLoader(true));
+    setIsDisabled(() => true);
     e.preventDefault();
     createInvoices(purchaseId, form)
       .then(res => {
@@ -48,9 +53,12 @@ function UploadInvoices({open, handleClose, purchaseId}) {
         handleClose();
         dispatch({type: 'initial'});
         setImageUploaded(false);
+        dispatch(setLoader(false));
       })
       .catch(err => {
         console.log(err);
+        dispatch(setLoader(false));
+        setIsDisabled(() => false);
         toast.error('Something went wrong');
       });
   };
@@ -79,10 +87,10 @@ function UploadInvoices({open, handleClose, purchaseId}) {
   return (
     <Dialog
       open={open}
-      onClose={() => {
-        dispatch({type: 'initial'});
-        handleClose();
-      }}
+      // onClose={() => {
+      //   dispatch({type: 'initial'});
+      //   handleClose();
+      // }}
       className="p-4">
       <DialogTitle>Create Invoice</DialogTitle>
       <form onSubmit={submit}>
@@ -148,7 +156,13 @@ function UploadInvoices({open, handleClose, purchaseId}) {
           <Button onClick={handleClose}>Cancel</Button>
           <Button
             type="submit"
-            disabled={form.invoiceLink?.length >= 1 ? false : true}>
+            disabled={
+              isDisabled
+                ? form.invoiceLink?.length >= 1
+                  ? false
+                  : true
+                : false
+            }>
             Create
           </Button>
         </DialogActions>

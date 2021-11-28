@@ -15,3 +15,7 @@ export const updateSlotCapacity = async form => {
 export const getZoneById = async id => {
   return await axios.get(URL_BASE + `/info?zone_id=${id}`);
 };
+
+export const editZonePartners = async form => {
+  return await axios.post(URL_BASE + `/partners/edit`, form);
+};

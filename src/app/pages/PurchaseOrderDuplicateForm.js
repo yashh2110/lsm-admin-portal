@@ -22,6 +22,7 @@ import {
   getPurchaseOrder,
   productSearchService,
 } from '../components/purchaseorders/PurchaseOrderService';
+import {setLoader} from '../../redux/actions/Loader';
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -139,6 +140,8 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
     }
   };
   const pocSubmit = async () => {
+    dispatch(setLoader(true));
+
     createDuplicatePurchaseOrderService(pocForm)
       .then(res => {
         toast.success('Purchase Order Created', {
@@ -146,9 +149,12 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
           autoClose: 2000,
         });
         history.goBack();
+        dispatch(setLoader(false));
       })
       .catch(err => {
         console.log(err);
+        dispatch(setLoader(false));
+
         toast.error('Something Went Worng', {
           position: 'top-right',
           autoClose: 2000,

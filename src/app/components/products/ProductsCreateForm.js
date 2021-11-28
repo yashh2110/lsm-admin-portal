@@ -14,6 +14,7 @@ import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {getProducts} from '../../../redux/actions/Products';
 import {createProduct, uploadProductImgService} from './ProductService';
+import {setLoader} from '../../../redux/actions/Loader';
 
 const initial = {
   name: '',
@@ -83,9 +84,11 @@ function ProductCreateForm({open, handleClose}) {
 
   const categories = useSelector(state => state.products.catogories);
   const reducDispatch = useDispatch();
-
+  const [isDisabled, setIsDisabled] = useState(false);
   const submit = async e => {
     e.preventDefault();
+    dispatch(setLoader(true));
+    setIsDisabled(() => true);
     createProduct(form)
       .then(res => {
         reducDispatch(
@@ -95,6 +98,8 @@ function ProductCreateForm({open, handleClose}) {
             active: filters.active,
           }),
         );
+        dispatch(setLoader(false));
+
         toast.success('Product Created Succefully', {
           position: 'top-right',
           autoClose: 2000,
@@ -105,6 +110,8 @@ function ProductCreateForm({open, handleClose}) {
       })
       .catch(err => {
         console.log(err);
+        dispatch(setLoader(false));
+        setIsDisabled(() => false);
         toast.error('Something went wrong');
       });
   };
@@ -134,10 +141,10 @@ function ProductCreateForm({open, handleClose}) {
   return (
     <Dialog
       open={open}
-      onClose={() => {
-        dispatch({type: 'initial'});
-        handleClose();
-      }}
+      // onClose={() => {
+      //   dispatch({type: 'initial'});
+      //   handleClose();
+      // }}
       className="p-4">
       <DialogTitle>Create Product</DialogTitle>
       <form onSubmit={submit}>
@@ -485,7 +492,13 @@ function ProductCreateForm({open, handleClose}) {
           <Button onClick={handleClose}>Cancel</Button>
           <Button
             type="submit"
-            disabled={form.imageUrlList?.length >= 1 ? false : true}>
+            disabled={
+              isDisabled
+                ? form.imageUrlList?.length >= 1
+                  ? false
+                  : true
+                : false
+            }>
             Create
           </Button>
         </DialogActions>

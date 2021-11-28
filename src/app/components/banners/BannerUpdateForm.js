@@ -75,17 +75,19 @@ function BannerUpdateForm({open, handleClose, data}) {
   const [imageLoading, setImageLoading] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const bannerRef = useRef();
   const reducDispatch = useDispatch();
   console.log(form);
   const submit = async e => {
+    setIsDisabled(() => true);
     e.preventDefault();
     let startdate = new Date(form.startedAt);
     startdate = startdate.getTime();
     let endDate = new Date(form.expiredAt);
     endDate = endDate.getTime();
     const target = [form.consumer, form.partner].join(',');
-
     const params = {
       ...form,
       startedAt: startdate,
@@ -105,6 +107,7 @@ function BannerUpdateForm({open, handleClose, data}) {
       .catch(err => {
         console.log(err);
         toast.error('Something went wrong');
+        setIsDisabled(() => false);
       });
   };
   const uploadImage = e => {
@@ -330,7 +333,9 @@ function BannerUpdateForm({open, handleClose, data}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" disabled={form.imagePath ? false : true}>
+          <Button
+            type="submit"
+            disabled={isDisabled ? (form.imagePath ? false : true) : false}>
             Update
           </Button>
         </DialogActions>

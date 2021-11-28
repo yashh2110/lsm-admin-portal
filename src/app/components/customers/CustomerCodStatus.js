@@ -11,6 +11,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {codStatusService} from './CustomerService';
 import {toast} from 'react-toastify';
 import CustomAlert from '../common/CustomAlert';
+import {setLoader} from '../../../redux/actions/Loader';
+import {useDispatch} from 'react-redux';
 
 const initial = {
   codStatus: '',
@@ -29,12 +31,15 @@ const reducer = (state, {type, payload}) => {
 
 function CustomerCodStatus({open, handleClose, id, getCustomer}) {
   const [form, dispatch] = useReducer(reducer, initial);
+  const reduxDispatch = useDispatch();
   const [alertOpen, setAlertOpen] = useState(false);
   const submit = e => {
     e.preventDefault();
     setAlertOpen(true);
   };
-  const codBlockCustomer = () => {
+  const codBlockCustomer = setIsDisabled => {
+    reduxDispatch(setLoader(true));
+    setIsDisabled(() => true);
     codStatusService(id, form)
       .then(res => {
         toast.success('Blocked COD succesfully', {
@@ -43,22 +48,25 @@ function CustomerCodStatus({open, handleClose, id, getCustomer}) {
         setAlertOpen(false);
         getCustomer();
         handleClose();
+        reduxDispatch(setLoader(false));
       })
       .catch(err => {
         toast.error('something went wrong', {
           autoClose: 3000,
         });
         setAlertOpen(false);
+        setIsDisabled(() => false);
+        reduxDispatch(setLoader(false));
       });
   };
   return (
     <div>
       <Dialog
         open={open}
-        onClose={() => {
-          dispatch({type: 'initial'});
-          handleClose();
-        }}
+        // onClose={() => {
+        //   dispatch({type: 'initial'});
+        //   handleClose();
+        // }}
         className="p-4">
         <DialogTitle>Cod Status</DialogTitle>
         <form onSubmit={submit}>

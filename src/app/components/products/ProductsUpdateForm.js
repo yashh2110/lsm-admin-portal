@@ -18,6 +18,7 @@ import {
   uploadProductImgService,
 } from './ProductService';
 import axios from 'axios';
+import {setLoader} from '../../../redux/actions/Loader';
 const reducer = (state, {type, payload}) => {
   switch (type) {
     case 'imageUrlList':
@@ -66,9 +67,15 @@ function ProductsUpdateForm({open, handleClose, data}) {
   const [imageUploaded, setImageUploaded] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const productImgRef = useRef();
+
   const submit = async e => {
     e.preventDefault();
+    dispatch(setLoader(true));
+    setIsDisabled(() => true);
+
     axios
       .all([
         updateProduct(initial.id, form),
@@ -82,6 +89,8 @@ function ProductsUpdateForm({open, handleClose, data}) {
             active: filters.active,
           }),
         );
+        dispatch(setLoader(false));
+
         toast.success('Edited Succefully', {
           position: 'top-right',
           autoClose: 2000,
@@ -90,6 +99,7 @@ function ProductsUpdateForm({open, handleClose, data}) {
       })
       .catch(e => {
         toast.error('Something went wrong');
+        setIsDisabled(() => false);
       });
   };
   const uploadImage = () => {
@@ -124,7 +134,7 @@ function ProductsUpdateForm({open, handleClose, data}) {
     }
   }, []);
   return (
-    <Dialog open={open} onClose={handleClose} className="p-4">
+    <Dialog open={open} className="p-4">
       <DialogTitle>Edit</DialogTitle>
       <form onSubmit={submit}>
         <DialogContent>
@@ -479,7 +489,9 @@ function ProductsUpdateForm({open, handleClose, data}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Update</Button>
+          <Button type="submit" disabled={isDisabled}>
+            Update
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

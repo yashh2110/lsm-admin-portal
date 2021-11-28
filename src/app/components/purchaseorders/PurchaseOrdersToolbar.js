@@ -18,7 +18,6 @@ function PurchaseOrderToolbar({setPage}) {
   const history = useHistory();
   const vendors = useSelector(state => state.vendors);
   const vendorid = useSelector(state => state.purchaseorders.vendorid);
-  console.log(vendors);
   useEffect(() => {
     if (vendorid) setVendor(vendorid);
   }, [vendorid]);

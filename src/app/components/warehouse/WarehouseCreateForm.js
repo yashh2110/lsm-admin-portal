@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useState} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -46,7 +46,10 @@ const reducer = (state, {type, payload}) => {
 function WarehouseCreateForm({open, handleClose}) {
   const [form, dispatch] = useReducer(reducer, initial);
   const reducDispatch = useDispatch();
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const submit = async e => {
+    setIsDisabled(() => true);
     e.preventDefault();
     createWareHouseService(form)
       .then(res => {
@@ -60,6 +63,7 @@ function WarehouseCreateForm({open, handleClose}) {
       .catch(err => {
         console.log(err);
         toast.error('Something went wrong');
+        setIsDisabled(() => false);
       });
   };
   return (
@@ -160,7 +164,9 @@ function WarehouseCreateForm({open, handleClose}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button type="submit" disabled={isDisabled}>
+            Create
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

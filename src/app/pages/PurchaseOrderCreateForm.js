@@ -19,6 +19,7 @@ import {
   createPurchaseOrderService,
   productSearchService,
 } from '../components/purchaseorders/PurchaseOrderService';
+import {setLoader} from '../../redux/actions/Loader';
 const initialState = {
   vendorId: '',
   warehouseId: '',
@@ -122,6 +123,8 @@ function PurchaseOrderCreateForm({setActiveTab}) {
     }
   };
   const pocSubmit = async () => {
+    dispatch(setLoader(true));
+
     createPurchaseOrderService(pocForm)
       .then(res => {
         toast.success('Purchase Order Created', {
@@ -129,9 +132,12 @@ function PurchaseOrderCreateForm({setActiveTab}) {
           autoClose: 2000,
         });
         history.goBack();
+        dispatch(setLoader(false));
       })
       .catch(err => {
         console.log(err);
+        dispatch(setLoader(false));
+
         toast.error('Something Went Worng', {
           position: 'top-right',
           autoClose: 2000,

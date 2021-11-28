@@ -9,14 +9,18 @@ import {toast} from 'react-toastify';
 import CustomAlert from '../components/common/CustomAlert';
 import ZoneSlotTable from '../components/zones/ZoneSlotTable';
 import ZoneSlotEdit from '../components/zones/ZoneSlotEdit';
+import ZonePartnerEdit from '../components/zones/ZonePartnerEdit';
 
 function ViewZone({zoneId, setActiveTab}) {
   const history = useHistory();
   const [path, setPath] = useState();
   const [libraries] = useState(['drawing']);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [partnerEditOpen, setPartnerEditOpen] = useState(false);
   const [createopen, setCreateopen] = useState(false);
   const [zone, setZone] = useState();
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const handleCreateClose = () => {
     setCreateopen(false);
   };
@@ -30,6 +34,7 @@ function ViewZone({zoneId, setActiveTab}) {
       });
   };
   const deactivate = () => {
+    setIsDisabled(() => true);
     deactivateZone(zoneId)
       .then(res => {
         toast.success('Zone ' + zoneId + ' has been deactivated', {
@@ -44,9 +49,9 @@ function ViewZone({zoneId, setActiveTab}) {
         toast.error('something went wrong', {
           autoClose: 2000,
         });
+        setIsDisabled(() => true);
       });
   };
-  console.log(zone);
   useEffect(() => {
     setActiveTab(6);
     getZone();
@@ -75,10 +80,25 @@ function ViewZone({zoneId, setActiveTab}) {
             </div>
             <p className="pocTitle">Zone Details</p>
           </div>
+
           <div className="m-4 mt-0 mb-0">
             <Button
               variant="contained"
+              onClick={() => setPartnerEditOpen(true)}
+              disabled={isDisabled}
+              style={{
+                backgroundColor: ' rgb(223, 223, 223)',
+                boxShadow: 'none',
+                color: '#333',
+                textTransform: 'capitalize',
+                marginLeft: '20px',
+              }}>
+              Edit Partners
+            </Button>
+            <Button
+              variant="contained"
               onClick={() => setAlertOpen(true)}
+              disabled={isDisabled}
               style={{
                 backgroundColor: ' rgb(223, 223, 223)',
                 boxShadow: 'none',
@@ -160,6 +180,16 @@ function ViewZone({zoneId, setActiveTab}) {
             confirmFunction={deactivate}
           />
         ) : null}
+        {partnerEditOpen ? (
+          <ZonePartnerEdit
+            open={partnerEditOpen}
+            handleClose={() => setPartnerEditOpen(false)}
+            partners={zone.partnersInfo}
+            setZone={setZone}
+            zoneId={zoneId}
+          />
+        ) : null}
+        {}
         <ZoneSlotEdit
           open={createopen}
           handleClose={handleCreateClose}

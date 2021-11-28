@@ -18,7 +18,6 @@ export const updateProductImgService = async (id, file) => {
 
 export const downloadLowStock = async ({cat, active}) => {
   let url =
-    URL_BASE +
-    `/low-stock/download?page=0&size=1000&categoryId=${cat}&isActive=${active}`;
+    URL_BASE + `/low-stock/download?categoryId=${cat}&isActive=${active}`;
   window.open(url);
 };

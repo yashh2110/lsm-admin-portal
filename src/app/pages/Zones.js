@@ -4,11 +4,14 @@ import '../css/pages/vendor.css';
 
 import ZoneTable from '../components/zones/ZoneTable';
 import {getZones} from '../../redux/actions/Zones';
+import {getActiveDes} from '../../redux/actions/Assignments';
 function Zones({setActiveTab}) {
   const zones = useSelector(state => state.zones.zonesInfo);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getZones());
+    dispatch(getActiveDes());
+
     setActiveTab(6);
   }, []);
   const columns = [

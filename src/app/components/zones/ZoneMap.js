@@ -7,7 +7,9 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getZones} from '../../../redux/actions/Zones';
+import {Marker} from '@react-google-maps/api';
 import ZoneMapStyle from '../common/ZoneMapStyle';
+import marker from '../../../assets/images/marker.svg';
 import CoordinatesAndColor from './CoordinatesAndColor';
 function ZoneMap({
   color,
@@ -20,9 +22,17 @@ function ZoneMap({
 }) {
   const dispatch = useDispatch();
   const [path, setPath] = useState([]);
+  // const latRef = useRef();
+  // const lngRef = useRef();
+  const [lat, setLat] = useState(16.5062);
+  const [lng, setLng] = useState(80.648);
   const onLoad = drawingManager => {
     console.log(drawingManager);
   };
+  // const mark = () => {
+  //   setLat(() => parseInt(latRef.current.value));
+  //   setLng(() => parseInt(lngRef.current.value));
+  // };
   const zones = useSelector(state =>
     state.zones?.zonesInfo
       ? state.zones.zonesInfo.map(i => {
@@ -65,7 +75,7 @@ function ZoneMap({
       libraries={libraries}>
       <GoogleMap
         zoom={12}
-        center={{lat: 16.5062, lng: 80.648}}
+        center={{lat: lat, lng: lng}}
         mapContainerStyle={{
           height: '100%',
         }}
@@ -102,6 +112,19 @@ function ZoneMap({
               />
             ))
           : null}
+        <Marker
+          position={{
+            lat: lat,
+            lng: lng,
+          }}
+          draggable={true}
+          onDragEnd={e => {
+            setLat(e.latLng.lat());
+            setLng(e.latLng.lng());
+          }}
+          icon={{
+            url: marker,
+          }}></Marker>
         <DrawingManager
           onLoad={onLoad}
           onPolygonComplete={onPolygonComplete}
@@ -127,6 +150,52 @@ function ZoneMap({
           color={color}
           activeDes={activeDes}
         />
+        <form
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: '10px',
+            backgroundColor: 'white',
+            margin: '5px',
+            borderRadius: '5px',
+            padding: '4px',
+          }}>
+          <span>Lat</span>
+          <input
+            required
+            type="number"
+            step={0.01}
+            value={lat}
+            onChange={e => setLat(() => parseFloat(e.target.value))}
+            style={{
+              padding: '5px',
+              width: '100px',
+              margin: '4px',
+              borderRadius: '5px',
+              border: '2px solid lightgrey',
+            }}
+            placeholder="Enter Lat"
+          />
+          <span>Lat</span>
+
+          <input
+            type="number"
+            step={0.01}
+            value={lng}
+            onChange={e => setLng(() => parseFloat(e.target.value))}
+            style={{
+              padding: '5px',
+              width: '100px',
+              margin: '4px',
+              borderRadius: '5px',
+              border: '2px solid lightgrey',
+            }}
+            placeholder="Enter Lng"
+          />
+          {/* <Button variant="contained" type="submit">
+            Mark
+          </Button> */}
+        </form>
       </GoogleMap>
     </LoadScript>
   );

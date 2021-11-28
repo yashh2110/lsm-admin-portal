@@ -13,10 +13,12 @@ import {
   getInvoices,
 } from './PurchaseOrderService';
 import {toast} from 'react-toastify';
+import {setLoader} from '../../../redux/actions/Loader';
+import {useDispatch} from 'react-redux';
 
 function DownloadInvoices({open, handleClose, purchaseId}) {
   const [invoices, setInvoices] = useState([]);
-
+  const dispatch = useDispatch();
   const getOrderInvoices = async orderId => {
     getInvoices(orderId)
       .then(res => {
@@ -28,33 +30,41 @@ function DownloadInvoices({open, handleClose, purchaseId}) {
       });
   };
   const deleteOrderInvoice = async (purchaseid, invoiceid) => {
+    dispatch(setLoader(true));
+
     deleteInvoice(purchaseid, invoiceid)
       .then(() => {
         toast.success('Invoice deleted Successfully', {
           position: 'top-right',
           autoClose: 2000,
         });
+        dispatch(setLoader(false));
       })
       .catch(err => {
         toast.error('Something went wrong', {
           position: 'top-right',
           autoClose: 2000,
         });
+        dispatch(setLoader(false));
       });
   };
   const deleteOrderInvoices = async () => {
+    dispatch(setLoader(true));
+
     deleteInvoices(purchaseId)
       .then(() => {
         toast.success('Invoices deleted Successfully', {
           position: 'top-right',
           autoClose: 2000,
         });
+        dispatch(setLoader(false));
       })
       .catch(err => {
         toast.error('Something went wrong', {
           position: 'top-right',
           autoClose: 2000,
         });
+        dispatch(setLoader(false));
       });
   };
   useEffect(() => {

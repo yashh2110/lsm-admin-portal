@@ -26,7 +26,7 @@ function PartnersTable({columns, data}) {
   const [openActivateForm, setOpenActivateForm] = useState(false);
   const [openDeactivate, setOpenDeactivate] = useState(false);
   const [partnership_type, setPartnership_type] = useState('');
-
+  const [isDisabled, setIsDisabled] = useState(false);
   const handleActivateFormClose = () => {
     setOpenActivateForm(false);
     setPartnership_type(false);
@@ -43,6 +43,7 @@ function PartnersTable({columns, data}) {
   const dispatch = useDispatch();
 
   const deactivate = async id => {
+    setIsDisabled(() => true);
     deactivatePartner(id)
       .then(res => {
         toast.success('Partner deactivated', {
@@ -59,9 +60,12 @@ function PartnersTable({columns, data}) {
           position: 'top-right',
           autoClose: 2000,
         });
+        setIsDisabled(() => false);
       });
   };
   const activate = async id => {
+    setIsDisabled(() => true);
+
     ActivatePartner(id, partnership_type)
       .then(res => {
         toast.success('Partner activated', {
@@ -78,6 +82,7 @@ function PartnersTable({columns, data}) {
           position: 'top-right',
           autoClose: 2000,
         });
+        setIsDisabled(() => false);
       });
   };
   return (
@@ -193,7 +198,10 @@ function PartnersTable({columns, data}) {
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleDeactivateClose}>No</Button>
-                <Button onClick={() => deactivate(anchorEl.data.id)} autoFocus>
+                <Button
+                  onClick={() => deactivate(anchorEl.data.id)}
+                  disabled={isDisabled}
+                  autoFocus>
                   Yes
                 </Button>
               </DialogActions>

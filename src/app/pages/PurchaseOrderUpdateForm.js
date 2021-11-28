@@ -25,6 +25,7 @@ import {
 import UploadInvoices from '../components/purchaseorders/UploadInvoices';
 import DownloadInvoices from '../components/purchaseorders/DownloadInvoices';
 import {getPurchaseOrder} from '../components/purchaseorders/PurchaseOrderService';
+import {setLoader} from '../../redux/actions/Loader';
 const reducer = (state, {type, payload}) => {
   switch (type) {
     case 'initial':
@@ -155,6 +156,7 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
   }, []);
 
   const pocSubmit = async () => {
+    dispatch(setLoader(true));
     updatePurchaseOrderService(item.id, pocForm)
       .then(res => {
         toast.success('Purchase Order updated', {
@@ -162,9 +164,11 @@ function PurchaseOrderUpdateForm({setActiveTab, id}) {
           autoClose: 2000,
         });
         history.goBack();
+        dispatch(setLoader(false));
       })
       .catch(err => {
         console.log(err);
+        dispatch(setLoader(false));
         toast.error('Something Went Worng', {
           position: 'top-right',
           autoClose: 2000,

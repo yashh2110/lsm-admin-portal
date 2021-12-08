@@ -1,7 +1,7 @@
 import {ActionTypes} from '../actionTypes/ActionTypes';
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_API + 'inventory/api/1/purchase-order';
+const BASE_URL = process.env.REACT_APP_API + 'inventory/api/1/purchase-order?';
 
 export const setPurchaseOrders = payload => {
   return {
@@ -21,11 +21,45 @@ export const setVendorFilter = payload => {
     payload,
   };
 };
-export const getPurchaseOrders = id => {
+export const setPurchaseStateFilter = payload => {
+  return {
+    type: ActionTypes.PO_PURCHASESTATE_FILTER,
+    payload,
+  };
+};
+export const setPaymentStateFilter = payload => {
+  return {
+    type: ActionTypes.PO_PAYMENTSTATE_FILTER,
+    payload,
+  };
+};
+export const setPoStartDateFilter = payload => {
+  return {
+    type: ActionTypes.PO_STARTDATE_FILTER,
+    payload,
+  };
+};
+export const setPoEndDateFilter = payload => {
+  return {
+    type: ActionTypes.PO_ENDDATE_FILTER,
+    payload,
+  };
+};
+export const getPurchaseOrders = ({
+  vendorId,
+  purchaseState,
+  paymentState,
+  poStartDate,
+  poEndDate,
+}) => {
   let URL = BASE_URL;
-  URL = URL + '?size=' + 25 + '&';
+  URL = URL + 'size=' + 25 + '&';
   URL = URL + 'page=' + 0 + '&';
-  if (id) URL = URL + 'vendorId=' + id + '&';
+  if (vendorId) URL = URL + 'vendorId=' + vendorId + '&';
+  if (purchaseState) URL = URL + 'purchaseState=' + purchaseState + '&';
+  if (paymentState) URL = URL + 'paymentState=' + paymentState + '&';
+  if (poStartDate) URL = URL + 'poStartDate=' + poStartDate + '&';
+  if (poEndDate) URL = URL + 'poEndDate=' + poEndDate;
   return async dispatch => {
     await axios
       .get(URL)
@@ -38,11 +72,22 @@ export const getPurchaseOrders = id => {
   };
 };
 
-export const getPurchaseOrdersByPage = ({id, page}) => {
+export const getPurchaseOrdersByPage = ({
+  page,
+  vendorId,
+  purchaseState,
+  paymentState,
+  poStartDate,
+  poEndDate,
+}) => {
   let URL = BASE_URL;
-  URL = URL + '?size=' + 25 + '&';
+  URL = URL + 'size=' + 25 + '&';
   URL = URL + 'page=' + page + '&';
-  if (id) URL = URL + 'vendorId=' + id + '&';
+  if (vendorId) URL = URL + 'vendorId=' + vendorId + '&';
+  if (purchaseState) URL = URL + 'purchaseState=' + purchaseState + '&';
+  if (paymentState) URL = URL + 'paymentState=' + paymentState + '&';
+  if (poStartDate) URL = URL + 'poStartDate=' + poStartDate + '&';
+  if (poEndDate) URL = URL + 'poEndDate=' + poEndDate;
   return async dispatch => {
     await axios
       .get(URL)

@@ -165,7 +165,7 @@ function PurchaseOrderCreateForm({setActiveTab}) {
       </div>
       <div className="pocFormDiv">
         <div className="pocForm">
-          <div className="d-flex justify-content-center">
+          <div className="pocInputWapper">
             <FormControl
               variant="standard"
               sx={{m: 1, maxWidth: '34%'}}
@@ -219,7 +219,7 @@ function PurchaseOrderCreateForm({setActiveTab}) {
               </Select>
             </FormControl>
           </div>
-          <div className="d-flex justify-content-center">
+          <div className="pocInputWapper">
             <FormControl
               variant="standard"
               sx={{m: 1, maxWidth: '34%'}}
@@ -278,12 +278,13 @@ function PurchaseOrderCreateForm({setActiveTab}) {
             </FormControl>
           </div>
 
-          <div className="d-flex justify-content-center">
+          <div className="pocInputWapper">
             <TextField
               label="Comments"
               variant="standard"
               value={pocForm.comments}
-              sx={{width: '74%', margin: '10px'}}
+              className="commentBox"
+              // sx={{width: '74%', margin: '10px'}}
               onChange={e =>
                 formDispatch({
                   type: 'comments',
@@ -301,7 +302,6 @@ function PurchaseOrderCreateForm({setActiveTab}) {
               onChange={e => productSearch(e.target.value)}
               sx={{
                 width: '100%',
-                margin: '10px',
                 marginBottom: '0',
                 paddingBottom: '0',
               }}
@@ -346,7 +346,7 @@ function PurchaseOrderCreateForm({setActiveTab}) {
             Checkout
           </p>
           <div className="d-flex">
-            <label for="exp" style={{paddingRight: '10px'}}>
+            <label for="exp" style={{paddingRight: '5px'}}>
               Exp for all items
             </label>
             <input

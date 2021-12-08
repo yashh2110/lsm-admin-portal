@@ -11,12 +11,27 @@ import PurchaseOrderTable from '../components/purchaseorders/PurchaseOrderTable'
 import '../css/pages/vendor.css';
 
 function PurchaseOrders({setActiveTab}) {
-  const {orders, vendorid} = useSelector(state => state.purchaseorders);
+  const {
+    orders,
+    vendorId,
+    purchaseState,
+    paymentState,
+    poStartDate,
+    poEndDate,
+  } = useSelector(state => state.purchaseorders);
   const dispatch = useDispatch();
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    dispatch(getPurchaseOrders());
+    dispatch(
+      getPurchaseOrders({
+        vendorId,
+        purchaseState,
+        paymentState,
+        poStartDate,
+        poEndDate,
+      }),
+    );
     dispatch(getVendors());
     setActiveTab(3);
   }, []);
@@ -33,7 +48,11 @@ function PurchaseOrders({setActiveTab}) {
                 if (rowdata.tableData.id === orders.length - 2) {
                   dispatch(
                     getPurchaseOrdersByPage({
-                      id: vendorid,
+                      vendorId,
+                      purchaseState,
+                      paymentState,
+                      poStartDate,
+                      poEndDate,
                       page: page + 1,
                     }),
                   );

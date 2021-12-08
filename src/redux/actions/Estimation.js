@@ -33,9 +33,11 @@ export const setEstimationSlot = payload => {
   };
 };
 export const getEstimations = ({category, startDate, endDate, slotId}) => {
-  let URL =
-    BASE_URL +
-    `/list?category=${category}&deliveryStartDate=${startDate}&deliveryEndDate=${endDate}&slotId=${slotId}`;
+  let URL = BASE_URL + `/list?`;
+  if (category) URL = URL + `category=${category}&`;
+  if (startDate) URL = URL + `deliveryStartDate=${startDate}&`;
+  if (endDate) URL = URL + `deliveryEndDate=${endDate}&`;
+  if (slotId) URL = URL + `slotIds=${slotId}`;
 
   return async dispatch => {
     await axios

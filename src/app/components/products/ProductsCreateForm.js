@@ -27,6 +27,7 @@ const initial = {
   imageUrlList: [],
   estimationType: '',
   estimationUnit: '',
+  availableQuantity: '',
   hsnCode: '',
   maxAllowedQuantity: '',
   priority: '',
@@ -57,6 +58,8 @@ const reducer = (state, {type, payload}) => {
       return {...state, estimationUnit: payload};
     case 'hsnCode':
       return {...state, hsnCode: payload};
+    case 'availableQuantity':
+      return {...state, availableQuantity: payload};
     case 'thresholdQuantity':
       return {...state, thresholdQuantity: payload};
     case 'maxAllowedQuantity':
@@ -99,7 +102,6 @@ function ProductCreateForm({open, handleClose}) {
           }),
         );
         dispatch(setLoader(false));
-
         toast.success('Product Created Succefully', {
           position: 'top-right',
           autoClose: 2000,
@@ -492,13 +494,7 @@ function ProductCreateForm({open, handleClose}) {
           <Button onClick={handleClose}>Cancel</Button>
           <Button
             type="submit"
-            disabled={
-              isDisabled
-                ? form.imageUrlList?.length >= 1
-                  ? false
-                  : true
-                : false
-            }>
+            disabled={form.imageUrlList?.length >= 1 ? isDisabled : true}>
             Create
           </Button>
         </DialogActions>

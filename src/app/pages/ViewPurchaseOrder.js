@@ -256,7 +256,9 @@ function ViewPurchaseOrder({orderId}) {
                             alt=""
                             className="itemImg"
                           />
-                          <div className="" style={{pointerEvents: 'none'}}>
+                          <div
+                            className="itemTitle"
+                            style={{pointerEvents: 'none'}}>
                             <p className="itemName">
                               {e.itemName} ({e.itemSubName})
                             </p>
@@ -271,7 +273,7 @@ function ViewPurchaseOrder({orderId}) {
                           <div className="d-flex justify-content-center align-items-center">
                             <div className="qantity d-flex">
                               <div className="d-flex">
-                                <p>Expires At :</p>
+                                <p>Exp At :</p>
                                 <p
                                   style={{
                                     marginRight: '10px',

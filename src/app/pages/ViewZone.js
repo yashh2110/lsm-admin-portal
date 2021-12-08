@@ -82,19 +82,21 @@ function ViewZone({zoneId, setActiveTab}) {
           </div>
 
           <div className="m-4 mt-0 mb-0">
-            <Button
-              variant="contained"
-              onClick={() => setPartnerEditOpen(true)}
-              disabled={isDisabled}
-              style={{
-                backgroundColor: ' rgb(223, 223, 223)',
-                boxShadow: 'none',
-                color: '#333',
-                textTransform: 'capitalize',
-                marginLeft: '20px',
-              }}>
-              Edit Partners
-            </Button>
+            {zone.zoneType !== 'NORMAL' ? (
+              <Button
+                variant="contained"
+                onClick={() => setPartnerEditOpen(true)}
+                disabled={isDisabled}
+                style={{
+                  backgroundColor: ' rgb(223, 223, 223)',
+                  boxShadow: 'none',
+                  color: '#333',
+                  textTransform: 'capitalize',
+                  marginLeft: '20px',
+                }}>
+                Edit Partners
+              </Button>
+            ) : null}
             <Button
               variant="contained"
               onClick={() => setAlertOpen(true)}

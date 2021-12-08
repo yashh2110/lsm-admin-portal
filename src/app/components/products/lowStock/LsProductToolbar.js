@@ -53,7 +53,7 @@ function LsProductToolbar({setPage}) {
         }}
         className="d-flex align-items-center">
         <ArrowBackOutlinedIcon sx={{fontSize: '24px', marginRight: '10px'}} />
-        <div className="title" style={{whiteSpace: 'nowrap'}}>
+        <div className="title mt-0" style={{whiteSpace: 'nowrap'}}>
           Low Stocks
         </div>
       </div>

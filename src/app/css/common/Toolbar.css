@@ -32,24 +32,22 @@
 .filter > .category {
   width: 25%;
 }
+.createBtn-sm {
+  display: none;
+}
 @media screen and (max-width: 768px) {
   .toolbar {
     padding: 1rem;
     padding-right: 8px;
     min-height: 64px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
   }
   .toolbar > .filter {
-    position: relative;
-    width: 100%;
-    display: flex;
-    padding-top: 5px;
-    justify-content: flex-start;
+    display: none;
   }
   .filter > .name {
     width: 50%;
+  }
+  .createBtn-sm {
+    display: initial;
   }
 }

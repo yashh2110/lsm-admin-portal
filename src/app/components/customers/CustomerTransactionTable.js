@@ -31,6 +31,7 @@ function CustomerTransactionTable({data}) {
           padding: 'dense',
           actionsColumnIndex: -1,
           search: false,
+          toolbar: false,
           rowStyle: {
             fontSize: '13px',
           },

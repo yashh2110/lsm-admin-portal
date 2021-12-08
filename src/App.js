@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux';
 import {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {setUser} from './redux/actions/Users';
+import 'rsuite/dist/rsuite.min.css';
 function App() {
   const {isLogged} = useSelector(state => state.user);
   const dispatch = useDispatch();
@@ -13,6 +14,8 @@ function App() {
   useEffect(() => {
     if (user && user.isSuccess) {
       dispatch(setUser({...user, isLogged: true}));
+    } else {
+      dispatch(setUser({isLogged: false}));
     }
   }, []);
 

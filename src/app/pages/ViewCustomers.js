@@ -11,12 +11,16 @@ import CustomerTransactionTable from '../components/customers/CustomerTransactio
 import CustomerBlockStatus from '../components/customers/CustomerBlockStatus';
 import AddCredits from '../components/customers/AddCredits';
 import CustomerCodStatus from '../components/customers/CustomerCodStatus';
+import {getOrdersByCustomer} from '../components/orders/OrdersServices';
+import CustomerOrdersTable from '../components/customers/CustomersOrdersTable';
 function ViewCustomers({id, setActiveTab}) {
   const [transactions, setTransactions] = useState();
+  const [orders, setOrders] = useState();
   const [blockOpen, setBlockOpen] = useState(false);
   const [codOpen, setCodOpen] = useState(false);
   const [addCreditOpen, setAddCreditOpen] = useState(false);
   const [customer, setCustomer] = useState();
+  const [toggleTable, setToggleTable] = useState('orders');
   const history = useHistory();
   // if (!customer) {
   //   history.push('/customers');
@@ -44,6 +48,11 @@ function ViewCustomers({id, setActiveTab}) {
     getTransactionService({id})
       .then(res => {
         setTransactions(res.data.creditTransactions);
+      })
+      .catch(err => console.log(err));
+    getOrdersByCustomer(id)
+      .then(res => {
+        setOrders(res.data);
       })
       .catch(err => console.log(err));
     setActiveTab(7);
@@ -129,11 +138,47 @@ function ViewCustomers({id, setActiveTab}) {
             </p>
           </div>
         </div>
-        {transactions ? (
-          <CustomerTransactionTable data={transactions} />
-        ) : (
-          <p className="text-center">No Transactions</p>
-        )}
+        <div className="d-flex align-items-center justify-content-start">
+          <p
+            style={{
+              fontSize: '1.2rem',
+              padding: '10px',
+              margin: '10px',
+              fontWeight: '600',
+              cursor: 'pointer',
+
+              opacity: toggleTable === 'orders' ? 1 : 0.5,
+            }}
+            onClick={() => setToggleTable('orders')}>
+            Orders
+          </p>
+          <p
+            style={{
+              fontSize: '1.2rem',
+              padding: '10px',
+              margin: '10px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              opacity: toggleTable === 'transactions' ? 1 : 0.5,
+            }}
+            onClick={() => setToggleTable('transactions')}>
+            Transactions
+          </p>
+        </div>
+        {toggleTable === 'transactions' ? (
+          transactions ? (
+            <CustomerTransactionTable data={transactions} />
+          ) : (
+            <p className="text-center">No Transactions</p>
+          )
+        ) : null}
+        {toggleTable === 'orders' ? (
+          orders ? (
+            <CustomerOrdersTable data={orders} />
+          ) : (
+            <p className="text-center">No Orders</p>
+          )
+        ) : null}
         {codOpen ? (
           <CustomerCodStatus
             open={codOpen}

@@ -22,7 +22,7 @@ function PurchaseOrderTable({columns, data, setPage}) {
         <PurchaseOrderToolbar setPage={setPage} />
       </div>
       <MaterialTable
-        style={{padding: '0 8px', boxShadow: 'none'}}
+        style={{padding: '0 2px', boxShadow: 'none'}}
         options={{
           paging: false,
           padding: 'dense',

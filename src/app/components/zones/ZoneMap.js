@@ -22,6 +22,7 @@ function ZoneMap({
 }) {
   const dispatch = useDispatch();
   const [path, setPath] = useState([]);
+  const [highlightCoord, setHighlightCoord] = useState();
   // const latRef = useRef();
   // const lngRef = useRef();
   const [lat, setLat] = useState(16.5062);
@@ -97,6 +98,17 @@ function ZoneMap({
             }}
           />
         ) : null}
+        {highlightCoord ? (
+          <Polygon
+            paths={highlightCoord}
+            options={{
+              strokeColor: 'black',
+              fillColor: 'black',
+              strokeOpacity: '1',
+              strokeWeight: '3',
+            }}
+          />
+        ) : null}
         {zones
           ? zones.map((i, index) => (
               <Polygon
@@ -155,46 +167,85 @@ function ZoneMap({
             position: 'absolute',
             left: 0,
             bottom: '10px',
-            backgroundColor: 'white',
-            margin: '5px',
-            borderRadius: '5px',
-            padding: '4px',
           }}>
-          <span>Lat</span>
-          <input
-            required
-            type="number"
-            step={0.01}
-            value={lat}
-            onChange={e => setLat(() => parseFloat(e.target.value))}
+          <div
             style={{
-              padding: '5px',
-              width: '100px',
-              margin: '4px',
+              position: 'relative',
+              width: '265px',
+              height: '240px',
+              backgroundColor: 'white',
+              margin: '5px',
               borderRadius: '5px',
-              border: '2px solid lightgrey',
-            }}
-            placeholder="Enter Lat"
-          />
-          <span>Lat</span>
-
-          <input
-            type="number"
-            step={0.01}
-            value={lng}
-            onChange={e => setLng(() => parseFloat(e.target.value))}
+              padding: '4px',
+              overflow: 'auto',
+            }}>
+            {zones
+              ? zones.map(e => (
+                  <div
+                    key={e.zoneId}
+                    style={{
+                      padding: '7px',
+                      margin: '1px',
+                      position: 'relative',
+                      width: '100%',
+                    }}
+                    className="selectedZone"
+                    onClick={() => {
+                      setHighlightCoord(e.latlng);
+                      setLat(() => e.latlng[0].lat);
+                      setLng(() => e.latlng[0].lng);
+                    }}>
+                    <div>{e.zoneId + '. ' + e.zoneType}</div>
+                    <span style={{color: 'grey', whiteSpace: 'nowrap'}}>
+                      {e.partnersInfo.map(i => i.name).join(' , ')}
+                    </span>
+                  </div>
+                ))
+              : null}
+          </div>
+          <div
             style={{
-              padding: '5px',
-              width: '100px',
-              margin: '4px',
+              bottom: '10px',
+              backgroundColor: 'white',
+              margin: '5px',
               borderRadius: '5px',
-              border: '2px solid lightgrey',
-            }}
-            placeholder="Enter Lng"
-          />
-          {/* <Button variant="contained" type="submit">
+              padding: '4px',
+            }}>
+            <span>Lat</span>
+            <input
+              required
+              type="number"
+              step={0.01}
+              value={lat}
+              onChange={e => setLat(() => parseFloat(e.target.value))}
+              style={{
+                padding: '5px',
+                width: '100px',
+                margin: '4px',
+                borderRadius: '5px',
+                border: '2px solid lightgrey',
+              }}
+              placeholder="Enter Lat"
+            />
+            <span>Lat</span>
+            <input
+              type="number"
+              step={0.01}
+              value={lng}
+              onChange={e => setLng(() => parseFloat(e.target.value))}
+              style={{
+                padding: '5px',
+                width: '100px',
+                margin: '4px',
+                borderRadius: '5px',
+                border: '2px solid lightgrey',
+              }}
+              placeholder="Enter Lng"
+            />
+            {/* <Button variant="contained" type="submit">
             Mark
           </Button> */}
+          </div>
         </form>
       </GoogleMap>
     </LoadScript>

@@ -47,3 +47,13 @@
 .addedDe {
   padding: 3px;
 }
+.selectedZone {
+  background-color: white;
+  border-radius: 5px;
+}
+.selectedZone:hover {
+  background-color: lightgrey;
+}
+.active {
+  background-color: lightgrey;
+}

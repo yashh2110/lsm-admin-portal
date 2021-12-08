@@ -14,6 +14,7 @@ import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlined';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import {Link} from 'react-router-dom';
 import logo from '../../../assets/icons/logo.png';
 import {setUser} from '../../../redux/actions/Users';
@@ -36,6 +37,9 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
   };
   return (
     <div ref={ref} className="sidebar">
+      <div
+        className="overlay"
+        onClick={() => ref.current.classList.toggle('sidebar-open')}></div>
       <div className="sidebarDiv">
         <div className="user">
           <div className="userDet">
@@ -61,7 +65,18 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
         <ul className="menu">
           {/* <p className="inventoryLabel">Orders</p> */}
           <Link
+            to="/orders"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
+            className={activeTab === 12 ? 'menu-item active' : 'menu-item'}>
+            <BookmarkBorderOutlinedIcon
+              sx={{fontSize: 20}}
+              className="menuicons"
+            />
+            <p>Orders</p>
+          </Link>
+          <Link
             to="/assignments"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 4 ? 'menu-item active' : 'menu-item'}>
             <AssignmentTurnedInOutlinedIcon
               sx={{fontSize: 20}}
@@ -71,12 +86,14 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
           </Link>
           <Link
             to="/banners"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 5 ? 'menu-item active' : 'menu-item'}>
             <LocalOfferOutlinedIcon sx={{fontSize: 20}} className="menuicons" />
             <p>Offer Management</p>
           </Link>
           <Link
             to="/zones"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 6 ? 'menu-item active' : 'menu-item'}>
             <EditLocationOutlinedIcon
               sx={{fontSize: 20}}
@@ -86,6 +103,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
           </Link>
           <Link
             to="/estimations"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 11 ? 'menu-item active' : 'menu-item'}>
             <InsertChartOutlinedIcon
               sx={{fontSize: 20}}
@@ -98,36 +116,42 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
           {/* <p className="inventoryLabel">Inventory</p> */}
           <Link
             to="/"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 0 ? 'menu-item active' : 'menu-item'}>
             <ListAltOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>Products</p>
           </Link>
           <Link
             to="/customers"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 7 ? 'menu-item active' : 'menu-item'}>
             <GroupsOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>Customers</p>
           </Link>
           <Link
             to="/vendors"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 1 ? 'menu-item active' : 'menu-item'}>
             <GroupOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>Vendors</p>
           </Link>
           <Link
             to="/warehouses"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 2 ? 'menu-item active' : 'menu-item'}>
             <HouseOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>Warehouses</p>
           </Link>
           <Link
             to="/partners"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 9 ? 'menu-item active' : 'menu-item'}>
             <PersonPinOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>Partners</p>
           </Link>
           <Link
             to="/purchaseorders"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 3 ? 'menu-item active' : 'menu-item'}>
             <ShoppingCartOutlinedIcon
               sx={{fontSize: 20}}
@@ -137,6 +161,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
           </Link>
           <Link
             to="/returnsandrefunds"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 10 ? 'menu-item active' : 'menu-item'}>
             <KeyboardReturnOutlinedIcon
               sx={{fontSize: 20}}
@@ -146,6 +171,7 @@ const Sidebar = forwardRef(({activeTab}, ref) => {
           </Link>
           <Link
             to="/codsummary"
+            onClick={() => ref.current.classList.toggle('sidebar-open')}
             className={activeTab === 8 ? 'menu-item active' : 'menu-item'}>
             <AssignmentOutlinedIcon sx={{fontSize: 20}} className="menuicons" />{' '}
             <p>COD Summary</p>

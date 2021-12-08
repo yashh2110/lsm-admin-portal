@@ -5,11 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../../assets/images/logo.svg';
 function Navbar({sidebar}) {
   const sidebarHandle = () => {
-    if (sidebar.style.left === '0px') {
-      sidebar.style.left = '-100%';
-    } else {
-      sidebar.style.left = 0;
-    }
+    sidebar.classList.toggle('sidebar-open');
   };
   return (
     <div className="navbar">
@@ -26,7 +22,7 @@ function Navbar({sidebar}) {
             src={logo}
             alt="Zasket"
             width="120px"
-            style={{marginBottom: '13px'}}
+            style={{marginTop: '-12px'}}
           />{' '}
           Inventory
         </div>

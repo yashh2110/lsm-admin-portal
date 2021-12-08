@@ -148,20 +148,37 @@
 .backDrop {
   display: none;
 }
+.overlay {
+  display: none;
+}
 @media screen and (max-width: 768px) {
   .sidebar {
     position: fixed;
     top: 0;
     left: -100%;
-    z-index: 100;
+    z-index: 10000;
+    width: 100%;
     height: 100vh;
     transition: all 0.2s ease-in-out;
+  }
+  .sidebar-open {
+    left: 0;
   }
   .sidebarDiv {
     z-index: 300;
     overflow: auto;
     width: 250px;
     height: 100vh;
-    background-color: rgba(253, 231, 231, 1);
+    background-color: rgb(255, 243, 243);
+  }
+  .overlay {
+    display: initial;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.102);
+    z-index: -1;
   }
 }

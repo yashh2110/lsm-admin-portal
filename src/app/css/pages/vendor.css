@@ -37,3 +37,20 @@
   cursor: pointer;
   margin-bottom: 6px !important;
 }
+
+@media screen and (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+    cursor: pointer;
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    width: 10px;
+  }
+  ::-webkit-slider-thumb {
+    border: none !important;
+  }
+  .Component-horizontalScrollContainer-5 ::-webkit-scrollbar-thumb {
+    border: none !important;
+  }
+}

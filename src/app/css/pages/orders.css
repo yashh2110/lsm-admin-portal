@@ -1,0 +1,16 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+.toolbar-title {
+  font-size: 1.5rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+  margin-left: 10px;
+}
+.filters {
+  display: flex;
+  justify-content: space-evenly;
+}

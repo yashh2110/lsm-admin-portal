@@ -1,8 +1,8 @@
 .main {
   position: relative;
-  margin-top: 87.01px;
+  margin-top: 70px;
   margin-left: 250px;
-  height: calc(100vh - 87.01px);
+  height: calc(100vh - 70px);
   display: flex;
   justify-content: center;
 }

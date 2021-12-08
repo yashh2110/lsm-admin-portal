@@ -43,6 +43,8 @@ const reducer = (state, {type, payload}) => {
       return {...state, hsnCode: payload};
     case 'thresholdQuantity':
       return {...state, thresholdQuantity: payload};
+    case 'availableQuantity':
+      return {...state, availableQuantity: payload};
     case 'maxAllowedQuantity':
       return {...state, maxAllowedQuantity: payload};
     case 'priority':

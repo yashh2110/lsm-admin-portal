@@ -15,9 +15,11 @@ import VendorReducer from './Vendors';
 import WarehouseReduser from './Warehouses';
 import ZoneReducer from './Zones';
 import UserReducer from './User';
+import OrdersReducer from './Orders';
 
 const allReducer = combineReducers({
   user: UserReducer,
+  orders: OrdersReducer,
   vendors: VendorReducer,
   warehouses: WarehouseReduser,
   purchaseorders: PurchaseReduser,

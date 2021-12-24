@@ -3,7 +3,13 @@ import {ActionTypes} from '../actionTypes/ActionTypes';
 const BASE_URL = process.env.REACT_APP_API + 'admin/v2';
 export const setOrders = payload => {
   return {
-    type: ActionTypes.GET_ORDERS,
+    type: ActionTypes.GET_ALL_ORDERS,
+    payload,
+  };
+};
+export const addOrders = payload => {
+  return {
+    type: ActionTypes.ADD_ALL_ORDERS,
     payload,
   };
 };
@@ -74,6 +80,39 @@ export const getAllOrders = ({
       .get(URL)
       .then(res => {
         dispatch(setOrders(res.data));
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
+export const getOrdersByPage = ({
+  assignedTo,
+  customerId,
+  deliveredBy,
+  deliveryDate,
+  deliveryState,
+  orderId,
+  slotId,
+  page,
+}) => {
+  let URL = BASE_URL + '/orders/list?';
+  URL += `page=${page}&`;
+  URL += `size=15&`;
+  if (assignedTo) URL += `assignedTo=${assignedTo}&`;
+  if (customerId) URL += `customerId=${customerId}&`;
+  if (deliveredBy) URL += `deliveredBy=${deliveredBy}&`;
+  if (deliveryDate) URL += `deliveryDate=${deliveryDate}&`;
+  if (deliveryState) URL += `deliveryState=${deliveryState}&`;
+  if (slotId) URL += `slotId=${slotId}&`;
+  if (orderId) URL += `orderId=${orderId}`;
+
+  return async dispatch => {
+    await axios
+      .get(URL)
+      .then(res => {
+        dispatch(addOrders(res.data));
         console.log(res.data);
       })
       .catch(err => {

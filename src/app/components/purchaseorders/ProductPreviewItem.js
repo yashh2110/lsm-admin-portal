@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import img from '../../../assets/images/img.jpg';
 import {IconButton} from '@mui/material';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import RemoveIcon from '@mui/icons-material/Remove';
+
 import {BiRupee} from 'react-icons/bi';
 function ProductPreviewItem({e, dispatch}) {
   const [quantity, setQuantity] = useState(e.quantity);
@@ -36,47 +35,49 @@ function ProductPreviewItem({e, dispatch}) {
           <p className="itemName">
             {e.item.name} ({e.item.subName})
           </p>
-          <div
+          {/* <div
             className="itemName d-flex align-items-center"
             style={{marginLeft: '10px'}}>
-            <p className="p-0 m-0">Unit Price : </p>
+            <p className="p-0 m-0">{e.estimationType} Price : </p>
             <input
               type="number"
-              value={e.unitPrice}
+              value={e.unitPrice / e.estimationUnit || 0}
               step={0.01}
               onChange={k => {
-                const newUnitPrice = k.target.value || 0;
+                const newUnitPrice =
+                  parseFloat(k.target.value) * e.estimationUnit;
+
                 dispatch({
                   type: 'updateProducts',
                   payload: {
                     ...item,
-                    unitPrice: newUnitPrice,
-                    totalQuantityPrice: newUnitPrice * e.quantity,
+                    unitPrice: newUnitPrice || 0,
+                    totalQuantityPrice: (newUnitPrice || 0) * e.quantity,
                   },
                 });
               }}
               className="unitPrice"
             />
             <BiRupee className="mb-1" />
-            {/* {unitPrice * quantity} */}
-          </div>
+            
+          </div> */}
         </div>
       </div>
 
-      <div className="d-flex align-items-center">
+      <div className="d-flex flex-column justify-content-center">
         <p
           style={{
             whiteSpace: 'nowrap',
-            margin: 0,
-            marginRight: '7px',
-            fontSize: '0.9rem',
+            margin: ' 0 0 7px 4px',
+
+            fontSize: '0.8rem',
             width: '105px',
           }}>
-          Enter in {e.estimationType}
+          Num of {e.estimationType}
         </p>
         <input
           type="text"
-          className="form-control counter"
+          className="unitPrice"
           value={e.quantity * e.estimationUnit || 0}
           onChange={k => {
             const units = parseInt(k.target.value) / e.estimationUnit;
@@ -85,14 +86,75 @@ function ProductPreviewItem({e, dispatch}) {
               payload: {
                 ...item,
                 quantity: units || 0,
-                totalQuantityPrice: e.unitPrice * units,
+                totalQuantityPrice: e.unitPrice * (units || 0),
               },
             });
           }}
-          style={{width: '70px'}}
+          // style={{width: '70px'}}
         />
       </div>
-      <div className="d-flex  ">
+      <div className="d-flex flex-column justify-content-center">
+        <p
+          style={{
+            whiteSpace: 'nowrap',
+            margin: ' 0 0 7px 4px',
+            fontSize: '0.8rem',
+            width: '80px',
+          }}>
+          price in {e.estimationType} :{' '}
+        </p>
+        <div>
+          <input
+            type="text"
+            value={e.unitPrice / e.estimationUnit || 0}
+            step={0.01}
+            onChange={k => {
+              const newUnitPrice =
+                parseFloat(k.target.value) * e.estimationUnit;
+
+              dispatch({
+                type: 'updateProducts',
+                payload: {
+                  ...item,
+                  unitPrice: newUnitPrice || 0,
+                  totalQuantityPrice: (newUnitPrice || 0) * e.quantity,
+                },
+              });
+            }}
+            className="unitPrice"
+          />
+          <BiRupee className="mb-1" />
+        </div>
+      </div>
+      <div className="d-flex flex-column justify-content-center">
+        <p
+          style={{
+            whiteSpace: 'nowrap',
+            margin: ' 0 0 7px 4px',
+            fontSize: '0.8rem',
+          }}>
+          Exp Date
+        </p>
+        <input
+          type="date"
+          className="unitPrice"
+          value={itemExpDate}
+          onChange={k => {
+            console.log(k.target.value);
+            let date = new Date(k.target.value);
+            dispatch({
+              type: 'updateProducts',
+              payload: {
+                ...item,
+                expiresAt: date.getTime(),
+              },
+            });
+          }}
+          style={{width: '170px'}}
+        />
+      </div>
+
+      <div className="d-flex flex-column justify-content-center ">
         <div className="qantity d-flex align-items-center">
           <p
             style={{
@@ -103,7 +165,19 @@ function ProductPreviewItem({e, dispatch}) {
             }}>
             Total Units
           </p>
-          <button
+          <p
+            style={{
+              whiteSpace: 'nowrap',
+              margin: 0,
+              fontSize: '0.9rem',
+              fontWeight: 'bold',
+              width: '60px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}>
+            {e.quantity}
+          </p>
+          {/* <button
             className="counterBtn"
             onClick={() => {
               if (e.quantity > 1) {
@@ -121,11 +195,12 @@ function ProductPreviewItem({e, dispatch}) {
               }
             }}>
             <RemoveIcon fontSize="14px" />
-          </button>
-          <input
+          </button> */}
+          {/* <input
             type="text"
             className="form-control counter"
             value={e.quantity || 0}
+            disabled
             onChange={k => {
               dispatch({
                 type: 'updateProducts',
@@ -137,9 +212,9 @@ function ProductPreviewItem({e, dispatch}) {
                 },
               });
             }}
-            style={{width: '70px'}}
-          />
-          <button
+            style={{width: '73px'}}
+          /> */}
+          {/* <button
             className="counterBtn"
             onClick={() => {
               setQuantity(k => k + 1);
@@ -153,7 +228,7 @@ function ProductPreviewItem({e, dispatch}) {
               });
             }}>
             <AddOutlinedIcon fontSize="14px" />
-          </button>
+          </button> */}
           {/* <button
             className="counterBtn"
             onClick={() => {
@@ -212,41 +287,78 @@ function ProductPreviewItem({e, dispatch}) {
             <AddOutlinedIcon fontSize="14px" />
           </button> */}
         </div>
-      </div>
-      <div className="d-flex align-items-center">
-        <p
-          style={{
-            whiteSpace: 'nowrap',
-            margin: 0,
-            marginRight: '7px',
-            fontSize: '0.9rem',
-          }}>
-          Exp Date
-        </p>
-        <input
-          type="date"
+        <div className="d-flex align-items-center">
+          <p
+            style={{
+              whiteSpace: 'nowrap',
+              margin: 0,
+              marginRight: '4px',
+              fontSize: '0.9rem',
+            }}>
+            Unit Price :
+          </p>
+          <p
+            style={{
+              whiteSpace: 'nowrap',
+              margin: 0,
+              fontSize: '0.9rem',
+              fontWeight: 'bold',
+              width: '60px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}>
+            <BiRupee className="mb-1" />
+            {e.unitPrice}
+          </p>
+          {/* <input
+          type="text"
           className="form-control counter"
-          value={itemExpDate}
-          onChange={k => {
-            console.log(k.target.value);
-            let date = new Date(k.target.value);
-            dispatch({
-              type: 'updateProducts',
-              payload: {
-                ...item,
-                expiresAt: date.getTime(),
-              },
-            });
-          }}
-          style={{width: '170px'}}
-        />
+          value={e.unitPrice}
+          disabled
+          style={{width: '70px'}}
+        /> */}
+        </div>
+        <div className="d-flex align-items-center">
+          <p
+            style={{
+              whiteSpace: 'nowrap',
+              margin: 0,
+              marginRight: '4px',
+              fontSize: '0.9rem',
+            }}>
+            Total Price :
+          </p>
+
+          <p
+            // className="price"
+            style={{
+              whiteSpace: 'nowrap',
+              margin: 0,
+              fontSize: '0.9rem',
+              fontWeight: 'bold',
+              width: '60px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}>
+            <BiRupee className="mb-1" />
+            {e.quantity * e.unitPrice || 0}
+          </p>
+
+          {/* <input
+          type="text"
+          className="form-control counter"
+          value={e.unitPrice}
+          disabled
+          style={{width: '70px'}}
+        /> */}
+        </div>
       </div>
-      <div className="quantityDiv">
+      {/* <div className="quantityDiv">
         <p className="price">
           <BiRupee className="mb-1" />
           {e.quantity * e.unitPrice || 0}
         </p>
-      </div>
+      </div> */}
       <IconButton
         aria-label="delete"
         onClick={() => dispatch({type: 'removeProductItems', payload: item})}>

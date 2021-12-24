@@ -1,8 +1,13 @@
 import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
 import {Dropdown, Popover, Whisper} from 'rsuite';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
 import {Cell, Column, HeaderCell} from 'rsuite-table';
 import Table from 'rsuite/Table';
+import CustomAlert from '../common/CustomAlert';
+import {partialRefund, refundToSource} from './OrdersServices';
+import {toast} from 'react-toastify';
 import Button from '@mui/material/Button';
 import {
   Dialog,
@@ -11,14 +16,13 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import {toast} from 'react-toastify';
-import {partialRefund} from './OrdersServices';
 const RenderMenu = React.forwardRef(
   (
     {
       onClose,
       rowdata,
       setSelectedData,
+      setShowAlert,
       setOpenPartialRefund,
       setAmount,
       ...rest
@@ -28,34 +32,65 @@ const RenderMenu = React.forwardRef(
     const handleSelect = eventKey => {
       onClose();
     };
+
     return (
       <Popover ref={ref} {...rest} full>
         <Dropdown.Menu onSelect={handleSelect}>
-          {rowdata.paymentMethod !== 'COD' ? (
+          {(rowdata.state === 'PARTIALLY_REFUNDED' ||
+            rowdata.state === 'REFUNDED') &&
+          rowdata.paymentMethod !== 'COD' ? (
             <Dropdown.Item
               onClick={() => {
                 setSelectedData(rowdata);
-                setAmount(rowdata.totalPrice);
+                setShowAlert(true);
+              }}>
+              Refund to source
+            </Dropdown.Item>
+          ) : (
+            ''
+          )}
+          {(rowdata.state === 'PARTIALLY_RETURNED' ||
+            rowdata.state === 'RETURNED') &&
+          rowdata.paymentMethod !== 'COD' ? (
+            <Dropdown.Item
+              onClick={() => {
+                setSelectedData(rowdata);
+                setAmount(rowdata.quantity * rowdata.unitPrice);
                 setOpenPartialRefund(true);
               }}>
               Partial Refund
             </Dropdown.Item>
           ) : (
-            'No actions'
+            ''
           )}
         </Dropdown.Menu>
       </Popover>
     );
   },
 );
-
-function OrderItemsTable({data, orderId, getrefunds}) {
-  const popref = React.useRef();
-  console.log(orderId);
+function ReturnsAndRefundsTable({data, getrefunds, orderId}) {
+  const [showAlert, setShowAlert] = useState(false);
   const [selectedData, setSelectedData] = useState();
   const [amount, setAmount] = useState();
   const [openPartialRefund, setOpenPartialRefund] = useState(false);
   const [btnDisable, setBtnDisable] = useState(false);
+  const popref = React.useRef();
+  const refund = id => {
+    refundToSource(id)
+      .then(res => {
+        toast.success('Refund to source was successful', {
+          autoClose: 2000,
+        });
+        setShowAlert(false);
+        getrefunds();
+      })
+      .catch(err => {
+        console.log(err);
+        toast.error('Something went wrong!', {
+          autoClose: 2000,
+        });
+      });
+  };
   return (
     <div className="mt-0">
       <p
@@ -66,47 +101,86 @@ function OrderItemsTable({data, orderId, getrefunds}) {
           marginLeft: '27px',
           opacity: '0.7',
         }}>
-        Items
+        Returns and Refunds
       </p>
-      <Table id="table" height={250} affixHeader bordered data={data}>
+      <Table id="table" height={400} affixHeader bordered data={data}>
         <Column flexGrow={1}>
           <HeaderCell>Id</HeaderCell>
           <Cell dataKey="id" style={{fontSize: '0.8rem', margin: 0}} />
         </Column>
         <Column flexGrow={1}>
-          <HeaderCell>Item Id</HeaderCell>
-          <Cell dataKey="itemId" style={{fontSize: '0.8rem', margin: 0}} />
+          <HeaderCell>orderId</HeaderCell>
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => <p>{row.orderId}</p>}
+          </Cell>
         </Column>
 
         <Column flexGrow={1}>
-          <HeaderCell>Item Name</HeaderCell>
-          <Cell dataKey="itemName" style={{fontSize: '0.8rem', margin: 0}} />
+          <HeaderCell>orderItemId</HeaderCell>
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => (row.orderItemId ? <p>{row.orderItemId}</p> : 'N/A')}
+          </Cell>
         </Column>
 
         <Column flexGrow={1}>
-          <HeaderCell>Item Sub Name</HeaderCell>
-          <Cell dataKey="itemSubName" style={{fontSize: '0.8rem', margin: 0}} />
+          <HeaderCell>customerId</HeaderCell>
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => (
+              <Link to={`/customers/${row.customerId}`}>{row.customerId}</Link>
+            )}
+          </Cell>
         </Column>
         <Column flexGrow={1}>
-          <HeaderCell>Category</HeaderCell>
-          <Cell dataKey="category" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
-        <Column flexGrow={1}>
-          <HeaderCell>Quantity</HeaderCell>
-          <Cell dataKey="quantity" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
-        <Column flexGrow={1}>
-          <HeaderCell>Market Price</HeaderCell>
-          <Cell dataKey="marketPrice" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
+          <HeaderCell>orderDenyFor</HeaderCell>
 
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => (row.orderDenyFor ? <p>{row.orderDenyFor}</p> : 'N/A')}
+          </Cell>
+        </Column>
         <Column flexGrow={1}>
-          <HeaderCell>Total Price</HeaderCell>
-          <Cell dataKey="totalPrice" style={{fontSize: '0.8rem', margin: 0}} />
+          <HeaderCell>quantity</HeaderCell>
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => (row.quantity ? <p>{row.quantity}</p> : 'N/A')}
+          </Cell>
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>Unit Price</HeaderCell>
-          <Cell dataKey="unitPrice" style={{fontSize: '0.8rem', margin: 0}} />
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => (row.unitPrice ? <p>{row.unitPrice}</p> : 'N/A')}
+          </Cell>
+        </Column>
+        <Column flexGrow={1}>
+          <HeaderCell>amount</HeaderCell>
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => (row.amount ? <p>{row.amount}</p> : 'N/A')}
+          </Cell>
+        </Column>
+
+        <Column flexGrow={1}>
+          <HeaderCell>state</HeaderCell>
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => (row.state ? <p>{row.state}</p> : 'N/A')}
+          </Cell>
+        </Column>
+        <Column flexGrow={1}>
+          <HeaderCell>paymentMethod</HeaderCell>
+          <Cell
+            dataKey="paymentMethod"
+            style={{fontSize: '0.8rem', margin: 0}}></Cell>
+        </Column>
+        <Column flexGrow={1}>
+          <HeaderCell>Refunded At</HeaderCell>
+          <Cell style={{fontSize: '0.8rem', margin: 0}}>
+            {row => {
+              const date = new Date(row.createdAt);
+              return (
+                <p style={{fontSize: '0.8rem', margin: 0}}>
+                  {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+                  {date.toDateString()}
+                </p>
+              );
+            }}
+          </Cell>
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>Actions</HeaderCell>
@@ -120,6 +194,7 @@ function OrderItemsTable({data, orderId, getrefunds}) {
                   <RenderMenu
                     rowdata={row}
                     setSelectedData={setSelectedData}
+                    setShowAlert={setShowAlert}
                     setAmount={setAmount}
                     setOpenPartialRefund={setOpenPartialRefund}
                     onClose={() => popref.current.close()}
@@ -131,6 +206,14 @@ function OrderItemsTable({data, orderId, getrefunds}) {
           </Cell>
         </Column>
       </Table>
+      {selectedData ? (
+        <CustomAlert
+          open={showAlert}
+          handleClose={() => setShowAlert(false)}
+          confirmFunction={() => refund(selectedData.id)}
+          alert={`By clicking this the refund amount of ${selectedData.amount} will be initiated to source ${selectedData.customerId}!`}
+        />
+      ) : null}
       {selectedData ? (
         <Dialog
           open={openPartialRefund}
@@ -187,4 +270,4 @@ function OrderItemsTable({data, orderId, getrefunds}) {
   );
 }
 
-export default OrderItemsTable;
+export default ReturnsAndRefundsTable;

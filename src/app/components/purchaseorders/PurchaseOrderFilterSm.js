@@ -1,9 +1,8 @@
-import React, {useReducer, useState} from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import {useHistory} from 'react-router';
 import DialogContent from '@mui/material/DialogContent';
 import {
   getPurchaseOrders,
@@ -19,7 +18,6 @@ import {FormControl, InputLabel, MenuItem, Select} from '@material-ui/core';
 
 function PurchaseOrderFilterSm({open, handleClose, setPage}) {
   const dispatch = useDispatch();
-  const history = useHistory();
   const {vendorId, purchaseState, paymentState, poStartDate, poEndDate} =
     useSelector(state => state.purchaseorders);
   const vendors = useSelector(state => state.vendors);

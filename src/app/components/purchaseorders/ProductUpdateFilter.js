@@ -52,21 +52,22 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
             {i.name} ({i.subName})
           </p>
           <div className="filterItemPrice d-flex align-items-center">
-            <p className="p-0 m-0">Unit Price : </p>
+            <p className="p-0 m-0">price in {i.estimationType} : </p>
             <input
               type="number"
-              value={unitPrice}
+              value={unitPrice / i.estimationUnit || 0}
               step={0.01}
               className="unitPrice"
               onChange={e => {
-                const newUnitPrice = e.target.value || 0;
-                setUnitPrice(newUnitPrice);
+                const newUnitPrice =
+                  parseFloat(e.target.value) * i.estimationUnit;
+                setUnitPrice(newUnitPrice || 0);
                 dispatch({
                   type: 'updateProducts',
                   payload: {
                     ...item,
-                    unitPrice: newUnitPrice,
-                    totalPrice: newUnitPrice * quantity,
+                    unitPrice: newUnitPrice || 0,
+                    totalPrice: (newUnitPrice || 0) * (quantity || 0),
                   },
                 });
               }}
@@ -88,7 +89,7 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
         ) : (
           <div className="qantity d-flex">
             <p className="m-0 text-right p-1 pb-0 pt-0">
-              Enter in {i.estimationType} :
+              Num of {i.estimationType} :
             </p>
 
             {/* <button
@@ -128,7 +129,7 @@ function ProductUpdateFilter({i, dispatch, addedProducts}) {
                   payload: {
                     ...item,
                     quantity: units || null,
-                    totalPrice: i.discountedPrice * units,
+                    totalPrice: i.discountedPrice * (units || 0),
                   },
                 });
               }}

@@ -12,7 +12,7 @@ import {
 } from '../../../redux/actions/Orders';
 import {downloadOrderInvoices} from './OrdersServices';
 
-function OrdersFilter() {
+function OrdersFilter({slotIdParam, deliveryDateParam, deliveryStateparam}) {
   const activeDes = useSelector(state => state.assignments.activeDes);
   const {
     assignedTo,
@@ -24,8 +24,6 @@ function OrdersFilter() {
     slotId,
   } = useSelector(state => state.orders);
   const dispatch = useDispatch();
-  const getOrdersWithFilter = () => {};
-  console.log(activeDes);
   return (
     <div className="filters">
       <TextField
@@ -53,7 +51,8 @@ function OrdersFilter() {
         label="Slot Id"
         variant="standard"
         sx={{width: '90px'}}
-        value={slotId}
+        disabled={slotIdParam ? true : false}
+        value={slotIdParam || slotId}
         onChange={e => dispatch(setSlotId(e.target.value))}
         size="small"
         InputLabelProps={{shrink: true}}>
@@ -66,7 +65,8 @@ function OrdersFilter() {
       <TextField
         type="date"
         label="Delivery Date"
-        value={deliveryDate}
+        value={deliveryDateParam || deliveryDate}
+        disabled={deliveryDateParam ? true : false}
         onChange={e => dispatch(setDeliveryDate(e.target.value))}
         variant="standard"
         size="small"
@@ -76,10 +76,11 @@ function OrdersFilter() {
         select
         sx={{width: '200px'}}
         label="Delivery State"
+        disabled={deliveryStateparam ? true : false}
         variant="standard"
         onChange={e => dispatch(setDeliveryState(e.target.value))}
         size="small"
-        value={deliveryState}
+        value={deliveryStateparam || deliveryState}
         InputLabelProps={{shrink: true}}>
         <MenuItem value="">None</MenuItem>
         <MenuItem value="PAYMENT_PROCESSING">PAYMENT_PROCESSING</MenuItem>

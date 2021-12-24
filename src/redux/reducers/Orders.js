@@ -13,8 +13,10 @@ const initial = {
 
 const OrdersReducer = (state = initial, {type, payload}) => {
   switch (type) {
-    case ActionTypes.GET_ORDERS:
+    case ActionTypes.GET_ALL_ORDERS:
       return {...state, orders: payload};
+    case ActionTypes.ADD_ALL_ORDERS:
+      return {...state, orders: [...state.orders, ...payload]};
     case ActionTypes.SET_ASSIGNED_TO:
       return {...state, assignedTo: payload};
     case ActionTypes.SET_CUSTOMER_ID:

@@ -5,7 +5,7 @@ import {useHistory} from 'react-router';
 function OrdersToolbar({title, back}) {
   const history = useHistory();
   return (
-    <div className="toolbar">
+    <div className="toolbar" style={{position: 'sticky', top: 0}}>
       <div className="d-flex align-items-center justify-content-start">
         {back ? (
           <ArrowBackOutlinedIcon

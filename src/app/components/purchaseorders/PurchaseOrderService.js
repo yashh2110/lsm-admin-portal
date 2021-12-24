@@ -9,16 +9,7 @@ export const createPurchaseOrderService = async form => {
   return await axios.post(URL_BASE + 'purchase-order', form);
 };
 export const createDuplicatePurchaseOrderService = async form => {
-  const params = {
-    vendorId: form.vendorId,
-    warehouseId: form.warehouseId,
-    purchaseOrderItemsRequests: form.purchaseOrderItems,
-    po_purchaseState: form.purchaseState,
-    po_paymentState: form.paymentState,
-    orderAmount: form.orderAmount,
-    comments: form.comments,
-  };
-  return await axios.post(URL_BASE + 'purchase-order', params);
+  return await axios.post(URL_BASE + 'purchase-order', form);
 };
 export const getPurchaseOrder = async id => {
   return await axios.get(URL_BASE + `purchase-order/${id}`);

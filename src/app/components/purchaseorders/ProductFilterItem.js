@@ -48,20 +48,21 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
             {i.name} ({i.subName})
           </p>
           <div className="filterItemPrice d-flex align-items-center">
-            <p className="p-0 m-0">Unit Price : </p>
+            <p className="p-0 m-0">price in {i.estimationType}: </p>
             <input
               type="number"
-              value={unitPrice}
+              value={unitPrice / i.estimationUnit || 0}
               step={0.01}
               onChange={e => {
-                const newUnitPrice = e.target.value || 0;
-                setUnitPrice(newUnitPrice);
+                const newUnitPrice =
+                  parseFloat(e.target.value) * i.estimationUnit;
+                setUnitPrice(newUnitPrice || 0);
                 dispatch({
                   type: 'updateProducts',
                   payload: {
                     ...item,
-                    unitPrice: newUnitPrice,
-                    totalQuantityPrice: newUnitPrice * quantity,
+                    unitPrice: newUnitPrice || 0,
+                    totalQuantityPrice: (newUnitPrice || 0) * (quantity || 0),
                   },
                 });
               }}
@@ -85,7 +86,7 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
           <div>
             <div className="qantity d-flex">
               <p className="m-0 text-right p-1 pb-0 pt-0">
-                Enter in {i.estimationType} :
+                Num of {i.estimationType} :
               </p>
 
               {/* <button
@@ -120,13 +121,12 @@ function ProductFilterItem({i, dispatch, addedProducts}) {
                 onChange={e => {
                   const units = parseInt(e.target.value) / i.estimationUnit;
                   setQuantity(units || 0);
-
                   dispatch({
                     type: 'updateProducts',
                     payload: {
                       ...item,
                       quantity: units || null,
-                      totalQuantityPrice: unitPrice * units,
+                      totalQuantityPrice: (unitPrice || 0) * (units || 0),
                     },
                   });
                 }}

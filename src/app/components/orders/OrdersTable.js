@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Cell, Column, HeaderCell} from 'rsuite-table';
 import Dropdown from 'rsuite/Dropdown';
-import Table from 'rsuite/Table';
-import {IconButton, Popover, Whisper} from 'rsuite';
+import {Popover, Whisper} from 'rsuite';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {canclearOrder, downloadOrderInvoice} from './OrdersServices';
 import {toast} from 'react-toastify';
 import RescheduleOrder from './RescheduleOrder';
-import {getAllOrders} from '../../../redux/actions/Orders';
+import {getAllOrders, getOrdersByPage} from '../../../redux/actions/Orders';
 import CustomAlert from '../common/CustomAlert';
 import {useHistory} from 'react-router';
 import {Link} from 'react-router-dom';
+import {Waypoint} from 'react-waypoint';
+import MaterialTable from 'material-table';
 const RenderMenu = React.forwardRef(
   (
     {
@@ -29,6 +29,7 @@ const RenderMenu = React.forwardRef(
       onClose();
     };
     const history = useHistory();
+
     return (
       <Popover ref={ref} {...rest} full>
         <Dropdown.Menu onSelect={handleSelect}>
@@ -62,7 +63,7 @@ const RenderMenu = React.forwardRef(
   },
 );
 
-function OrdersTable() {
+function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
   const {orders} = useSelector(state => state.orders);
   console.log(orders);
   const [rescheduleOpen, setRescheduleOpen] = React.useState(false);
@@ -78,7 +79,181 @@ function OrdersTable() {
     slotId,
   } = useSelector(state => state.orders);
   const dispatch = useDispatch();
+  const [page, setPage] = useState(0);
+  const column = [
+    {
+      title: 'Order Id',
 
+      render: rowData => {
+        return (
+          <>
+            <Waypoint
+              onEnter={() => {
+                if (rowData.tableData.id === orders.length - 2) {
+                  dispatch(
+                    getOrdersByPage({
+                      assignedTo,
+                      customerId,
+                      // deliveredBy,
+                      deliveryDate: deliveryDateParam || deliveryDate,
+                      deliveryState: deliveryStateparam || deliveryState,
+                      orderId,
+                      slotId: slotIdParam || slotId,
+                      page: page + 1,
+                    }),
+                  );
+                  setPage(i => i + 1);
+                }
+              }}></Waypoint>
+            <Link to={`/orders/${rowData.id}`} style={{color: 'blue'}}>
+              {rowData.id}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      title: 'Customer Id',
+      render: rowData => (
+        <Link to={`/customers/${rowData.customerId}`} style={{color: 'blue'}}>
+          {rowData.customerId}
+        </Link>
+      ),
+    },
+    {
+      title: 'Slot',
+      field: 'orderId',
+      render: rowData => (
+        <Whisper
+          placement="right"
+          trigger="hover"
+          controlId="control-id-hover-enterable"
+          speaker={
+            <Popover title="Delivery Slot">
+              <p style={{maxWidth: '250px'}}>
+                {rowData.deliverySlot.description}
+              </p>
+            </Popover>
+          }
+          enterable>
+          <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
+            {rowData.deliverySlot.id}
+          </span>
+        </Whisper>
+      ),
+    },
+    {title: 'Payment Method', field: 'paymentMethod'},
+    {
+      title: 'Billing Address',
+      render: rowData => (
+        <Whisper
+          placement="right"
+          trigger="hover"
+          controlId="control-id-hover-enterable"
+          speaker={
+            <Popover title={rowData.billingAddress.recipientName}>
+              <p style={{maxWidth: '250px'}}>
+                {rowData.billingAddress.addressLine_1}
+              </p>
+              <p>{rowData.billingAddress.pinCode}</p>
+              <p>
+                <a href={`tel:${rowData.billingAddress.recipientMobileNumber}`}>
+                  {rowData.billingAddress.recipientMobileNumber}
+                </a>
+              </p>
+            </Popover>
+          }
+          enterable>
+          <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
+            {rowData.billingAddress.id}
+          </span>
+        </Whisper>
+      ),
+    },
+    {
+      title: 'Assigned To',
+      render: rowData => (
+        <p>{rowData.assignedTo ? rowData.assignedTo.name : 'N/A'}</p>
+      ),
+    },
+    {
+      title: 'Delivered By',
+      render: rowData => (
+        <p>{rowData.deliveredBy ? rowData.deliveredBy.name : 'N/A'}</p>
+      ),
+    },
+    {
+      title: 'Delivery Fee',
+      render: rowData => <p>{rowData.deliveryFee}</p>,
+    },
+    {
+      title: 'Delivered At',
+      render: row => {
+        let date;
+        if (row.deliveredAt) {
+          date = new Date(row.deliveredAt);
+        }
+        return (
+          <p style={{fontSize: '0.8rem', margin: 0}}>
+            {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+            {row.deliveredAt ? date.toDateString() : 'N/A'}
+          </p>
+        );
+      },
+    },
+    {title: 'Delivered state', field: 'state'},
+    {
+      title: 'Ordered At',
+      render: row => {
+        const date = new Date(row.orderedAt);
+        return (
+          <p style={{fontSize: '0.8rem', margin: 0}}>
+            {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+            {date.toDateString()}
+          </p>
+        );
+      },
+    },
+    {title: 'Offer Price', field: 'offerPrice'},
+    {title: 'Final Price', field: 'finalPrice'},
+    {title: 'Refunded Amount', field: 'refundedAmount'},
+    {title: 'Credit Used', field: 'creditUsed'},
+    {title: 'Offer Code', field: 'offerCode'},
+    {
+      title: 'Actions',
+      cellStyle: {
+        backgroundColor: '#FFF',
+        position: 'sticky',
+        right: 0,
+      },
+      headerStyle: {
+        backgroundColor: '#FFF',
+        position: 'sticky',
+        right: 0,
+        zIndex: 11,
+      },
+      render: rowData => {
+        return (
+          <Whisper
+            placement="autoVerticalEnd"
+            trigger="click"
+            ref={popref}
+            speaker={
+              <RenderMenu
+                rowData={rowData}
+                setRescheduleOpen={setRescheduleOpen}
+                rescheduleOpen={rescheduleOpen}
+                setSelectedData={setSelectedData}
+                setCancleOrderPopup={setCancleOrderPopup}
+                onClose={() => popref.current.close()}
+              />
+            }>
+            <MoreHorizIcon />
+          </Whisper>
+        );
+      },
+    },
+  ];
   const cancelOrder = id => {
     canclearOrder(id)
       .then(res => {
@@ -107,190 +282,33 @@ function OrdersTable() {
   const popref = React.useRef();
   return (
     <div className="mt-3">
-      <Table
-        id="table"
-        height={498}
-        affixHeader
-        bordered
-        cellBordered
-        data={orders}>
-        <Column resizable width={90}>
-          <HeaderCell>Id</HeaderCell>
-          <Cell style={{fontSize: '0.8rem', margin: 0}}>
-            {rowData => <Link to={`/orders/${rowData.id}`}>{rowData.id}</Link>}
-          </Cell>
-        </Column>
-        <Column resizable width={90}>
-          <HeaderCell>Customer Id</HeaderCell>
-          <Cell style={{fontSize: '0.8rem', margin: 0}}>
-            {rowData => (
-              <Link to={`/customers/${rowData.customerId}`}>{rowData.id}</Link>
-            )}
-          </Cell>
-        </Column>
-        <Column resizable width={50}>
-          <HeaderCell>Slot</HeaderCell>
-          <Cell>
-            {rowData => (
-              <Whisper
-                placement="right"
-                trigger="hover"
-                controlId="control-id-hover-enterable"
-                speaker={
-                  <Popover title="Delivery Slot">
-                    <p style={{maxWidth: '250px'}}>
-                      {rowData.deliverySlot.description}
-                    </p>
-                  </Popover>
-                }
-                enterable>
-                <a style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
-                  {rowData.deliverySlot.id}
-                </a>
-              </Whisper>
-            )}
-          </Cell>
-        </Column>
+      <MaterialTable
+        style={{padding: '0 0px', boxShadow: 'none'}}
+        options={{
+          paging: false,
+          padding: 'dense',
 
-        <Column resizable>
-          <HeaderCell>Payment Method</HeaderCell>
-          <Cell
-            dataKey="paymentMethod"
-            style={{fontSize: '0.8rem', margin: 0}}
-          />
-        </Column>
-        <Column resizable width={90}>
-          <HeaderCell>Billing Address</HeaderCell>
-          <Cell>
-            {rowData => (
-              <Whisper
-                placement="right"
-                trigger="hover"
-                controlId="control-id-hover-enterable"
-                speaker={
-                  <Popover title={rowData.billingAddress.recipientName}>
-                    <p style={{maxWidth: '300px'}}>
-                      {rowData.billingAddress.addressLine_1}
-                    </p>
-                    <p>{rowData.billingAddress.pinCode}</p>
-                    <p>
-                      <a
-                        href={`tel:${rowData.billingAddress.recipientMobileNumber}`}>
-                        {rowData.billingAddress.recipientMobileNumber}
-                      </a>
-                    </p>
-                  </Popover>
-                }
-                enterable>
-                <a style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
-                  {rowData.billingAddress.id}
-                </a>
-              </Whisper>
-            )}
-          </Cell>
-        </Column>
-        <Column resizable>
-          <HeaderCell>Assigned To</HeaderCell>
-          <Cell style={{fontSize: '0.8rem', margin: 0}}>
-            {rowData => (
-              <p>{rowData.assignedTo ? rowData.assignedTo.name : 'N/A'}</p>
-            )}
-          </Cell>
-        </Column>
-        <Column resizable>
-          <HeaderCell>Delivered By</HeaderCell>
-          <Cell style={{fontSize: '0.8rem', margin: 0}}>
-            {rowData => (
-              <p>{rowData.deliveredBy ? rowData.deliveredBy.name : 'N/A'}</p>
-            )}
-          </Cell>
-        </Column>
-        <Column resizable width={120}>
-          <HeaderCell>Delivered At</HeaderCell>
-          <Cell>
-            {row => {
-              let date;
-              if (row.deliveredAt) {
-                date = new Date(row.deliveredAt);
-              }
-              return (
-                <p style={{fontSize: '0.8rem', margin: 0}}>
-                  {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
-                  {row.deliveredAt ? date.toDateString() : 'N/A'}
-                </p>
-              );
-            }}
-          </Cell>
-        </Column>
-        <Column resizable>
-          <HeaderCell>Delivered state</HeaderCell>
-          <Cell dataKey="state" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
-        <Column resizable width={120}>
-          <HeaderCell>Ordered At</HeaderCell>
-          <Cell>
-            {row => {
-              const date = new Date(row.orderedAt);
-              return (
-                <p style={{fontSize: '0.8rem', margin: 0}}>
-                  {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
-                  {date.toDateString()}
-                </p>
-              );
-            }}
-          </Cell>
-        </Column>
-        <Column resizable>
-          <HeaderCell>Offer Price</HeaderCell>
-          <Cell dataKey="offerPrice" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
-        <Column resizable>
-          <HeaderCell>finalPrice</HeaderCell>
-          <Cell dataKey="finalPrice" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
-        <Column resizable>
-          <HeaderCell>Refunded Amount</HeaderCell>
-          <Cell
-            dataKey="refundedAmount"
-            style={{fontSize: '0.8rem', margin: 0}}
-          />
-        </Column>
-        <Column resizable>
-          <HeaderCell>Credit Used</HeaderCell>
-          <Cell dataKey="creditUsed" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
+          actionsColumnIndex: -1,
+          search: false,
+          toolbar: false,
+          sorting: false,
+          headerStyle: {
+            fontSize: '13px',
+            fontWeight: '500',
+          },
+          minBodyHeight: '490px',
+          maxBodyHeight: '499px',
+          rowStyle: {
+            fontSize: '13px',
+          },
 
-        <Column resizable>
-          <HeaderCell>Offer Code</HeaderCell>
-          <Cell dataKey="offerCode" style={{fontSize: '0.8rem', margin: 0}} />
-        </Column>
-        <Column width={70} fixed="right">
-          <HeaderCell>Action</HeaderCell>
+          draggable: false,
+        }}
+        columns={column}
+        data={orders}
+        title="Orders"
+      />
 
-          <Cell>
-            {rowData => {
-              return (
-                <Whisper
-                  placement="autoVerticalEnd"
-                  trigger="click"
-                  ref={popref}
-                  speaker={
-                    <RenderMenu
-                      rowData={rowData}
-                      setRescheduleOpen={setRescheduleOpen}
-                      rescheduleOpen={rescheduleOpen}
-                      setSelectedData={setSelectedData}
-                      setCancleOrderPopup={setCancleOrderPopup}
-                      onClose={() => popref.current.close()}
-                    />
-                  }>
-                  <MoreHorizIcon />
-                </Whisper>
-              );
-            }}
-          </Cell>
-        </Column>
-      </Table>
       {selectData ? (
         <RescheduleOrder
           open={rescheduleOpen}

@@ -1,8 +1,12 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
+import {Link} from 'react-router-dom';
 import {Cell, Column, HeaderCell, Table} from 'rsuite-table';
 import AssignmentsTableToolBar from './AssignmentsTableToolBar';
 
 function OrderStateSummary({orderStateSummary}) {
+  const {date} = useSelector(state => state.assignments.dateandslot);
+
   return (
     <div>
       <AssignmentsTableToolBar title="Order State Summary" />
@@ -13,23 +17,63 @@ function OrderStateSummary({orderStateSummary}) {
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>In Inventory</HeaderCell>
-          <Cell dataKey="inInventoryCount" />
+          <Cell>
+            {row => (
+              <Link
+                style={{color: 'blue'}}
+                to={`orders?slotId=${row.slotId}&deliveryDate=${date}&state=IN_INVENTORY`}>
+                {row.inInventoryCount}
+              </Link>
+            )}
+          </Cell>
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>In Transit</HeaderCell>
-          <Cell dataKey="inTransitCount" />
+          <Cell>
+            {row => (
+              <Link
+                style={{color: 'blue'}}
+                to={`orders?slotId=${row.slotId}&deliveryDate=${date}&state=IN_TRANSIT`}>
+                {row.inTransitCount}
+              </Link>
+            )}
+          </Cell>
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>Delivered</HeaderCell>
-          <Cell dataKey="deliveredCount" />
+          <Cell>
+            {row => (
+              <Link
+                style={{color: 'blue'}}
+                to={`orders?slotId=${row.slotId}&deliveryDate=${date}&state=DELIVERED`}>
+                {row.deliveredCount}
+              </Link>
+            )}
+          </Cell>
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>Assigned</HeaderCell>
-          <Cell dataKey="assignedCount" />
+          <Cell>
+            {row => (
+              <Link
+                style={{color: 'blue'}}
+                to={`orders?slotId=${row.slotId}&deliveryDate=${date}&state=ASSIGNED`}>
+                {row.assignedCount}
+              </Link>
+            )}
+          </Cell>
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>Cancelled</HeaderCell>
-          <Cell dataKey="cancelledCount" />
+          <Cell>
+            {row => (
+              <Link
+                style={{color: 'blue'}}
+                to={`orders?slotId=${row.slotId}&deliveryDate=${date}&state=CANCELLED`}>
+                {row.cancelledCount}
+              </Link>
+            )}
+          </Cell>
         </Column>
       </Table>
     </div>

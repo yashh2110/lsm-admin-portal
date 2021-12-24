@@ -219,11 +219,22 @@ function Routes() {
             <Route
               exact
               path="/orders"
-              render={props => (
-                <Index activeTab={activeTab}>
-                  <Orders setActiveTab={setActiveTab} />
-                </Index>
-              )}
+              render={props => {
+                const query = new URLSearchParams(props.location.search);
+                const slotIdParam = query.get('slotId');
+                const deliveryDateParam = query.get('deliveryDate');
+                const deliveryStateparam = query.get('state');
+                return (
+                  <Index activeTab={activeTab}>
+                    <Orders
+                      setActiveTab={setActiveTab}
+                      deliveryDateParam={deliveryDateParam}
+                      deliveryStateparam={deliveryStateparam}
+                      slotIdParam={slotIdParam}
+                    />
+                  </Index>
+                );
+              }}
             />
             <Route
               exact

@@ -33,9 +33,9 @@ const reducer = (state, {type, payload}) => {
     case 'warehouseId':
       return {...state, warehouseId: payload};
     case 'po_paymentState':
-      return {...state, paymentState: payload};
+      return {...state, po_paymentState: payload};
     case 'po_purchaseState':
-      return {...state, purchaseState: payload};
+      return {...state, po_purchaseState: payload};
     case 'comments':
       return {...state, comments: payload};
     case 'orderAmount':
@@ -43,7 +43,7 @@ const reducer = (state, {type, payload}) => {
     case 'addProductItems':
       return {
         ...state,
-        purchaseOrderItems: [
+        purchaseOrderItemsRequests: [
           {
             ...payload,
             itemImages: [
@@ -52,13 +52,13 @@ const reducer = (state, {type, payload}) => {
               },
             ],
           },
-          ...state.purchaseOrderItems,
+          ...state.purchaseOrderItemsRequests,
         ],
         orderAmount: state.orderAmount + payload.totalPrice,
       };
     case 'updateProducts':
       let count = 0;
-      const updatedProductItems = state.purchaseOrderItems.map(i => {
+      const updatedProductItems = state.purchaseOrderItemsRequests.map(i => {
         if (i['itemId'] === payload['itemId']) {
           count = count + payload.totalPrice;
           return {
@@ -76,32 +76,32 @@ const reducer = (state, {type, payload}) => {
       });
       return {
         ...state,
-        purchaseOrderItems: updatedProductItems,
+        purchaseOrderItemsRequests: updatedProductItems,
         orderAmount: count,
       };
     case 'removeProductItems':
-      const filterdList = state.purchaseOrderItems.filter(
+      const filterdList = state.purchaseOrderItemsRequests.filter(
         i => i['itemId'] !== payload['itemId'],
       );
       return {
         ...state,
-        purchaseOrderItems: filterdList,
+        purchaseOrderItemsRequests: filterdList,
         orderAmount: state.orderAmount - payload.totalPrice,
       };
     case 'itemQuantity':
-      const quantityfilterdList = state.purchaseOrderItems.map(i => {
+      const quantityfilterdList = state.purchaseOrderItemsRequests.map(i => {
         if (i['id'] === payload['id']) {
           i['quantity'] = payload['quantity'];
         }
         return i;
       });
-      return {...state, purchaseOrderItems: quantityfilterdList};
+      return {...state, purchaseOrderItemsRequests: quantityfilterdList};
     case 'bulkExpDate':
-      const poitems = state.purchaseOrderItems.map(e => ({
+      const poitems = state.purchaseOrderItemsRequests.map(e => ({
         ...e,
         expiresAt: payload,
       }));
-      return {...state, purchaseOrderItems: poitems};
+      return {...state, purchaseOrderItemsRequests: poitems};
     default:
       return state;
   }
@@ -141,8 +141,16 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
   };
   const pocSubmit = async () => {
     dispatch(setLoader(true));
-
-    createDuplicatePurchaseOrderService(pocForm)
+    const params = {
+      ...pocForm,
+      purchaseOrderItemsRequests: pocForm.purchaseOrderItemsRequests.map(i => ({
+        itemId: i.itemId,
+        quantity: i.quantity,
+        unitPrice: i.unitPrice,
+        expiresAt: i.expiresAt,
+      })),
+    };
+    createDuplicatePurchaseOrderService(params)
       .then(res => {
         toast.success('Purchase Order Created', {
           position: 'top-right',
@@ -167,8 +175,20 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
     setActiveTab(3);
     getPurchaseOrder(id)
       .then(res => {
-        setItem(res.data);
-        formDispatch({type: 'initial', payload: res.data});
+        const data = {
+          vendorId: res.data.vendorId,
+          warehouseId: res.data.warehouseId,
+          po_paymentState: res.data.paymentState,
+          po_purchaseState: res.data.purchaseState,
+          comments: res.data.comments,
+          orderAmount: res.data.orderAmount,
+          purchaseOrderItemsRequests: res.data.purchaseOrderItems,
+        };
+        setItem(data);
+        formDispatch({
+          type: 'initial',
+          payload: data,
+        });
       })
       .then(err => {
         console.log(err);
@@ -268,7 +288,7 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
                     labelId="status"
                     id="selectStatus"
                     label="Status"
-                    value={pocForm.purchaseState || ''}
+                    value={pocForm.po_purchaseState || ''}
                     onChange={e =>
                       formDispatch({
                         type: 'po_purchaseState',
@@ -296,7 +316,7 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
                     labelId="status"
                     id="selectStatus"
                     label="Status"
-                    value={pocForm.paymentState || ''}
+                    value={pocForm.po_paymentState || ''}
                     onChange={e =>
                       formDispatch({
                         type: 'po_paymentState',
@@ -360,7 +380,7 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
                               i={i}
                               key={i.id}
                               dispatch={formDispatch}
-                              addedProducts={pocForm.purchaseOrderItems}
+                              addedProducts={pocForm.purchaseOrderItemsRequests}
                             />
                           );
                         })
@@ -418,8 +438,8 @@ function PurchaseOrderDuplicateForm({setActiveTab, id}) {
               </div>
             </div>
             <div className="productPrev">
-              {pocForm.purchaseOrderItems?.length >= 1 ? (
-                pocForm.purchaseOrderItems.map(e => (
+              {pocForm.purchaseOrderItemsRequests?.length >= 1 ? (
+                pocForm.purchaseOrderItemsRequests.map(e => (
                   <ProductUpdateFormPrev
                     e={e}
                     dispatch={formDispatch}

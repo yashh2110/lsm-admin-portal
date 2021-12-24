@@ -40,3 +40,18 @@ export const getSlotsForNextNDays = async orderId => {
     `${BASE_URL_V2}/orders/reschedule/slots/list?orderId=${orderId}`,
   );
 };
+
+export const getRefundsAndReturnsByOrderId = async orderId => {
+  return await axios.get(`${BASE_URL_V2}/refund-returns/${orderId}/list`);
+};
+
+export const partialRefund = async ({orderId, amount, orderItemId}) => {
+  return await axios.post(
+    `${BASE_URL_V2}/refunds/partial-refund?orderId=${orderId}&amount=${amount}&orderItemId=${orderItemId}`,
+  );
+};
+export const refundToSource = async id => {
+  return await axios.post(
+    `${BASE_URL_V2}/refunds/refund-to-source?orderDenyAuditId=${id}`,
+  );
+};

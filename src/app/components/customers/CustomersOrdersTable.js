@@ -21,9 +21,9 @@ function CustomerOrdersTable({data}) {
             </Popover>
           }
           enterable>
-          <a style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
+          <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
             {rowData.deliverySlot.id}
-          </a>
+          </span>
         </Whisper>
       ),
     },
@@ -42,16 +42,18 @@ function CustomerOrdersTable({data}) {
               </p>
               <p>{rowData.billingAddress.pinCode}</p>
               <p>
-                <a href={`tel:${rowData.billingAddress.recipientMobileNumber}`}>
+                <a
+                  href={`tel:${rowData.billingAddress.recipientMobileNumber}`}
+                  rel="noopener noreferrer">
                   {rowData.billingAddress.recipientMobileNumber}
                 </a>
               </p>
             </Popover>
           }
           enterable>
-          <a style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
+          <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
             {rowData.billingAddress.id}
-          </a>
+          </span>
         </Whisper>
       ),
     },

@@ -5,6 +5,8 @@ import {
   setOrders,
   setOrderStateSummary,
 } from '../../../redux/actions/Assignments';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
 import DownloadIcon from '@mui/icons-material/Download';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -24,11 +26,85 @@ import 'rsuite/styles/index.less';
 
 import {Checkbox, Fab} from '@material-ui/core';
 import AssignmentsTableToolBar from './AssignmentsTableToolBar';
+import {Dropdown, Whisper, Popover} from 'rsuite';
+import {Dialog} from '@mui/material';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import {PDFViewer} from '@react-pdf/renderer';
+import OrderTags from '../pdfs/OrderTags';
+
+const makeTransit = async rowData => {
+  makeTransitService(rowData)
+    .then(res => {
+      toast.success('Order is in transit now', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
+    })
+    .catch(err => {
+      toast.error('Something went wrong', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
+    });
+};
+
+const RenderMenu = React.forwardRef(
+  (
+    {
+      onClose,
+      rowdata,
+      setSelectedData,
+      setDeliveryBoy,
+      deleteAssignment,
+      setOpen,
+      ...rest
+    },
+    ref,
+  ) => {
+    const handleSelect = eventKey => {
+      onClose();
+    };
+    return (
+      <Popover ref={ref} {...rest} full>
+        <Dropdown.Menu onSelect={handleSelect}>
+          <Dropdown.Item
+            onClick={() => {
+              makeTransit(rowdata);
+            }}>
+            Move to transit
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              downloadInvoicesService(rowdata);
+            }}>
+            Download Invoices
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              deleteAssignment(rowdata);
+            }}>
+            Delete Assignment
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              setDeliveryBoy(rowdata.id);
+              setOpen(true);
+            }}>
+            Print Order Tags
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Popover>
+    );
+  },
+);
 
 function AssignedOrders({assignedOrders}) {
+  const popref = React.useRef();
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const {date, slotstr} = useSelector(state => state.assignments.dateandslot);
-
+  const [selectedData, setSelectedData] = useState();
+  const [deliveryBoy, setDeliveryBoy] = useState();
   const [checkedKeys, setCheckedKeys] = useState([]);
   let checked = false;
   let indeterminate = false;
@@ -99,21 +175,6 @@ function AssignedOrders({assignedOrders}) {
         });
       });
   };
-  const makeTransit = async rowData => {
-    makeTransitService(rowData)
-      .then(res => {
-        toast.success('Order is in transit now', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-      })
-      .catch(err => {
-        toast.error('Something went wrong', {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-      });
-  };
 
   return (
     <div style={{position: 'relative', height: '600px'}}>
@@ -177,7 +238,24 @@ function AssignedOrders({assignedOrders}) {
           <Cell className="link-group">
             {rowData => (
               <>
-                <Fab
+                <Whisper
+                  placement="autoVerticalEnd"
+                  trigger="click"
+                  ref={popref}
+                  speaker={
+                    <RenderMenu
+                      rowdata={rowData}
+                      setDeliveryBoy={setDeliveryBoy}
+                      setOpen={setOpen}
+                      deleteAssignment={deleteAssignment}
+                      setSelectedData={setSelectedData}
+                      onClose={() => popref.current.close()}
+                    />
+                  }>
+                  <MoreHorizIcon />
+                </Whisper>
+
+                {/* <Fab
                   color="light"
                   size="small"
                   style={{
@@ -201,7 +279,6 @@ function AssignedOrders({assignedOrders}) {
                   onClick={() => downloadInvoicesService(rowData)}>
                   <DownloadIcon fontSize={'100px'} />
                 </Fab>
-
                 <Fab
                   color="light"
                   size="small"
@@ -213,12 +290,44 @@ function AssignedOrders({assignedOrders}) {
                   aria-label="add"
                   onClick={() => deleteAssignment(rowData)}>
                   <DeleteIcon fontSize={'100px'} />
-                </Fab>
+                </Fab> */}
               </>
             )}
           </Cell>
         </Column>
       </Table>
+      {deliveryBoy ? (
+        <Dialog
+          onClose={() => {
+            setOpen(false);
+            setDeliveryBoy(null);
+          }}
+          open={open}
+          fullWidth
+          maxWidth={800}>
+          <CloseOutlinedIcon
+            onClick={() => {
+              setDeliveryBoy(null);
+              setOpen(false);
+            }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              color: 'grey',
+              margin: '10px',
+              fontSize: '2rem',
+              backgroundColor: 'rgba(233, 224, 224)',
+              borderRadius: '50%',
+            }}
+          />
+          <PDFViewer
+            style={{width: '100%', height: '100vh'}}
+            fileName={date + '.pdf'}>
+            <OrderTags date={date} deliveryBoy={deliveryBoy} />
+          </PDFViewer>
+        </Dialog>
+      ) : null}
     </div>
   );
 }

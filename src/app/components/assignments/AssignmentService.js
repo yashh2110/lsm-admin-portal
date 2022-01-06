@@ -95,3 +95,12 @@ export const getAllService = async (date, slot) => {
     getOrderStateSummary(date),
   ]);
 };
+
+export const getActiveOrderByDate = async (date, deliveryBoy) => {
+  let URL =
+    process.env.REACT_APP_API +
+    `admin/v2/orders/active-orders/cards?deliveryDate=${date}`;
+  if (deliveryBoy) URL = URL + `&deliveryBoy=${deliveryBoy}`;
+
+  return await axios.get(URL);
+};

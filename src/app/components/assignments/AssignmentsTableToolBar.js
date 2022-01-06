@@ -3,7 +3,15 @@ import '../../css/common/Toolbar.css';
 import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 import Button from '@material-ui/core/Button';
 import {downloadEstimationService} from './AssignmentService';
-function AssignmentsTableToolBar({checkedKeys, title, downloadEstimation}) {
+import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
+function AssignmentsTableToolBar({
+  checkedKeys,
+  title,
+  downloadEstimation,
+  printActiveOrders,
+  date,
+  setOpen,
+}) {
   return (
     <div
       className="toolbar"
@@ -21,6 +29,15 @@ function AssignmentsTableToolBar({checkedKeys, title, downloadEstimation}) {
           className="mt-3"
           onClick={() => downloadEstimationService(checkedKeys)}>
           <SimCardDownloadIcon /> Download Estimation
+        </Button>
+      ) : null}
+      {printActiveOrders ? (
+        <Button
+          variant="outlined"
+          className="mt-3"
+          disabled={date ? false : true}
+          onClick={() => setOpen(() => true)}>
+          <LocalPrintshopOutlinedIcon style={{marginRight: '5px'}} /> Order Tags
         </Button>
       ) : null}
     </div>

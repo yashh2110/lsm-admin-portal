@@ -1,10 +1,18 @@
 import MaterialTable from 'material-table';
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {Popover, Whisper} from 'rsuite';
 
 function CustomerOrdersTable({data}) {
   const column = [
-    {title: 'Order Id', field: 'id'},
+    {
+      title: 'Order Id',
+      render: rowData => (
+        <Link to={`/orders/${rowData.id}`} style={{color: 'blue'}}>
+          {rowData.id}
+        </Link>
+      ),
+    },
     {
       title: 'Slot',
       field: 'orderId',

@@ -20,15 +20,15 @@ function ProductsTable({
       </div>
       <MaterialTable
         style={{padding: '0 8px', boxShadow: 'none'}}
-        onRowClick={(event, rowData) => {
-          setRowData(rowData);
-          setViewProduct(true);
-        }}
+        // onRowClick={(event, rowData) => {
+        //   setRowData(rowData);
+        //   setViewProduct(true);
+        // }}
         options={{
           paging: false,
           padding: 'dense',
           sorting: false,
-          actionsColumnIndex: -1,
+          actions: false,
           toolbar: false,
           minBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
           maxBodyHeight: 'calc(100vh - (92px + 67px + 16px))',
@@ -38,16 +38,16 @@ function ProductsTable({
 
           draggable: false,
         }}
-        actions={[
-          {
-            icon: () => <EditOutlinedIcon />,
-            tooltip: 'Edit',
-            onClick: (event, rowData) => {
-              setUpdateopen(true);
-              setRowData(rowData);
-            },
-          },
-        ]}
+        // actions={[
+        //   {
+        //     icon: () => <EditOutlinedIcon />,
+        //     tooltip: 'Edit',
+        //     onClick: (event, rowData) => {
+        //       setUpdateopen(true);
+        //       setRowData(rowData);
+        //     },
+        //   },
+        // ]}
         columns={columns}
         data={products}
         title="Products"

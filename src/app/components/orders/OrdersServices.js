@@ -55,3 +55,13 @@ export const refundToSource = async id => {
     `${BASE_URL_V2}/refunds/refund-to-source?orderDenyAuditId=${id}`,
   );
 };
+
+export const markAsDeliveredService = async orderId => {
+  return await axios.post(`${BASE_URL_V2}/orders/${orderId}/mark-delivered`);
+};
+
+export const rearrangeCl = async ({id, cl}) => {
+  return await axios.post(
+    `${BASE_URL_V2}/orders/reAssignPartner?orderId=${id}&partnerId=${cl}`,
+  );
+};

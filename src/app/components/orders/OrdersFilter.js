@@ -25,7 +25,21 @@ function OrdersFilter({slotIdParam, deliveryDateParam, deliveryStateparam}) {
   } = useSelector(state => state.orders);
   const dispatch = useDispatch();
   return (
-    <div className="filters">
+    <form
+      className="filters"
+      onSubmit={e => {
+        e.preventDefault();
+        dispatch(
+          getAllOrders({
+            assignedTo,
+            customerId,
+            deliveryDate,
+            deliveryState,
+            orderId,
+            slotId,
+          }),
+        );
+      }}>
       <TextField
         type="text"
         label="Order Id"
@@ -118,18 +132,19 @@ function OrdersFilter({slotIdParam, deliveryDateParam, deliveryStateparam}) {
       </TextField>
       <button
         className="btn"
-        onClick={() =>
-          dispatch(
-            getAllOrders({
-              assignedTo,
-              customerId,
-              deliveryDate,
-              deliveryState,
-              orderId,
-              slotId,
-            }),
-          )
-        }
+        type="submit"
+        // onClick={() =>
+        //   dispatch(
+        //     getAllOrders({
+        //       assignedTo,
+        //       customerId,
+        //       deliveryDate,
+        //       deliveryState,
+        //       orderId,
+        //       slotId,
+        //     }),
+        //   )
+        // }
         style={{
           backgroundColor: 'rgb(223, 223, 223)',
           fontWeight: '500',
@@ -150,7 +165,7 @@ function OrdersFilter({slotIdParam, deliveryDateParam, deliveryStateparam}) {
         }}>
         Download Invoices
       </button>
-    </div>
+    </form>
   );
 }
 

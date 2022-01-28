@@ -179,7 +179,7 @@ function EstimationToolbar() {
           onClick={() =>
             downloadEstimationService({category, startDate, endDate, slotId})
           }
-          disabled={category && startDate && endDate && slotId ? false : true}
+          disabled={startDate ? false : true}
           style={{
             backgroundColor: 'rgb(223, 223, 223)',
             fontWeight: '500',

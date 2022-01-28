@@ -64,10 +64,10 @@ function RescheduleOrder({open, handleClose, rowData}) {
       });
   }, []);
   const days = [
-    'Today',
     'Tomorrow',
     'Day After Tomorrow',
-    'Next To Day Ater Tomorrow',
+    '3 Days From Now',
+    '4 Days From Now ',
   ];
   return (
     <div>

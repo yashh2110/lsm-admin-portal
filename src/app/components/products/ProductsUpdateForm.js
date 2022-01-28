@@ -33,6 +33,8 @@ const reducer = (state, {type, payload}) => {
       return {...state, actualPrice: payload};
     case 'discountedPrice':
       return {...state, discountedPrice: payload};
+    case 'itemTag':
+      return {...state, itemTag: payload};
     case 'eanCode':
       return {...state, eanCode: payload};
     case 'estimationType':
@@ -270,7 +272,16 @@ function ProductsUpdateForm({open, handleClose, data}) {
                 : null}
             </Select>
           </FormControl>
-
+          <TextField
+            fullWidth
+            value={form.itemTag}
+            onChange={e => dispatch({type: 'itemTag', payload: e.target.value})}
+            margin="dense"
+            id="itemTag"
+            label="Tag Name"
+            type="text"
+            variant="standard"
+          />
           <TextField
             required
             fullWidth

@@ -5,8 +5,10 @@ export const downloadEstimationService = ({
   endDate,
   slotId,
 }) => {
-  window.open(
-    URL_BASE +
-      `/download?category=${category}&deliveryStartDate=${startDate}&deliveryEndDate=${endDate}&slotId=${slotId}`,
-  );
+  let URL = URL_BASE + `/download?`;
+  if (category) URL = URL + `category=${category}&`;
+  if (slotId) URL = URL + `slotId=${slotId}&`;
+  if (endDate) URL = URL + `deliveryEndDate=${endDate}&`;
+  if (startDate) URL = URL + `deliveryStartDate=${startDate}`;
+  window.open(URL);
 };

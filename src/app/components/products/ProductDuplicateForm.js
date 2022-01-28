@@ -1,5 +1,5 @@
-import React, {useReducer, useRef, useState} from 'react';
-import Button from '@material-ui/core/Button';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -9,35 +9,18 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import DialogTitle from '@mui/material/DialogTitle';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
-import {useSelector} from 'react-redux';
 import {getProducts} from '../../../redux/actions/Products';
-import {createProduct, uploadProductImgService} from './ProductService';
+import {
+  createProduct,
+  updateProductImgService,
+  uploadProductImgService,
+} from './ProductService';
+import axios from 'axios';
 import {setLoader} from '../../../redux/actions/Loader';
-
-const initial = {
-  name: '',
-  subName: '',
-  categoryId: '',
-  actualPrice: '',
-  thresholdQuantity: '',
-  discountedPrice: '',
-  eanCode: '',
-  imageUrlList: [],
-  estimationType: '',
-  estimationUnit: '',
-  availableQuantity: '',
-  hsnCode: '',
-  maxAllowedQuantity: '',
-  priority: '',
-  onDemand: '',
-  isActive: '',
-};
 const reducer = (state, {type, payload}) => {
   switch (type) {
-    case 'initial':
-      return initial;
     case 'imageUrlList':
       return {...state, imageUrlList: [payload]};
     case 'name':
@@ -60,10 +43,10 @@ const reducer = (state, {type, payload}) => {
       return {...state, estimationUnit: payload};
     case 'hsnCode':
       return {...state, hsnCode: payload};
-    case 'availableQuantity':
-      return {...state, availableQuantity: payload};
     case 'thresholdQuantity':
       return {...state, thresholdQuantity: payload};
+    case 'availableQuantity':
+      return {...state, availableQuantity: payload};
     case 'maxAllowedQuantity':
       return {...state, maxAllowedQuantity: payload};
     case 'priority':
@@ -72,24 +55,26 @@ const reducer = (state, {type, payload}) => {
       return {...state, onDemand: payload};
     case 'isActive':
       return {...state, isActive: payload};
-
+    // case 'img'
     default:
       return state;
   }
 };
-
-function ProductCreateForm({open, handleClose}) {
-  const [form, dispatch] = useReducer(reducer, initial);
+function ProductDuplicateForm({open, handleClose, data}) {
+  console.log(data);
   const filters = useSelector(state => state.products.filters);
+  const initial = {...data, imageUrlList: []};
+  const [form, dispatch] = useReducer(reducer, initial);
+  const categories = useSelector(state => state.products.catogories);
+  const reducDispatch = useDispatch();
   const [imageLoading, setImageLoading] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
-  const productImgRef = useRef();
   const [selectedImage, setSelectedImage] = useState('');
-
-  const categories = useSelector(state => state.products.catogories);
-  const reducDispatch = useDispatch();
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const productImgRef = useRef();
+
   const submit = async e => {
     e.preventDefault();
     dispatch(setLoader(true));
@@ -104,7 +89,7 @@ function ProductCreateForm({open, handleClose}) {
           }),
         );
         dispatch(setLoader(false));
-        toast.success('Product Created Succefully', {
+        toast.success('Product Duplicated Succefully', {
           position: 'top-right',
           autoClose: 2000,
         });
@@ -142,50 +127,19 @@ function ProductCreateForm({open, handleClose}) {
       toast.error('Please Select image');
     }
   };
+  useEffect(() => {
+    if (data.productImageInfoList[0]) {
+      dispatch({
+        type: 'imageUrlList',
+        payload: data.productImageInfoList[0].mediumImagePath,
+      });
+    }
+  }, []);
   return (
-    <Dialog
-      open={open}
-      // onClose={() => {
-      //   dispatch({type: 'initial'});
-      //   handleClose();
-      // }}
-      className="p-4">
-      <DialogTitle>Create Product</DialogTitle>
+    <Dialog open={open} className="p-4">
+      <DialogTitle>Duplicate Product</DialogTitle>
       <form onSubmit={submit}>
         <DialogContent>
-          {/* <div className="d-flex justify-content-center align-items-end">
-            <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="imageUrlList"
-              inputRef={productImgRef}
-              onChange={() => {
-                setImageSelected(true);
-                setImageUploaded(false);
-              }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{mr: '5px'}}
-              label="Product Image"
-              type="file"
-              variant="standard"
-              fullWidth
-            />
-            <Button
-              variant="outlined"
-              disabled={imageSelected ? false : true}
-              color="secondary"
-              onClick={uploadImage}
-              className="mb-1 ">
-              {imageLoading
-                ? 'loading..'
-                : imageUploaded
-                ? 'Uploaded'
-                : 'Upload'}
-            </Button>
-          </div> */}
           <div className="productPic">
             <label
               htmlFor="image"
@@ -194,9 +148,18 @@ function ProductCreateForm({open, handleClose}) {
                   ? {
                       backgroundImage: 'url(' + selectedImage + ')',
                     }
+                  : form.productImageInfoList[0]
+                  ? {
+                      backgroundImage:
+                        'url(' +
+                        form.productImageInfoList[0].mediumImagePath +
+                        ')',
+                    }
                   : null
               }>
-              {selectedImage ? null : 'Upload Product'}
+              {selectedImage || form.productImageInfoList[0]
+                ? null
+                : 'Upload Product'}
             </label>
             <input
               ref={productImgRef}
@@ -223,8 +186,43 @@ function ProductCreateForm({open, handleClose}) {
                 : 'Upload'}
             </button>
           </div>
+          {/* <div className="d-flex justify-content-center align-items-end">
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="imageUrlList"
+              inputRef={productImgRef}
+              onChange={() => {
+                setImageSelected(true);
+                setImageUploaded(false);
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{mr: '5px'}}
+              label="Product Image"
+              type="file"
+              variant="standard"
+              fullWidth
+            />
+            
+            <Button
+              variant="outlined"
+              disabled={imageSelected ? false : true}
+              color="secondary"
+              onClick={uploadImage}
+              className="mb-1 ">
+              {imageLoading
+                ? 'loading..'
+                : imageUploaded
+                ? 'Uploaded'
+                : 'Upload'}
+            </Button>
+          </div> */}
           <TextField
             required
+            autoFocus
             margin="dense"
             id="name"
             value={form.name}
@@ -356,7 +354,6 @@ function ProductCreateForm({open, handleClose}) {
             type="number"
             variant="standard"
           />
-
           <FormControl
             variant="standard"
             fullWidth
@@ -501,13 +498,10 @@ function ProductCreateForm({open, handleClose}) {
             </Select>
           </FormControl>
         </DialogContent>
-
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button
-            type="submit"
-            disabled={form.imageUrlList?.length >= 1 ? isDisabled : true}>
-            Create
+          <Button type="submit" disabled={isDisabled}>
+            Duplicate
           </Button>
         </DialogActions>
       </form>
@@ -515,4 +509,4 @@ function ProductCreateForm({open, handleClose}) {
   );
 }
 
-export default ProductCreateForm;
+export default ProductDuplicateForm;

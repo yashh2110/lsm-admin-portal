@@ -3,7 +3,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import Dropdown from 'rsuite/Dropdown';
 import {Popover, Whisper} from 'rsuite';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import {canclearOrder, downloadOrderInvoice} from './OrdersServices';
+import {
+  canclearOrder,
+  downloadOrderInvoice,
+  markAsDeliveredService,
+} from './OrdersServices';
 import {toast} from 'react-toastify';
 import RescheduleOrder from './RescheduleOrder';
 import {getAllOrders, getOrdersByPage} from '../../../redux/actions/Orders';
@@ -12,6 +16,9 @@ import {useHistory} from 'react-router';
 import {Link} from 'react-router-dom';
 import {Waypoint} from 'react-waypoint';
 import MaterialTable from 'material-table';
+import {Icon} from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import RearrangeCl from './RearrangeCl';
 const RenderMenu = React.forwardRef(
   (
     {
@@ -20,7 +27,9 @@ const RenderMenu = React.forwardRef(
       rescheduleOpen,
       setRescheduleOpen,
       setCancleOrderPopup,
+      setOpenMarkAsDelivered,
       setSelectedData,
+      setOpenRearrangeCl,
       ...rest
     },
     ref,
@@ -57,6 +66,24 @@ const RenderMenu = React.forwardRef(
             }}>
             Reschedule Order
           </Dropdown.Item>
+          {rowData.state === 'ASSIGNED' || rowData.state === 'IN_TRANSIT' ? (
+            <>
+              <Dropdown.Item
+                onClick={() => {
+                  setSelectedData(rowData);
+                  setOpenMarkAsDelivered(true);
+                }}>
+                Mark As Delivered
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  setSelectedData(rowData);
+                  setOpenRearrangeCl(true);
+                }}>
+                Rearrange CL
+              </Dropdown.Item>
+            </>
+          ) : null}
         </Dropdown.Menu>
       </Popover>
     );
@@ -69,6 +96,8 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
   const [rescheduleOpen, setRescheduleOpen] = React.useState(false);
   const [selectData, setSelectedData] = useState();
   const [cancleOrderPopup, setCancleOrderPopup] = useState(false);
+  const [openMarkAsDelivered, setOpenMarkAsDelivered] = useState(false);
+  const [openRearrangeCl, setOpenRearrangeCl] = useState(false);
   const {
     assignedTo,
     customerId,
@@ -136,8 +165,23 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
             </Popover>
           }
           enterable>
-          <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
+          <span
+            style={{
+              fontSize: '0.8rem',
+              margin: 0,
+              cursor: 'pointer',
+              display: 'flex',
+              justifyContent: 'center',
+            }}>
             {rowData.deliverySlot.id}
+            <InfoOutlinedIcon
+              style={{
+                marginLeft: 3,
+                fontSize: 20,
+                paddingBottom: 2,
+                color: 'grey',
+              }}
+            />
           </span>
         </Whisper>
       ),
@@ -152,7 +196,7 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
           controlId="control-id-hover-enterable"
           speaker={
             <Popover title={rowData.billingAddress.recipientName}>
-              <p style={{maxWidth: '250px'}}>
+              <p style={{maxWidth: '280px'}}>
                 {rowData.billingAddress.addressLine_1}
               </p>
               <p>{rowData.billingAddress.pinCode}</p>
@@ -166,21 +210,105 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
           enterable>
           <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
             {rowData.billingAddress.id}
+            <InfoOutlinedIcon
+              style={{
+                marginLeft: 3,
+                fontSize: 20,
+                paddingBottom: 2,
+                color: 'grey',
+              }}
+            />
           </span>
         </Whisper>
       ),
     },
     {
       title: 'Assigned To',
-      render: rowData => (
-        <p>{rowData.assignedTo ? rowData.assignedTo.name : 'N/A'}</p>
-      ),
+      render: rowData =>
+        rowData.assignedTo ? (
+          <Whisper
+            placement="right"
+            trigger="hover"
+            controlId="control-id-hover-enterable"
+            speaker={
+              <Popover title="Assigned By">
+                <p>{rowData.assignedTo?.name}</p>
+                {/* <p>{rowData.assignedTo.pinCode}</p> */}
+                <p>
+                  <a href={`tel:${rowData.assignedTo?.phoneNumber}`}>
+                    {rowData.assignedTo?.phoneNumber}
+                  </a>
+                </p>
+              </Popover>
+            }
+            enterable>
+            <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
+              {rowData.assignedTo?.id}
+              <InfoOutlinedIcon
+                style={{
+                  marginLeft: 3,
+                  fontSize: 20,
+                  paddingBottom: 2,
+                  color: 'grey',
+                }}
+              />
+            </span>
+          </Whisper>
+        ) : (
+          'N/A'
+        ),
+    },
+
+    {
+      title: 'Delivery Date',
+      render: row => {
+        let date;
+        if (row.deliveryDate) {
+          date = new Date(row.deliveryDate);
+        }
+        return (
+          <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
+            {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+            {row.deliveryDate ? date.toDateString() : 'N/A'}
+          </p>
+        );
+      },
     },
     {
       title: 'Delivered By',
-      render: rowData => (
-        <p>{rowData.deliveredBy ? rowData.deliveredBy.name : 'N/A'}</p>
-      ),
+      render: rowData =>
+        rowData.deliveredBy ? (
+          <Whisper
+            placement="right"
+            trigger="hover"
+            controlId="control-id-hover-enterable"
+            speaker={
+              <Popover title="Assigned By">
+                <p>{rowData.deliveredBy?.name}</p>
+                {/* <p>{rowData.deliveredBy.pinCode}</p> */}
+                <p>
+                  <a href={`tel:${rowData.deliveredBy?.phoneNumber}`}>
+                    {rowData.deliveredBy?.phoneNumber}
+                  </a>
+                </p>
+              </Popover>
+            }
+            enterable>
+            <span style={{fontSize: '0.8rem', margin: 0, cursor: 'pointer'}}>
+              {rowData.deliveredBy?.id}
+              <InfoOutlinedIcon
+                style={{
+                  marginLeft: 3,
+                  fontSize: 20,
+                  paddingBottom: 2,
+                  color: 'grey',
+                }}
+              />
+            </span>
+          </Whisper>
+        ) : (
+          'N/A'
+        ),
     },
     {
       title: 'Delivery Fee',
@@ -217,7 +345,7 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
     {title: 'Offer Price', field: 'offerPrice'},
     {title: 'Final Price', field: 'finalPrice'},
     {title: 'Refunded Amount', field: 'refundedAmount'},
-    {title: 'Credit Used', field: 'creditUsed'},
+    {title: 'Wallet', field: 'creditUsed'},
     {title: 'Offer Code', field: 'offerCode'},
     {
       title: 'Actions',
@@ -245,6 +373,8 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
                 rescheduleOpen={rescheduleOpen}
                 setSelectedData={setSelectedData}
                 setCancleOrderPopup={setCancleOrderPopup}
+                setOpenRearrangeCl={setOpenRearrangeCl}
+                setOpenMarkAsDelivered={setOpenMarkAsDelivered}
                 onClose={() => popref.current.close()}
               />
             }>
@@ -277,6 +407,34 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
           autoClose: 2000,
         });
         console.log(err);
+      });
+  };
+  const markAsDelivered = (id, setIsDisabled) => {
+    setIsDisabled(true);
+    markAsDeliveredService(id)
+      .then(res => {
+        toast.success(res.data, {
+          autoClose: 3000,
+        });
+        dispatch(
+          getAllOrders({
+            assignedTo,
+            customerId,
+            deliveryDate,
+            deliveryState,
+            orderId,
+            slotId,
+          }),
+        );
+        setOpenMarkAsDelivered(false);
+        setIsDisabled(false);
+      })
+      .catch(err => {
+        console.log(err);
+        toast.error('Something went wrong!', {
+          autoClose: 3000,
+        });
+        setIsDisabled(false);
       });
   };
   const popref = React.useRef();
@@ -323,6 +481,24 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
           confirmFunction={() => cancelOrder(selectData.id)}
           alert="Are you sure you want to cancle the order ?"
           alertDesc="By clicking this you will cancel the order!"
+        />
+      ) : null}
+      {selectData ? (
+        <CustomAlert
+          open={openMarkAsDelivered}
+          handleClose={() => setOpenMarkAsDelivered(false)}
+          confirmFunction={setIsDisabled =>
+            markAsDelivered(selectData.id, setIsDisabled)
+          }
+          alert={`Marking Order ${selectData.id} as delivered`}
+          alertDesc="By clicking this you will mark this order as delivered!"
+        />
+      ) : null}
+      {selectData ? (
+        <RearrangeCl
+          open={openRearrangeCl}
+          handleClose={() => setOpenRearrangeCl(false)}
+          id={selectData.id}
         />
       ) : null}
     </div>

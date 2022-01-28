@@ -58,7 +58,7 @@ const RenderMenu = React.forwardRef(
                 setAmount(rowdata.quantity * rowdata.unitPrice);
                 setOpenPartialRefund(true);
               }}>
-              Partial Refund
+              Refund
             </Dropdown.Item>
           ) : (
             ''
@@ -249,7 +249,7 @@ function ReturnsAndRefundsTable({data, getrefunds, orderId}) {
                   amount: amount,
                 })
                   .then(res => {
-                    toast.success('Partial refund was successful', {
+                    toast.success('Refund was successful', {
                       autoClose: true,
                     });
                     setOpenPartialRefund(false);

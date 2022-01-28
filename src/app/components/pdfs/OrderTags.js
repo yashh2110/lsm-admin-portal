@@ -42,24 +42,57 @@ const OrderTags = ({date, deliveryBoy}) => {
   useEffect(() => {
     getOrders(date, deliveryBoy);
   }, []);
+  console.log(data);
   return data ? (
     <Document>
       <Page size="A4" style={styles.page}>
         {data.map(item => (
           <View style={styles.section}>
-            <Text style={{fontSize: 20, margin: 2}}>Order Id: {item.id}</Text>
-            <Text style={{fontSize: 20, margin: 2}}>
+            <Text
+              style={{
+                fontSize: 26,
+                fontWeight: 'bolder',
+                margin: 2,
+                letterSpacing: 1,
+                padding: '10px',
+                border: '1px solid grey',
+                borderRadius: 5,
+                textAlign: 'center',
+              }}>
+              Id: {item.id}
+            </Text>
+            <Text style={{fontSize: 14, margin: 2, marginTop: 4}}>
+              CL Info:{' '}
+              {item.deliveryBoyId ||
+              item.deliveryBoyName ||
+              item.deliveryBoyPhoneNumber
+                ? '[' +
+                  item.deliveryBoyId +
+                  '] - [' +
+                  item.deliveryBoyName +
+                  '] - [' +
+                  item.deliveryBoyPhoneNumber +
+                  ']'
+                : 'N/A'}
+            </Text>
+            <Text style={{fontSize: 14, margin: 2, marginTop: 4}}>
+              Address: {item.addressLine_1 ? item.addressLine_1 : 'N/A'}
+            </Text>
+            {/* <Text style={{fontSize: 17, margin: 2, marginTop: 4}}>
+              CL Id: {item.deliveryBoyId ? item.deliveryBoyId : 'N/A'}
+            </Text> */}
+            {/* <Text style={{fontSize: 16, margin: 2, marginTop: 4}}>
               CL Id: {item.deliveryBoyId ? item.deliveryBoyId : 'N/A'}
             </Text>
-            <Text style={{fontSize: 20, margin: 2}}>
+            <Text style={{fontSize: 16, margin: 2}}>
               CL Name: {item.deliveryBoyName ? item.deliveryBoyName : 'N/A'}
             </Text>
-            <Text style={{fontSize: 20, margin: 2}}>
+            <Text style={{fontSize: 16, margin: 2}}>
               CL phone :
               {item.deliveryBoyPhoneNumber
                 ? item.deliveryBoyPhoneNumber
                 : 'N/A'}
-            </Text>
+            </Text> */}
           </View>
         ))}
       </Page>

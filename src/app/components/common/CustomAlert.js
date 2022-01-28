@@ -25,7 +25,7 @@ function CustomAlert({open, handleClose, confirmFunction, alert, alertDesc}) {
           onClick={() => confirmFunction(setIsDisabled)}
           autoFocus
           disabled={isDisabled}>
-          Confirm
+          {isDisabled ? 'Loading...' : 'Confirm'}
         </Button>
       </DialogActions>
     </Dialog>

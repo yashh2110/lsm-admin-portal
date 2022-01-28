@@ -21,3 +21,20 @@ export const downloadLowStock = async ({cat, active}) => {
     URL_BASE + `/low-stock/download?categoryId=${cat}&isActive=${active}`;
   window.open(url);
 };
+
+export const addStock = async ({product_id, quantity}) => {
+  let url = URL_BASE + `/${product_id}/add-stock?quantity=${quantity}`;
+  return await axios.get(url);
+};
+
+export const getCommitedStock = async ({product_id}) => {
+  let url = URL_BASE + `/${product_id}/get-committed-stock`;
+  return await axios.get(url);
+};
+
+export const adjustStockOpen = async ({product_id, quantity_adjusted}) => {
+  let url =
+    URL_BASE +
+    `/${product_id}/adjust-stock?quantity_adjusted=${quantity_adjusted}`;
+  return await axios.get(url);
+};

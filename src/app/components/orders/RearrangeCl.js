@@ -1,27 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import {MenuItem, TextField} from '@mui/material';
-import {
-  getSlotsForNextNDays,
-  rearrangeCl,
-  rescheduleOrderService,
-} from './OrdersServices';
+import {rearrangeCl} from './OrdersServices';
 import {toast} from 'react-toastify';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllOrders} from '../../../redux/actions/Orders';
-import {SelectPicker} from 'rsuite';
 import Select from 'react-select';
 function RearrangeCl({open, handleClose, rowData, id}) {
-  const [deliverySlot, setDeliverySlot] = useState();
   const activeDes = useSelector(state => state.assignments.activeDes);
-  const [daysFromCurrentDay, setDaysFromCurrentDay] = useState();
-  const [data, setData] = useState();
   const [cl, setCl] = useState('');
-  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const {assignedTo, customerId, deliveryDate, deliveryState, orderId, slotId} =
     useSelector(state => state.orders);

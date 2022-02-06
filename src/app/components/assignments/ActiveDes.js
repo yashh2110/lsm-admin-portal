@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {batch, useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
 import {
+  replaceSelectedOrders,
   setAssignedOrders,
   setOrders,
   setOrderStateSummary,
@@ -10,8 +11,9 @@ import {
 import ActiveDeCard from './ActiveDeCard';
 import {assignOrderService, getAllService} from './AssignmentService';
 
-function ActiveDes({selectedOrders, setSelectedOrders}) {
+function ActiveDes() {
   const activeDes = useSelector(state => state.assignments.activeDes);
+  const {selectedOrders} = useSelector(state => state.assignments);
   const {date, slotstr} = useSelector(state => state.assignments.dateandslot);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -21,7 +23,7 @@ function ActiveDes({selectedOrders, setSelectedOrders}) {
     if (selectedOrders) {
       assignOrderService(de, selectedOrders)
         .then(res => {
-          setSelectedOrders([]);
+          dispatch(replaceSelectedOrders([]));
           getAllService(date, slotstr)
             .then(
               axios.spread((...alldata) => {

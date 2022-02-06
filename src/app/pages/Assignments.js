@@ -13,53 +13,32 @@ import {CircularProgress} from '@material-ui/core';
 
 function Assignments({setActiveTab}) {
   const dispatch = useDispatch();
-  const {isfetching, assignedOrders, orderStateSummary} = useSelector(
-    state => state.assignments,
-  );
-  const storeorders = useSelector(state => state.assignments.orders);
+  // const {isfetching} = useSelector(state => state.assignments);
 
-  const [selectedOrders, setSelectedOrders] = useState([]);
-  const [orders, setOrders] = useState();
   useEffect(() => {
     dispatch(getActiveDes());
     dispatch(getZones());
     setActiveTab(4);
   }, []);
-  console.log(orders);
-  useEffect(() => {
-    setOrders(storeorders);
-  }, [storeorders]);
+
   return (
     <div className="vendor">
       <div className="map-assign">
         <div className="map-data">
-          <FinalMap
-            selectedOrders={selectedOrders}
-            setSelectedOrders={setSelectedOrders}
-            orders={orders}
-            setOrders={setOrders}
-          />
-          <AssignedOrders assignedOrders={assignedOrders} />
-          <OrderStateSummary orderStateSummary={orderStateSummary} />
+          <FinalMap />
+          <AssignedOrders />
+          <OrderStateSummary />
         </div>
         <div className="assign">
-          <SelectedOrders
-            selectedOrders={selectedOrders}
-            setSelectedOrders={setSelectedOrders}
-            orders={orders}
-            setOrders={setOrders}
-          />
-          <ActiveDes
-            selectedOrders={selectedOrders}
-            setSelectedOrders={setSelectedOrders}
-          />
+          <SelectedOrders />
+          <ActiveDes />
         </div>
       </div>
-      {isfetching ? (
+      {/* {isfetching ? (
         <div className="loader">
           <CircularProgress style={{color: 'white'}} />
         </div>
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

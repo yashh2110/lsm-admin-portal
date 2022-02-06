@@ -98,11 +98,12 @@ const RenderMenu = React.forwardRef(
   },
 );
 
-function AssignedOrders({assignedOrders}) {
+function AssignedOrders() {
   const popref = React.useRef();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const {date, slotstr} = useSelector(state => state.assignments.dateandslot);
+  const {assignedOrders} = useSelector(state => state.assignments);
   const [selectedData, setSelectedData] = useState();
   const [deliveryBoy, setDeliveryBoy] = useState();
   const [checkedKeys, setCheckedKeys] = useState([]);

@@ -1,16 +1,45 @@
 import MaterialTable from 'material-table';
-import React from 'react';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import {Waypoint} from 'react-waypoint';
 import {Popover, Whisper} from 'rsuite';
+import {getOrdersByCustomer} from '../orders/OrdersServices';
 
-function CustomerOrdersTable({data}) {
+function CustomerOrdersTable({id}) {
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(0);
+  const addOrders = page => {
+    getOrdersByCustomer(id, page)
+      .then(res => {
+        setData(e => [...e, ...res.data]);
+      })
+      .catch(err => console.log(err));
+  };
+  useEffect(() => {
+    getOrdersByCustomer(id)
+      .then(res => {
+        setData(res.data);
+      })
+      .catch(err => console.log(err));
+  }, []);
   const column = [
     {
       title: 'Order Id',
       render: rowData => (
-        <Link to={`/orders/${rowData.id}`} style={{color: 'blue'}}>
-          {rowData.id}
-        </Link>
+        <>
+          <Waypoint
+            onEnter={() => {
+              console.log(rowData.tableData.id);
+              if (rowData.tableData.id === data.length - 2) {
+                addOrders(page);
+                setPage(i => i + 1);
+              }
+            }}></Waypoint>
+          <Link to={`/orders/${rowData.id}`} style={{color: 'blue'}}>
+            {rowData.id}
+          </Link>
+        </>
       ),
     },
     {
@@ -124,7 +153,8 @@ function CustomerOrdersTable({data}) {
           rowStyle: {
             fontSize: '13px',
           },
-
+          minBodyHeight: '500px',
+          maxBodyHeight: '500px',
           draggable: false,
         }}
         columns={column}

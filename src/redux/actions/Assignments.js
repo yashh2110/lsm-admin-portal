@@ -56,6 +56,12 @@ export const setAssignmentSlot = payload => {
     payload,
   };
 };
+export const setMarkerInfo = payload => {
+  return {
+    type: ActionTypes.SET_MARKER_INFO,
+    payload,
+  };
+};
 export const setAllSlots = payload => {
   return {
     type: ActionTypes.SET_ALL_SLOTS,

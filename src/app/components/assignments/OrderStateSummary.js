@@ -7,8 +7,9 @@ import {Cell, Column, HeaderCell, Table} from 'rsuite-table';
 import OrderTags from '../pdfs/OrderTags';
 import AssignmentsTableToolBar from './AssignmentsTableToolBar';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-function OrderStateSummary({orderStateSummary}) {
+function OrderStateSummary() {
   const {date} = useSelector(state => state.assignments.dateandslot);
+  const {orderStateSummary} = useSelector(state => state.assignments);
   const [open, setOpen] = useState(false);
   return (
     <div>

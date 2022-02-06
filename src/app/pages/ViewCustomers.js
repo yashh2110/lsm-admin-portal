@@ -3,19 +3,13 @@ import '../css/pages/vendor.css';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import {useHistory} from 'react-router';
 import Button from '@material-ui/core/Button';
-import {
-  getCustomerById,
-  getTransactionService,
-} from '../components/customers/CustomerService';
+import {getCustomerById} from '../components/customers/CustomerService';
 import CustomerTransactionTable from '../components/customers/CustomerTransactionTable';
 import CustomerBlockStatus from '../components/customers/CustomerBlockStatus';
 import AddCredits from '../components/customers/AddCredits';
 import CustomerCodStatus from '../components/customers/CustomerCodStatus';
-import {getOrdersByCustomer} from '../components/orders/OrdersServices';
 import CustomerOrdersTable from '../components/customers/CustomersOrdersTable';
 function ViewCustomers({id, setActiveTab}) {
-  const [transactions, setTransactions] = useState();
-  const [orders, setOrders] = useState();
   const [blockOpen, setBlockOpen] = useState(false);
   const [codOpen, setCodOpen] = useState(false);
   const [addCreditOpen, setAddCreditOpen] = useState(false);
@@ -43,18 +37,10 @@ function ViewCustomers({id, setActiveTab}) {
   const handleAddCreditClose = () => {
     setAddCreditOpen(false);
   };
+
   useEffect(() => {
     getCustomer();
-    getTransactionService({id})
-      .then(res => {
-        setTransactions(res.data.creditTransactions);
-      })
-      .catch(err => console.log(err));
-    getOrdersByCustomer(id)
-      .then(res => {
-        setOrders(res.data);
-      })
-      .catch(err => console.log(err));
+
     setActiveTab(7);
   }, []);
   return customer ? (
@@ -166,19 +152,9 @@ function ViewCustomers({id, setActiveTab}) {
           </p>
         </div>
         {toggleTable === 'transactions' ? (
-          transactions ? (
-            <CustomerTransactionTable data={transactions} />
-          ) : (
-            <p className="text-center">No Transactions</p>
-          )
+          <CustomerTransactionTable id={id} />
         ) : null}
-        {toggleTable === 'orders' ? (
-          orders ? (
-            <CustomerOrdersTable data={orders} />
-          ) : (
-            <p className="text-center">No Orders</p>
-          )
-        ) : null}
+        {toggleTable === 'orders' ? <CustomerOrdersTable id={id} /> : null}
         {codOpen ? (
           <CustomerCodStatus
             open={codOpen}

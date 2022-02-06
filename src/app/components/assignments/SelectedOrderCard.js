@@ -1,14 +1,15 @@
 import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-function SelectedOrderCard({
-  orderId,
-  selectedOrder,
-  selectedOrders,
-  setSelectedOrders,
-  orders,
+import {
+  replaceSelectedOrders,
   setOrders,
-}) {
+  setSelectedOrders,
+} from '../../../redux/actions/Assignments';
+import {useDispatch, useSelector} from 'react-redux';
+
+function SelectedOrderCard({orderId, selectedOrder}) {
+  const dispatch = useDispatch();
+  const {orders, selectedOrders} = useSelector(state => state.assignments);
   return (
     <span
       style={{
@@ -24,8 +25,8 @@ function SelectedOrderCard({
         className="m-0 mb-2 text-danger selectOrderDelBtn"
         onClick={() => {
           const filteredOrders = selectedOrders.filter(i => i.id !== orderId);
-          setSelectedOrders(filteredOrders);
-          setOrders([...orders, selectedOrder]);
+          dispatch(replaceSelectedOrders(filteredOrders));
+          dispatch(setOrders([...orders, selectedOrder]));
         }}
       />
     </span>

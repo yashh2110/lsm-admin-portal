@@ -1,20 +1,13 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 import MarkerAndInfo from './MarkerAndInfo';
 
-function Markers({setSelectedOrders, selectedOrders, orders, setOrders}) {
+function Markers() {
+  const {orders} = useSelector(state => state.assignments);
   return orders
     ? orders.map(i =>
-        i.associatedAddress ? (
-          <MarkerAndInfo
-            i={i}
-            orders={orders}
-            setOrders={setOrders}
-            key={i.id}
-            selectedOrders={selectedOrders}
-            setSelectedOrders={setSelectedOrders}
-          />
-        ) : null,
+        i.associatedAddress ? <MarkerAndInfo i={i} key={i.id} /> : null,
       )
     : null;
 }

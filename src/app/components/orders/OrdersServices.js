@@ -31,8 +31,11 @@ export const getOrderDetails = async orderId => {
   return await axios.get(`${BASE_URL_V2}/order-items/list?order-id=${orderId}`);
 };
 
-export const getOrdersByCustomer = async id => {
-  return await axios.get(`${BASE_URL_V2}/orders/list?customerId=${id}`);
+export const getOrdersByCustomer = async (id, page) => {
+  let URL = `${BASE_URL_V2}/orders/list?customerId=${id}`;
+  URL = URL + '&size=15';
+  if (page) URL = URL + '&page=' + page;
+  return await axios.get(URL);
 };
 
 export const getSlotsForNextNDays = async orderId => {

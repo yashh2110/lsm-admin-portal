@@ -267,10 +267,21 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
           date = new Date(row.deliveryDate);
         }
         return (
-          <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
-            {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
-            {row.deliveryDate ? date.toDateString() : 'N/A'}
-          </p>
+          <>
+            <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
+              {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+              {row.deliveryDate
+                ? date.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })
+                : 'N/A'}
+            </p>
+            <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
+              {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+              {row.deliveryDate ? date.toLocaleDateString() : 'N/A'}
+            </p>
+          </>
         );
       },
     },
@@ -321,11 +332,22 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
         if (row.deliveredAt) {
           date = new Date(row.deliveredAt);
         }
-        return (
-          <p style={{fontSize: '0.8rem', margin: 0}}>
-            {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
-            {row.deliveredAt ? date.toDateString() : 'N/A'}
-          </p>
+        return row.deliveredAt ? (
+          <>
+            <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
+              {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+              {date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </p>
+            <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
+              {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+              {date.toLocaleDateString()}
+            </p>
+          </>
+        ) : (
+          'N/A'
         );
       },
     },
@@ -334,11 +356,22 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
       title: 'Ordered At',
       render: row => {
         const date = new Date(row.orderedAt);
-        return (
-          <p style={{fontSize: '0.8rem', margin: 0}}>
-            {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
-            {date.toDateString()}
-          </p>
+        return row.orderedAt ? (
+          <>
+            <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
+              {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+              {date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </p>
+            <p style={{fontSize: '0.8rem', margin: 0, width: 70}}>
+              {/* {date.toLocaleString('en-US', {hour: 'numeric', hour12: true})},{' '} */}
+              {date.toLocaleDateString()}
+            </p>
+          </>
+        ) : (
+          'N/A'
         );
       },
     },

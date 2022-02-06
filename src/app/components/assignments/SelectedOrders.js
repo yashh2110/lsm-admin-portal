@@ -1,12 +1,9 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import SelectedOrderCard from './SelectedOrderCard';
 
-function SelectedOrders({
-  selectedOrders,
-  setSelectedOrders,
-  orders,
-  setOrders,
-}) {
+function SelectedOrders({}) {
+  const {selectedOrders} = useSelector(state => state.assignments);
   return (
     <div
       style={{
@@ -21,11 +18,8 @@ function SelectedOrders({
           ? selectedOrders.map(i => (
               <SelectedOrderCard
                 orderId={i.id}
-                orders={orders}
-                setOrders={setOrders}
                 selectedOrder={i}
                 selectedOrders={selectedOrders}
-                setSelectedOrders={setSelectedOrders}
                 key={i.id}
               />
             ))

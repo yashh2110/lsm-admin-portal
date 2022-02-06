@@ -24,16 +24,11 @@ const FinalMap = ({selectedOrders, setSelectedOrders, orders, setOrders}) => {
           fullscreenControl: false,
           styles: mapStyles,
         }}>
-        <Markers
-          selectedOrders={selectedOrders}
-          setSelectedOrders={setSelectedOrders}
-          orders={orders}
-          setOrders={setOrders}
-        />
+        <Markers />
         <Polygons />
         <DateAndSlotForm />
       </GoogleMap>
     </LoadScript>
   );
 };
-export default React.memo(FinalMap);
+export default FinalMap;

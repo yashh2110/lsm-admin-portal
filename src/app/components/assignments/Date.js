@@ -11,7 +11,7 @@ function Date({slot, setDate}) {
       type="date"
       className="assign-date "
       value={date}
-      style={{width: '220px'}}
+      style={{width: '220px', marginTop: '2px'}}
       onChange={e => dispatch(setAssignemtDate(e.target.value))}
     />
   );

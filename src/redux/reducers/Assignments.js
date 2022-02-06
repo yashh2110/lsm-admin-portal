@@ -7,14 +7,10 @@ const initial = {
   zones: [],
   orderStateSummary: [],
   selectedOrders: [],
+  markerInfo: null,
   dateandslot: {
     date: '',
-    slots: {
-      1: false,
-      2: false,
-      3: false,
-      4: false,
-    },
+    slots: [1, 2, 3, 4],
     all: true,
     slotstr: '',
   },
@@ -31,7 +27,7 @@ const AssignemenReducer = (state = initial, {type, payload}) => {
     case ActionTypes.GET_ORDERS:
       return {...state, orders: payload};
     case ActionTypes.SET_SELECTED_ORDERS:
-      return {...state, selectedOrders: [...state.selectedOrders, payload]};
+      return {...state, selectedOrders: [payload, ...state.selectedOrders]};
     case ActionTypes.REPLACE_SELECTED_ORDERS:
       return {...state, selectedOrders: payload};
     case ActionTypes.GET_ORDER_STATE_SUMMARY:
@@ -40,6 +36,8 @@ const AssignemenReducer = (state = initial, {type, payload}) => {
       return {...state, dateandslot: {...state.dateandslot, date: payload}};
     case ActionTypes.SET_ASSINGMENT_SLOT:
       return {...state, dateandslot: {...state.dateandslot, slots: payload}};
+    case ActionTypes.SET_MARKER_INFO:
+      return {...state, markerInfo: payload};
     case ActionTypes.SET_ALL_SLOTS:
       return {...state, dateandslot: {...state.dateandslot, all: payload}};
     case ActionTypes.SET_ASSIGNMENT_SLOT_STR:

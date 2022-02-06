@@ -4,8 +4,8 @@ const BASE_URL = process.env.REACT_APP_API + 'inventory/api/1/customers';
 
 export const getTransactionService = async ({id, page}) => {
   let URL = BASE_URL + `/${id}/credits/transactions/list`;
-  URL = URL + '?size';
-  //   URL = URL + '&page=' + page;
+  URL = URL + '?size=15';
+  if (page) URL = URL + '&page=' + page;
   return await axios.get(URL);
 };
 

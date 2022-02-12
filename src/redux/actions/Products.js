@@ -52,12 +52,12 @@ export const productActiveFilter = payload => {
   };
 };
 export const getProducts = ({name, category, active}) => {
-  let URL = URL_BASE;
-  URL = URL + '?productsNameLike=' + name + '&';
+  let URL = URL_BASE + '?';
+  if (name) URL = URL + 'productsNameLike=' + name + '&';
+  if (active) URL = URL + 'isActive=' + active + '&';
+  if (category) URL = URL + 'categoryId=' + category + '&';
   URL = URL + 'size=' + 15 + '&';
-  URL = URL + 'page=' + 0 + '&';
-  URL = URL + 'categoryId=' + category + '&';
-  if (active) URL = URL + 'isActive=' + active;
+  URL = URL + 'page=' + 0;
   return async dispatch => {
     await axios
       .get(URL)
@@ -85,12 +85,12 @@ export const getLowStockProducts = () => {
   };
 };
 export const addProducts = ({name, category, active, page}) => {
-  let URL = URL_BASE;
-  URL = URL + '?productsNameLike=' + name + '&';
+  let URL = URL_BASE + '?';
+  if (name) URL = URL + 'productsNameLike=' + name + '&';
+  if (active) URL = URL + 'isActive=' + active + '&';
+  if (category) URL = URL + 'categoryId=' + category + '&';
   URL = URL + 'size=' + 15 + '&';
-  URL = URL + 'page=' + page + '&';
-  URL = URL + 'categoryId=' + category + '&';
-  if (active) URL = URL + 'isActive=' + active;
+  URL = URL + 'page=' + page;
   return async dispatch => {
     await axios
       .get(URL)

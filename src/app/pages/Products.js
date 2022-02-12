@@ -189,6 +189,7 @@ function Products({setActiveTab}) {
     {title: 'Priority', field: 'priority'},
     {title: 'On Demand', field: 'onDemand'},
     {title: 'Status', field: 'isActive'},
+    {title: 'User Applicability', field: 'userApplicability'},
     {
       title: 'Actions',
       render: rowData => {

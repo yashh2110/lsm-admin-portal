@@ -55,7 +55,8 @@ const reducer = (state, {type, payload}) => {
       return {...state, onDemand: payload};
     case 'isActive':
       return {...state, isActive: payload};
-    // case 'img'
+    case 'userApplicability':
+      return {...state, userApplicability: payload};
     default:
       return state;
   }
@@ -496,6 +497,31 @@ function ProductsUpdateForm({open, handleClose, data}) {
               </MenuItem>
               <MenuItem value={false} className="d-block p-2">
                 false
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl
+            required
+            fullWidth
+            variant="standard"
+            sx={{marginTop: '8px', minWidth: 120, marginBottom: '4px'}}>
+            <InputLabel id="status">User Applicability</InputLabel>
+            <Select
+              labelId="userApplicability"
+              id="userApplicability"
+              label="Status"
+              onChange={e =>
+                dispatch({type: 'userApplicability', payload: e.target.value})
+              }
+              value={form.userApplicability}>
+              <MenuItem value="APPLICABLE_TO_ALL" className="d-block p-2">
+                Applicable to all
+              </MenuItem>
+              <MenuItem value="NEW_USER" className="d-block p-2">
+                New User
+              </MenuItem>
+              <MenuItem value="RETURNING_USER" className="d-block p-2">
+                Returning User
               </MenuItem>
             </Select>
           </FormControl>

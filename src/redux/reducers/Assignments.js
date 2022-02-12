@@ -27,6 +27,9 @@ const AssignemenReducer = (state = initial, {type, payload}) => {
     case ActionTypes.GET_ORDERS:
       return {...state, orders: payload};
     case ActionTypes.SET_SELECTED_ORDERS:
+      if (state.selectedOrders?.some(i => i === payload)) {
+        return state;
+      }
       return {...state, selectedOrders: [payload, ...state.selectedOrders]};
     case ActionTypes.REPLACE_SELECTED_ORDERS:
       return {...state, selectedOrders: payload};

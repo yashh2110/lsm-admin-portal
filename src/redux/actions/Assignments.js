@@ -74,6 +74,12 @@ export const setSlotStr = payload => {
     payload,
   };
 };
+export const setOrderedAfter = payload => {
+  return {
+    type: ActionTypes.SET_ORDERED_AFTER,
+    payload,
+  };
+};
 export const getActiveDes = () => {
   return async dispatch => {
     await axios

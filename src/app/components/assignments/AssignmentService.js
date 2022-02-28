@@ -34,29 +34,32 @@ export const assignOrderService = async (de, selectedOrders) => {
   };
   return await axios.post(URL_BASE + `orders`, params);
 };
-export const getOrders = async (date, slot) => {
+export const getOrders = async (date, slot, ordered_after) => {
   if (date) {
     const start = new Date(date);
     start.setHours(0, 0, 0, 0);
     const end = new Date(date);
     end.setHours(23, 59, 59, 999);
-    return await axios.get(
+    let URL =
       URL_BASE +
-        `orders?start-time=${start.getTime()}&end-time=${end.getTime()}&slot-id-list=${slot}`,
-    );
+      `orders?start-time=${start.getTime()}&end-time=${end.getTime()}&slot-id-list=${slot}`;
+    if (ordered_after) URL = URL + `&ordered_after=${ordered_after}`;
+    return await axios.get(URL);
   }
 };
-export const getAssignedOrders = async (date, slot) => {
+export const getAssignedOrders = async (date, slot, ordered_after) => {
   if (date) {
     const start = new Date(date);
     start.setHours(0, 0, 0, 0);
     const end = new Date(date);
     end.setHours(23, 59, 59, 999);
     // try {
-    return await axios.get(
+    let URL =
       URL_BASE +
-        `delivery-executives/orders?start_time=${start.getTime()}&end_time=${end.getTime()}&slot-id-list=${slot}`,
-    );
+      `delivery-executives/orders?start_time=${start.getTime()}&end_time=${end.getTime()}&slot-id-list=${slot}`;
+    if (ordered_after) URL = URL + `&ordered_after=${ordered_after}`;
+    console.log(URL);
+    return await axios.get(URL);
     //   const data = Object.keys(res.data).map(i => {
     //     const item = {
     //       id: i.split(':')[0],
@@ -71,7 +74,7 @@ export const getAssignedOrders = async (date, slot) => {
     // }
   }
 };
-export const getOrderStateSummary = async date => {
+export const getOrderStateSummary = async (date, ordered_after) => {
   if (date) {
     const newDate = new Date(date);
     const formattedDate =
@@ -81,26 +84,30 @@ export const getOrderStateSummary = async date => {
       newDate.getDate() +
       '/' +
       newDate.getFullYear();
-
-    return await axios.get(
-      URL_BASE + `orders/summary?orderDate=${formattedDate}`,
-    );
+    let URL = URL_BASE + `orders/summary?orderDate=${formattedDate}`;
+    if (ordered_after) URL = URL + `&ordered_after=${ordered_after}`;
+    return await axios.get(URL);
   }
 };
 
-export const getAllService = async (date, slot) => {
+export const getAllService = async (date, slot, ordered_after) => {
   return await axios.all([
-    getOrders(date, slot),
-    getAssignedOrders(date, slot),
-    getOrderStateSummary(date),
+    getOrders(date, slot, ordered_after),
+    getAssignedOrders(date, slot, ordered_after),
+    getOrderStateSummary(date, ordered_after),
   ]);
 };
 
-export const getActiveOrderByDate = async (date, deliveryBoy) => {
+export const getActiveOrderByDate = async (
+  date,
+  deliveryBoy,
+  ordered_after,
+) => {
   let URL =
     process.env.REACT_APP_API +
     `admin/v2/orders/active-orders/cards?deliveryDate=${date}`;
   if (deliveryBoy) URL = URL + `&deliveryBoy=${deliveryBoy}`;
+  if (ordered_after) URL = URL + `&ordered_after=${ordered_after}`;
 
   return await axios.get(URL);
 };

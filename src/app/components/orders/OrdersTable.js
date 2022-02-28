@@ -6,6 +6,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {
   canclearOrder,
   downloadOrderInvoice,
+  getPaymentStatus,
   markAsDeliveredService,
 } from './OrdersServices';
 import {toast} from 'react-toastify';
@@ -38,24 +39,35 @@ const RenderMenu = React.forwardRef(
       onClose();
     };
     const history = useHistory();
-
+    const [color, setColor] = useState(null);
     return (
       <Popover ref={ref} {...rest} full>
-        <Dropdown.Menu onSelect={handleSelect}>
-          <Dropdown.Item onClick={() => downloadOrderInvoice(rowData.id)}>
+        <Dropdown.Menu>
+          <Dropdown.Item
+            onClick={async () => {
+              downloadOrderInvoice(rowData.id);
+            }}>
             Download
           </Dropdown.Item>
           <Dropdown.Item
-            onClick={() => history.push(`customers/${rowData.customerId}`)}>
+            onClick={() => {
+              history.push(`customers/${rowData.customerId}`);
+              handleSelect();
+            }}>
             Customer Orders
           </Dropdown.Item>
-          <Dropdown.Item onClick={() => history.push(`orders/${rowData.id}`)}>
+          <Dropdown.Item
+            onClick={() => {
+              history.push(`orders/${rowData.id}`);
+              handleSelect();
+            }}>
             View Order Details
           </Dropdown.Item>
           <Dropdown.Item
             onClick={() => {
               setSelectedData(rowData);
               setCancleOrderPopup(true);
+              handleSelect();
             }}>
             Cancel Order
           </Dropdown.Item>
@@ -63,6 +75,7 @@ const RenderMenu = React.forwardRef(
             onClick={() => {
               setSelectedData(rowData);
               setRescheduleOpen(true);
+              handleSelect();
             }}>
             Reschedule Order
           </Dropdown.Item>
@@ -72,6 +85,7 @@ const RenderMenu = React.forwardRef(
                 onClick={() => {
                   setSelectedData(rowData);
                   setOpenMarkAsDelivered(true);
+                  handleSelect();
                 }}>
                 Mark As Delivered
               </Dropdown.Item>
@@ -79,11 +93,30 @@ const RenderMenu = React.forwardRef(
                 onClick={() => {
                   setSelectedData(rowData);
                   setOpenRearrangeCl(true);
+                  handleSelect();
                 }}>
                 Rearrange CL
               </Dropdown.Item>
             </>
           ) : null}
+          <Dropdown.Item
+            style={{
+              backgroundColor: color ? color : null,
+              color: color ? 'white' : '#333',
+            }}
+            onClick={async () => {
+              await getPaymentStatus({orderid: rowData.id}).then(res => {
+                if (res?.data) {
+                  setColor(res.data);
+                }
+              });
+            }}>
+            {color === 'GREEN'
+              ? 'Payment Success'
+              : color === 'RED'
+              ? 'Payment Failure'
+              : 'Check Payment Status'}
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Popover>
     );
@@ -395,24 +428,26 @@ function OrdersTable({slotIdParam, deliveryDateParam, deliveryStateparam}) {
       },
       render: rowData => {
         return (
-          <Whisper
-            placement="autoVerticalEnd"
-            trigger="click"
-            ref={popref}
-            speaker={
-              <RenderMenu
-                rowData={rowData}
-                setRescheduleOpen={setRescheduleOpen}
-                rescheduleOpen={rescheduleOpen}
-                setSelectedData={setSelectedData}
-                setCancleOrderPopup={setCancleOrderPopup}
-                setOpenRearrangeCl={setOpenRearrangeCl}
-                setOpenMarkAsDelivered={setOpenMarkAsDelivered}
-                onClose={() => popref.current.close()}
-              />
-            }>
-            <MoreHorizIcon />
-          </Whisper>
+          <>
+            <Whisper
+              placement="autoVerticalEnd"
+              trigger="click"
+              ref={popref}
+              speaker={
+                <RenderMenu
+                  rowData={rowData}
+                  setRescheduleOpen={setRescheduleOpen}
+                  rescheduleOpen={rescheduleOpen}
+                  setSelectedData={setSelectedData}
+                  setCancleOrderPopup={setCancleOrderPopup}
+                  setOpenRearrangeCl={setOpenRearrangeCl}
+                  setOpenMarkAsDelivered={setOpenMarkAsDelivered}
+                  onClose={() => popref.current.close()}
+                />
+              }>
+              <MoreHorizIcon />
+            </Whisper>
+          </>
         );
       },
     },

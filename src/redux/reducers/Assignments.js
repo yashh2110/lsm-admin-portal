@@ -13,6 +13,7 @@ const initial = {
     slots: [1, 2, 3, 4],
     all: true,
     slotstr: '',
+    ordered_after: '0',
   },
   isfetching: false,
 };
@@ -39,6 +40,11 @@ const AssignemenReducer = (state = initial, {type, payload}) => {
       return {...state, dateandslot: {...state.dateandslot, date: payload}};
     case ActionTypes.SET_ASSINGMENT_SLOT:
       return {...state, dateandslot: {...state.dateandslot, slots: payload}};
+    case ActionTypes.SET_ORDERED_AFTER:
+      return {
+        ...state,
+        dateandslot: {...state.dateandslot, ordered_after: payload},
+      };
     case ActionTypes.SET_MARKER_INFO:
       return {...state, markerInfo: payload};
     case ActionTypes.SET_ALL_SLOTS:

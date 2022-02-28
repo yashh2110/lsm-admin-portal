@@ -14,17 +14,18 @@ import {assignOrderService, getAllService} from './AssignmentService';
 function ActiveDes() {
   const activeDes = useSelector(state => state.assignments.activeDes);
   const {selectedOrders} = useSelector(state => state.assignments);
-  const {date, slotstr} = useSelector(state => state.assignments.dateandslot);
+  const {date, slotstr, ordered_after} = useSelector(
+    state => state.assignments.dateandslot,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-
   const assignDeToOrder = de => {
     setIsLoading(true);
     if (selectedOrders) {
       assignOrderService(de, selectedOrders)
         .then(res => {
           dispatch(replaceSelectedOrders([]));
-          getAllService(date, slotstr)
+          getAllService(date, slotstr, ordered_after)
             .then(
               axios.spread((...alldata) => {
                 const assigndata = Object.keys(alldata[1].data).map(i => {

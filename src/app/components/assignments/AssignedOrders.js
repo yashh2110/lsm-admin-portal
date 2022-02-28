@@ -102,7 +102,9 @@ function AssignedOrders() {
   const popref = React.useRef();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const {date, slotstr} = useSelector(state => state.assignments.dateandslot);
+  const {date, slotstr, ordered_after} = useSelector(
+    state => state.assignments.dateandslot,
+  );
   const {assignedOrders} = useSelector(state => state.assignments);
   const [selectedData, setSelectedData] = useState();
   const [deliveryBoy, setDeliveryBoy] = useState();
@@ -325,7 +327,11 @@ function AssignedOrders() {
           <PDFViewer
             style={{width: '100%', height: '100vh'}}
             fileName={date + '.pdf'}>
-            <OrderTags date={date} deliveryBoy={deliveryBoy} />
+            <OrderTags
+              date={date}
+              deliveryBoy={deliveryBoy}
+              ordered_after={ordered_after}
+            />
           </PDFViewer>
         </Dialog>
       ) : null}

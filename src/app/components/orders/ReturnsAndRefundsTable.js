@@ -245,7 +245,7 @@ function ReturnsAndRefundsTable({data, getrefunds, orderId}) {
                 setBtnDisable(true);
                 partialRefund({
                   orderId: orderId,
-                  orderItemId: selectedData.id,
+                  orderItemId: selectedData.orderItemId,
                   amount: amount,
                 })
                   .then(res => {

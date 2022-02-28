@@ -23,6 +23,7 @@
     "bootstrap": "^5.1.1",
     "file-saver": "^2.0.5",
     "material-table": "^1.69.3",
+    "moment": "^2.29.1",
     "mui-datatables": "^3.7.6",
     "multiselect-react-dropdown": "^2.0.7",
     "prop-types": "^15.7.2",

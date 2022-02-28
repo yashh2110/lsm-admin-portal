@@ -8,7 +8,7 @@ import {getOrdersByCustomer} from '../orders/OrdersServices';
 
 function CustomerOrdersTable({id}) {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const addOrders = page => {
     getOrdersByCustomer(id, page)
       .then(res => {

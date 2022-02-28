@@ -8,14 +8,16 @@ import {
   setAssignedOrders,
   setAssignmentSlot,
   setIsFetching,
+  setOrderedAfter,
   setOrders,
   setOrderStateSummary,
 } from '../../../redux/actions/Assignments';
 import {getAllService} from './AssignmentService';
 import axios from 'axios';
 import {CheckPicker} from 'rsuite';
+import moment from 'moment';
 function DateAndSlotForm() {
-  const {date, slots, all} = useSelector(
+  const {date, slots, all, ordered_after} = useSelector(
     state => state.assignments.dateandslot,
   );
   const {markerInfo} = useSelector(state => state.assignments);
@@ -43,6 +45,11 @@ function DateAndSlotForm() {
       value: 4,
     },
   ];
+  // const orderedAfter = [
+  //   {label: 'All', value: 0},
+  //   {label: 'Today After 9 PM', value: moment('21:00', 'HH:mm ').valueOf()},
+  // ];
+  console.log(ordered_after, 'asad');
   const searchHandle = () => {
     // let slotarr = [];
     // if (all) {
@@ -54,7 +61,7 @@ function DateAndSlotForm() {
     //   });
     // }
     const slotStr = slots.join(',');
-    getAllService(date, slotStr)
+    getAllService(date, slotStr, ordered_after)
       .then(
         axios.spread((...alldata) => {
           const assigndata = Object.keys(alldata[1].data).map(i => {
@@ -90,10 +97,90 @@ function DateAndSlotForm() {
       <div className="assign-date-slot">
         <Date />
         {/* <Slot /> */}
-        <CheckPicker
-          data={slotsData}
-          placeholder="Slot"
+        <div
+          style={{
+            width: '120px',
+            marginRight: '3px',
+            // marginLeft: '4px',
+            marginTop: '2px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+          <label
+            for="date"
+            style={{
+              margin: 0,
+              fontSize: '12px',
+              fontWeight: 'bold',
+              padding: 0,
+              paddingLeft: '2px',
+            }}>
+            Slots
+          </label>
+          <CheckPicker
+            data={slotsData}
+            placeholder="Slot"
+            searchable={false}
+            size="md"
+            style={{
+              width: '120px',
+              marginRight: '3px',
+              // marginLeft: '4px',
+              marginTop: '2px',
+            }}
+            // container={() => <div>asd</div>}
+            onChange={e => {
+              if (e?.some(i => i === 'all')) {
+                dispatch(setAssignmentSlot([1, 2, 3, 4]));
+              } else {
+                dispatch(setAssignmentSlot(e));
+              }
+            }}
+            value={slots ? slots : []}
+            renderValue={(value, items) => {
+              return (
+                <span>
+                  <span style={{color: '#575757'}}></span> {value?.join(',')}
+                </span>
+              );
+            }}
+          />
+        </div>
+        <div
+          style={{
+            width: '120px',
+            marginRight: '3px',
+            // marginLeft: '4px',
+            marginTop: '2px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+          <label
+            for="date"
+            style={{
+              margin: 0,
+              fontSize: '12px',
+              fontWeight: 'bold',
+              padding: 0,
+              paddingLeft: '2px',
+            }}>
+            Ordered At
+          </label>
+          <select
+            className="assign-order-after"
+            value={ordered_after}
+            onChange={e => dispatch(setOrderedAfter(e.target.value))}>
+            <option value={0}>All</option>
+            <option value={moment('21:00', 'HH:mm ').valueOf()}>
+              After 9PM
+            </option>
+          </select>
+        </div>
+        {/* <CheckPicker
+          data={orderedAfter}
+          placeholder="Ordered At"
           searchable={false}
+          mul
           size="md"
           style={{
             width: '120px',
@@ -103,21 +190,21 @@ function DateAndSlotForm() {
           }}
           // container={() => <div>asd</div>}
           onChange={e => {
-            if (e?.some(i => i === 'all')) {
-              dispatch(setAssignmentSlot([1, 2, 3, 4]));
-            } else {
-              dispatch(setAssignmentSlot(e));
+            if (e.length >= 1) {
+              console.log(e[e.length - 1]);
+              dispatch(setOrderedAfter(e[e.length - 1]));
             }
           }}
-          value={slots ? slots : []}
+          value={ordered_after ? [ordered_after] : []}
           renderValue={(value, items) => {
             return (
               <span>
-                <span style={{color: '#575757'}}></span> {value?.join(',')}
+                <span style={{color: '#575757'}}></span> {value}
               </span>
             );
           }}
-        />
+        /> */}
+
         <Button
           variant="contained"
           style={{
@@ -135,7 +222,7 @@ function DateAndSlotForm() {
       {markerInfo ? (
         <div
           style={{
-            maxWidth: '35%',
+            maxWidth: '33%',
             padding: '10px',
             backgroundColor: 'white',
             borderRadius: '6px 0 0 6px',

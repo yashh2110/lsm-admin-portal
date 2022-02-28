@@ -7,6 +7,7 @@ import OrdersToolbar from '../components/orders/OrdersToolbar';
 import OrderItemsTable from '../components/orders/OrderItemsTable';
 import ReturnsAndRefundsTable from '../components/orders/ReturnsAndRefundsTable';
 function OrderDetails({orderId}) {
+  console.log(orderId);
   const [data, setData] = useState();
   const [refundsData, setRefundsData] = useState();
   const getrefunds = () => {

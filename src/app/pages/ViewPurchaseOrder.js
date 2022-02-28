@@ -264,31 +264,49 @@ function ViewPurchaseOrder({orderId}) {
                             </p>
                           </div>
                         </div>
-                        <div className="quantityDiv">
-                          <p className="price">
-                            <BiRupee className="mb-1" />
-                            {e.totalPrice}
-                          </p>
-
-                          <div className="d-flex justify-content-center align-items-center">
-                            <div className="qantity d-flex">
-                              <div className="d-flex">
-                                <p>Exp At :</p>
-                                <p
-                                  style={{
-                                    marginRight: '10px',
-                                    marginLeft: '10px',
-                                  }}>
-                                  {date}
-                                </p>
+                        <div className="d-flex ">
+                          <div className="d-flex justify-content-center align-items-end flex-column">
+                            <div className="d-flex">
+                              <p className="m-0">Exp At :</p>
+                              <p
+                                style={{
+                                  margin: 0,
+                                  marginRight: '10px',
+                                  marginLeft: '10px',
+                                  paddingRight: '10px',
+                                }}>
+                                {date}
+                              </p>
+                            </div>
+                            <div className="d-flex">
+                              <p className="m-0">Actual Price :</p>
+                              <p
+                                style={{
+                                  margin: 0,
+                                  marginRight: '10px',
+                                  marginLeft: '10px',
+                                  paddingRight: '10px',
+                                }}>
+                                <BiRupee className="mb-1" />
+                                {e.actualPrice}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="quantityDiv">
+                            <p className="price">
+                              <BiRupee className="mb-1" />
+                              {e.totalPrice}
+                            </p>
+                            <div className="d-flex justify-content-center align-items-center">
+                              <div className="qantity d-flex align-items-center justify-content-center">
+                                <input
+                                  type="text"
+                                  className="form-control counter"
+                                  value={e.quantity}
+                                  disabled
+                                  style={{width: '75px'}}
+                                />
                               </div>
-                              <input
-                                type="text"
-                                className="form-control counter"
-                                value={e.quantity}
-                                disabled
-                                style={{width: '75px'}}
-                              />
                             </div>
                           </div>
                         </div>

@@ -68,3 +68,7 @@ export const rearrangeCl = async ({id, cl}) => {
     `${BASE_URL_V2}/orders/reAssignPartner?orderId=${id}&partnerId=${cl}`,
   );
 };
+
+export const getPaymentStatus = async ({orderid}) => {
+  return await axios.get(`${BASE_URL_V2}/orders/${orderid}/payment-status`);
+};

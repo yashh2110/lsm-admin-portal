@@ -8,7 +8,9 @@ import OrderTags from '../pdfs/OrderTags';
 import AssignmentsTableToolBar from './AssignmentsTableToolBar';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 function OrderStateSummary() {
-  const {date} = useSelector(state => state.assignments.dateandslot);
+  const {date, ordered_after} = useSelector(
+    state => state.assignments.dateandslot,
+  );
   const {orderStateSummary} = useSelector(state => state.assignments);
   const [open, setOpen] = useState(false);
   return (
@@ -106,7 +108,7 @@ function OrderStateSummary() {
         <PDFViewer
           style={{width: '100%', height: '100vh'}}
           fileName={date + '.pdf'}>
-          <OrderTags date={date} />
+          <OrderTags date={date} ordered_after={ordered_after} />
         </PDFViewer>
       </Dialog>
     </div>

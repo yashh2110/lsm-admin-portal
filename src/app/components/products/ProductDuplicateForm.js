@@ -81,7 +81,7 @@ function ProductDuplicateForm({open, handleClose, data}) {
     e.preventDefault();
     dispatch(setLoader(true));
     setIsDisabled(() => true);
-    createProduct(form)
+    createProduct({...form, version: null})
       .then(res => {
         reducDispatch(
           getProducts({

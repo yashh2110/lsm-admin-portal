@@ -27,10 +27,10 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const OrderTags = ({date, deliveryBoy}) => {
+const OrderTags = ({date, deliveryBoy, ordered_after}) => {
   const [data, setData] = useState();
   const getOrders = (date, deliveryBoy) => {
-    getActiveOrderByDate(date, deliveryBoy)
+    getActiveOrderByDate(date, deliveryBoy, ordered_after)
       .then(res => {
         setData(res.data);
         console.log(res.data);

@@ -265,7 +265,7 @@ function ViewPurchaseOrder({orderId}) {
                           </div>
                         </div>
                         <div className="d-flex ">
-                          <div className="d-flex justify-content-center align-items-end flex-column">
+                          <div className="d-flex justify-content-center align-items-start flex-column">
                             <div className="d-flex">
                               <p className="m-0">Exp At :</p>
                               <p
@@ -279,7 +279,7 @@ function ViewPurchaseOrder({orderId}) {
                               </p>
                             </div>
                             <div className="d-flex">
-                              <p className="m-0">Actual Price :</p>
+                              <p className="m-0">Unit Price :</p>
                               <p
                                 style={{
                                   margin: 0,
@@ -288,7 +288,7 @@ function ViewPurchaseOrder({orderId}) {
                                   paddingRight: '10px',
                                 }}>
                                 <BiRupee className="mb-1" />
-                                {e.actualPrice}
+                                {e.unitPrice}
                               </p>
                             </div>
                           </div>
